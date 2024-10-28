@@ -1,5 +1,4 @@
 document.addEventListener('DOMContentLoaded', function() {
-   
     const fadeInElements = document.querySelectorAll('.fade-in');
     fadeInElements.forEach(element => {
         element.style.opacity = 0;
@@ -8,7 +7,6 @@ document.addEventListener('DOMContentLoaded', function() {
             element.style.opacity = 1;
         }, 100);
     });
-
 
     const buttons3D = document.querySelectorAll('.button-3d');
     buttons3D.forEach(button => {
@@ -23,23 +21,28 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Alternar modo escuro
+    // Alternar modo oscuro
     const themeToggle = document.getElementById('themeToggle');
     themeToggle.addEventListener('click', () => {
         document.body.classList.toggle('dark-mode');
-
     });
-    document.getElementById("languageButton").addEventListener("click", function() {
-        // Alternar entre los elementos en inglés y en español
-        document.querySelectorAll("[data-lang]").forEach(element => {
-            if (element.style.display === "none") {
-                element.style.display = "";
-            } else {
-                element.style.display = "none";
-            }
+
+    // Alternar idioma
+    const languageButton = document.getElementById("languageButton");
+    let currentLang = "en";  // Idioma predeterminado
+
+    languageButton.addEventListener("click", function() {
+        currentLang = currentLang === "en" ? "es" : "en";
+        
+        document.querySelectorAll("[data-lang='en']").forEach(element => {
+            element.style.display = currentLang === "en" ? "block" : "none";
+        });
+        document.querySelectorAll("[data-lang='es']").forEach(element => {
+            element.style.display = currentLang === "es" ? "block" : "none";
         });
     });
+
     document.getElementById("signUp").addEventListener("click", function() {
-    document.querySelector(".container").classList.add("right-panel-active");
-});
+        document.querySelector(".container").classList.add("right-panel-active");
+    });
 });
