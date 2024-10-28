@@ -1,10 +1,9 @@
 <?php
-require 'conexion.php'; // Asegúrate de que esta ruta sea correcta
+require '../Administrador/conexion.php';
 
-// Recibe los datos del formulario
 $nombre_cliente = $_POST['nombre_cliente'];
 $apellido_paterno = $_POST['apellido_paterno'];
-$apellido_materno = $_POST['apellido_materno'] ?? ''; // opcional
+$apellido_materno = $_POST['apellido_materno'] ?? '';
 $telefono_personal = $_POST['telefono_personal'];
 $correo_electronico = $_POST['correo_electronico'];
 $contrasena = $_POST['contrasena'];
@@ -23,16 +22,19 @@ $sql = "INSERT INTO clientes (nombre_cliente, apellido_paterno, apellido_materno
         VALUES (?, ?, ?, ?, ?, ?, ?)";
 
 $stmt = $con->prepare($sql); // Prepara la declaración
-$rol = 'usuario'; // Valor por defecto para el rol
+$rol = 'admin'; // Valor por defecto para el rol
 $stmt->bind_param("sssssss", $nombre_cliente, $apellido_paterno, $apellido_materno, $telefono_personal, $correo_electronico, $hashed_password, $rol); // Vincula parámetros
 
 if ($stmt->execute()) {
+    // Redirige a index.html si la inserción fue exitosa
     header("Location: login.php");
     exit();
 } else {
+    // Maneja el error si la inserción falla
     echo "Error al registrar al usuario: " . $stmt->error;
 }
 
+// Cierra la declaración y la conexión
 $stmt->close();
 $con->close();
 ?>
