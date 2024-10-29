@@ -18,13 +18,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         // Verificar la contraseña ingresada con la encriptada en la base de datos
         if (password_verify($password, $row['contrasena'])) {
-            $_SESSION['user'] = $row['correo_electronico']; // Almacenar el correo en la sesión
+            $_SESSION['user'] = $row['correo_electronico'];
+            $_SESSION['id_cliente'] = $row['id_cliente'];
             
             // Redireccionar según el rol del usuario
             if ($row['rol'] === 'admin') {
-                header("Location: indexx.html"); // Redirige a la página para admin
+                header("Location: ../administrador/index_admin.php"); // Redirige a la página para admin
             } else {
-                header("Location: index.html"); // Redirige a la página para usuario normal
+                header("Location: ../Customers/index.php"); // Redirige a la página para usuario normal
             }
             exit();
         } else {

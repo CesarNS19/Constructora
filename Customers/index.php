@@ -1,28 +1,10 @@
+<?php require '../Customers/superior_customer.php'; ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Family Drywall</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
-    <header>
-        <nav>
-            <button class="language-toggle" id="languageButton" aria-label="Change Language">
-                <i class="fas fa-globe"></i>
-            </button>
-            <ul class="nav-links">
-                <li><a href="index.html"><i class="fas fa-home"></i></a></li>
-                <li><a href="perfil.php"><i class="fas fa-user"></i></a></li>
-                <li><a href="#services"><i class="fas fa-concierge-bell"></i></a></li>
-                <li><a href="#contact"><i class="fas fa-envelope"></i></a></li>
-            </ul>
-            <button id="themeToggle"><i class="fas fa-adjust"></i></button>
-        </nav>
-    </header>
-
     <section class="hero" data-lang="en">
         <div class="hero-content fade-in">
             <h1>Welcome to Our Website</h1>
@@ -107,6 +89,6 @@
         <p>© Family Drywall. Todos los derechos reservados.</p>
     </footer>    
 
-    <script src="script.js"></script>
+    <script src="../Js/script.js"></script>
 </body>
 </html>

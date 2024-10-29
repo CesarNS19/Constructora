@@ -1,5 +1,5 @@
 <?php
-require '../Administrador/conexion.php';
+require '../Login/conexion.php';
 
 if (isset($_GET['id'])) {
     $id = $_GET['id'];

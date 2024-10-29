@@ -1,10 +1,10 @@
 <?php
 session_start();
-include 'conexion.php'; // Asegúrate de incluir tu conexión a la base de datos
+require '../Login/conexion.php'; // Asegúrate de incluir tu conexión a la base de datos
 
 // Verificar si el usuario está autenticado
 if (!isset($_SESSION['id_cliente'])) {
-    header("Location: login.php"); // Redirigir a la página de inicio de sesión si no está autenticado
+    header("Location: ../Login/login.php"); // Redirigir a la página de inicio de sesión si no está autenticado
     exit;
 }
 
@@ -33,7 +33,7 @@ if (!$user) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Perfil de Usuario</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="estilos/estiloagg.css"> <!-- Tu CSS -->
+    <link rel="stylesheet" href="../Css/style.css">
 </head>
 <body class="dark-mode">
 
@@ -53,10 +53,10 @@ if (!$user) {
     <div class="card mt-4">
         <div class="card-body">
             <h5>Datos Personales</h5>
-            <p><strong>Nombre:</strong> <?php echo htmlspecialchars($user['Nombre']); ?></p>
-            <p><strong>Apellido:</strong> <?php echo htmlspecialchars($user['ApellidoPat'] . ' ' . $user['ApellidoMat']); ?></p>
-            <p><strong>Correo:</strong> <?php echo htmlspecialchars($user['Correo']); ?></p>
-            <p><strong>Teléfono:</strong> <?php echo htmlspecialchars($user['Telefono']); ?></p>
+            <p><strong>Nombre:</strong> <?php echo htmlspecialchars($user['nombre_cliente']); ?></p>
+            <p><strong>Apellido:</strong> <?php echo htmlspecialchars($user['apellido_paterno'] . ' ' . $user['apellido_materno']); ?></p>
+            <p><strong>Correo:</strong> <?php echo htmlspecialchars($user['correo_electronico']); ?></p>
+            <p><strong>Teléfono:</strong> <?php echo htmlspecialchars($user['telefono_personal']); ?></p>
         </div>
     </div>
 
