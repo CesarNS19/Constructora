@@ -5,7 +5,6 @@
 <head>
 </head>
 <body>
-    <p>Hola soy gay</p>
     <section class="hero" data-lang="en">
         <div class="hero-content fade-in">
             <h1>Welcome to Our Website</h1>

@@ -2,7 +2,7 @@
 $servername = "localhost"; // Cambia esto si tu servidor de MySQL es diferente
 $username = "root";        // Usuario de la base de datos
 $password = "";        // Contraseña de la base de datos
-$database = "construct"; // Nombre de la base de datos
+$database = "constructora"; // Nombre de la base de datos
 
 $con = new mysqli($servername, $username, $password, $database);
 

@@ -11,16 +11,20 @@
     <header>
         <nav>
             <!-- Botón de idioma -->
-            <button class="language-toggle" id="languageButton" aria-label="Change Language">
+            <button class="language-toggle" id="languageButton" aria-label="Change Language" title="Cambiar idioma">
                 <i class="fas fa-globe"></i>
             </button>
             <ul class="nav-links">
-                <li><a href="index_admin.php"><i class="fas fa-home"></i></a></li>
-                <li><a href="perfil.php"><i class="fas fa-user"></i></a></li>
-                <li><a href="#services"><i class="fas fa-concierge-bell"></i></a></li>
-                <li><a href="#contact"><i class="fas fa-envelope"></i></a></li>
-                <li><a href="users.php"><i class="fas fa-users"></i></a></li>
+                <li><a href="index_admin.php" title="Inicio"><i class="fas fa-home"></i></a></li>
+                <li><a href="perfil.php" title="Perfil"><i class="fas fa-user"></i></a></li>
+                <li><a href="#services" title="Servicios"><i class="fas fa-concierge-bell"></i></a></li>
+                <li><a href="#contact" title="Contacto"><i class="fas fa-envelope"></i></a></li>
+                <li><a href="customers.php" title="Clientes"><i class="fas fa-users"></i></a></li>
+                <li><a href="employee.php" title="Empleados"><i class="fas fa-user-tie"></i></a></li>
+                <li><a href="company.php" title="Empresa"><i class="fas fa-house"></i></a></li>
             </ul>
-            <button id="themeToggle"><i class="fas fa-adjust"></i></button>
+            <button id="themeToggle" title="Modo Oscuro/Claro"><i class="fas fa-adjust"></i></button>
         </nav>
     </header>
+</body>
+</html>
