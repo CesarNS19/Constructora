@@ -1,4 +1,9 @@
-<?php require '../Login/conexion.php'; ?>
+<?php
+require '../Login/conexion.php';
+
+$sql_clientes = "SELECT id_cliente, nombre_cliente, apellido_paterno, apellido_materno FROM clientes WHERE rol = 'usuario'";
+$result_clientes = $con->query($sql_clientes);
+?>
 
 <?php
 require '../Administrador/superior_admin.php';
@@ -31,11 +36,11 @@ if (isset($_POST['status_action'])) {
 
 <div id="Alert"></div>
 
-<section class="employee-header">
+<section>
     <button class="btn btn-success" data-toggle="modal" data-target="#addCustomerModal" style="float: right; margin: 10px;">
         Add Customer
-    </button>
-</section>
+    </button><br/>
+</section><br/>
 
 <!-- Modal para añadir cliente -->
 <div class="modal fade" id="addCustomerModal" tabindex="-1" role="dialog" aria-labelledby="addCustomerModalLabel" aria-hidden="true">
@@ -86,55 +91,174 @@ if (isset($_POST['status_action'])) {
     </div>
 </div>
 
+<!-- Modal para editar cliente -->
 <div class="modal fade" id="editCustomerModal" tabindex="-1" role="dialog" aria-labelledby="editCustomerModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="editCustomerLabel">Edit Customer</h5>
+                <h5 class="modal-title" id="editCustomerModalLabel">Edit Customer</h5>
             </div>
             <form action="edit_customer.php" method="POST">
                 <div class="modal-body">
                     <input type="hidden" name="id_cliente" id="edit_id_cliente">
                     
                     <div class="form-group mb-3">
-                        <label for="edit_nombre_cliente">First Name</label>
-                        <input type="text" name="nombre_cliente" id="edit_nombre_cliente" class="form-control" placeholder="Enter first name" required>
+                        <label for="edit_nombre_cliente">Nombre</label>
+                        <input type="text" name="nombre_cliente" id="edit_nombre_cliente" class="form-control" required>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="edit_apellido_paterno">Apellido Paterno</label>
+                        <input type="text" name="apellido_paterno" id="edit_apellido_paterno" class="form-control" required>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="edit_apellido_materno">Apellido Materno</label>
+                        <input type="text" name="apellido_materno" id="edit_apellido_materno" class="form-control" required>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="edit_genero_cliente">Género</label>
+                        <input type="text" name="genero_cliente" id="edit_genero_cliente" class="form-control" required>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="edit_telefono_personal">Teléfono</label>
+                        <input type="text" name="telefono_personal" id="edit_telefono_personal" class="form-control" required>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="edit_correo_electronico">Correo Electrónico</label>
+                        <input type="email" name="correo_electronico" id="edit_correo_electronico" class="form-control" required>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="edit_edad">Edad</label>
+                        <input type="number" name="edad" id="edit_edad" class="form-control" required>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="edit_rol">Rol</label>
+                        <input type="text" name="rol" id="edit_rol" class="form-control" required>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para añadir dirección del cliente -->
+<div class="modal fade" id="addCustomerAddressModal" tabindex="-1" role="dialog" aria-labelledby="addCustomerAddressModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addCustomerAddressLabel">Add Customer Address</h5>
+            </div>
+            <form action="add_customer_address.php" method="POST">
+                <div class="modal-body">
+                <div class="form-group mb-3">
+                        <label for="id_cliente">Seleccione un cliente</label>
+                        <select name="id_cliente" class="form-control" required>
+                            <option value="">Seleccione un cliente</option>
+                            <?php
+                            if ($result_clientes->num_rows > 0) {
+                                while ($clientes = $result_clientes->fetch_assoc()) {
+                                    $nombre_completo = htmlspecialchars($clientes['nombre_cliente'] . ' ' . $clientes['apellido_paterno'] . ' ' . $clientes['apellido_materno']);
+                                    echo "<option value='" . htmlspecialchars($clientes['id_cliente']) . "'>" . $nombre_completo . "</option>";
+                                }
+                            } else {
+                                echo "<option value=''>No hay clientes disponibles</option>";
+                            }
+                            ?>
+                        </select>
+                    </div>
+                    <div class="form-group mb-3">
+                        <input type="number" name="num_ext" class="form-control" placeholder="Outside number" required>
+                    </div>
+                    <div class="form-group mb-3">
+                        <input type="number" name="num_int" class="form-control" placeholder="Inner number" required>
+                    </div>
+                    <div class="form-group mb-3">
+                        <input type="text" name="calle" class="form-control" placeholder="Street" required>
+                    </div>
+                    <div class="form-group mb-3">
+                        <input type="text" name="ciudad" class="form-control" placeholder="City" required>
+                    </div>
+                    <div class="form-group mb-3">
+                        <input type="text" name="estado" class="form-control" placeholder="State" required>
+                    </div>
+                    <div class="form-group mb-3">
+                        <input type="number" name="codigo_postal" class="form-control" placeholder="Postal code" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Add Customer Address</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para editar dirección del cliente -->
+<div class="modal fade" id="editCustomerAddressModal" tabindex="-1" role="dialog" aria-labelledby="editCustomerAddressModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editCustomerAddressLabel">Edit Customer Address</h5>
+            </div>
+            <form action="edit_customer_address.php" method="POST">
+                <div class="modal-body">
+                    <input type="hidden" name="id_direccion_cliente" id="edit_id_direccion_cliente">
+                    <div class="form-group mb-3">
+                        <label for="edit_id_clientee">Seleccione un cliente</label>
+                        <select name="id_cliente" id="edit_id_clientee" class="form-control" required>
+                            <option value="">Seleccione un cliente</option>
+                            <?php
+                            $result_clientes->data_seek(0);
+                            while ($clientes = $result_clientes->fetch_assoc()) {
+                                $nombre_completo = htmlspecialchars($clientes['nombre_cliente'] . ' ' . $clientes['apellido_paterno'] . ' ' . $clientes['apellido_materno']);
+                                echo "<option value='" . htmlspecialchars($clientes['id_cliente']) . "'>$nombre_completo</option>";
+                            }
+                            ?>
+                        </select>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="edit_num_ext">Outside Number</label>
+                        <input type="number" name="num_ext" id="edit_num_ext" class="form-control" placeholder="Enter Outside Number" required>
                     </div>
                     
                     <div class="form-group mb-3">
-                        <label for="edit_apellido_paterno">Last Name</label>
-                        <input type="text" name="apellido_paterno" id="edit_apellido_paterno" class="form-control" placeholder="Enter last name" required>
+                        <label for="edit_num_int">Inner Number</label>
+                        <input type="number" name="num_int" id="edit_num_int" class="form-control" placeholder="Enter Inner Number" required>
                     </div>
                     
                     <div class="form-group mb-3">
-                        <label for="edit_apellido_materno">Mother's Last Name</label>
-                        <input type="text" name="apellido_materno" id="edit_apellido_materno" class="form-control" placeholder="Enter mother's last name" required>
+                        <label for="edit_calle">Street</label>
+                        <input type="text" name="calle" id="edit_calle" class="form-control" placeholder="Enter Street" required>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="edit_ciudad">City</label>
+                        <input type="text" name="ciudad" id="edit_ciudad" class="form-control" placeholder="Enter City" required>
                     </div>
                     
                     <div class="form-group mb-3">
-                        <label for="edit_genero_cliente">Gender</label>
-                        <input type="text" name="genero_cliente" id="edit_genero_cliente" class="form-control" placeholder="Enter gender" required>
+                        <label for="edit_estado">State</label>
+                        <input type="text" name="estado" id="edit_estado" class="form-control" placeholder="Enter State" required>
                     </div>
-                    
+
                     <div class="form-group mb-3">
-                        <label for="edit_telefono_personal">Phone Number</label>
-                        <input type="text" name="telefono_personal" id="edit_telefono_personal" class="form-control" placeholder="Enter phone number" required>
+                        <label for="edit_codigo_postal">Postal Code</label>
+                        <input type="number" name="codigo_postal" id="edit_codigo_postal" class="form-control" placeholder="Enter Postal Code" required>
                     </div>
-                    
-                    <div class="form-group mb-3">
-                        <label for="edit_correo_electronico">Email</label>
-                        <input type="email" name="correo_electronico" id="edit_correo_electronico" class="form-control" placeholder="Enter email" required>
-                    </div>
-                    
-                    <div class="form-group mb-3">
-                        <label for="edit_edad">Age</label>
-                        <input type="number" name="edad" id="edit_edad" class="form-control" placeholder="Enter age" required>
-                    </div>
-                    
-                    <div class="form-group mb-3">
-                        <label for="edit_rol">Role</label>
-                        <input type="text" name="rol" id="edit_rol" class="form-control" placeholder="Enter role" required>
-                    </div>
+
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -148,7 +272,9 @@ if (isset($_POST['status_action'])) {
 <section>
     <table class="table">
         <thead class="thead-dark">
+        <h2 class="text-center">Manage Customers</h2><br/>
             <tr>
+                <th>Customer ID</th>
                 <th>Name</th>
                 <th>Last Name</th>
                 <th>Mother's Last Name</th>
@@ -156,7 +282,7 @@ if (isset($_POST['status_action'])) {
                 <th>Phone</th>
                 <th>Email</th>
                 <th>Age</th>
-                <th>Rol</th>
+                <th>Role</th>
                 <th>Status</th>
                 <th>Actions</th>
             </tr>
@@ -169,6 +295,7 @@ if (isset($_POST['status_action'])) {
             if ($result->num_rows > 0) {
                 while ($row = $result->fetch_assoc()) {
                     echo "<tr>";
+                    echo "<td>" . htmlspecialchars($row['id_cliente']) . "</td>";
                     echo "<td>" . htmlspecialchars($row['nombre_cliente']) . "</td>";
                     echo "<td>" . htmlspecialchars($row['apellido_paterno']) . "</td>";
                     echo "<td>" . htmlspecialchars($row['apellido_materno']) . "</td>";
@@ -205,28 +332,98 @@ if (isset($_POST['status_action'])) {
             ?>
         </tbody>
     </table>
+</section><br/>
+
+<section>
+    <button class="btn btn-info" data-toggle="modal" data-target="#addCustomerAddressModal" style="float: right; margin: 10px;">
+        Add Customer Address
+    </button>
+</section><br/>
+
+<section>
+    <table class="table">
+        <thead class="thead-dark">
+        <h2 class="text-center">Manage Customers Address</h2><br/>
+            <tr>
+                <th>Customer ID</th>
+                <th>Outside Number</th>
+                <th>Inner Number</th>
+                <th>Street</th>
+                <th>City</th>
+                <th>State</th>
+                <th>Postal Code</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php
+            $sql = "SELECT * FROM direccion_cliente";
+            $result = $con->query($sql);
+
+            if ($result->num_rows > 0) {
+                while ($row = $result->fetch_assoc()) {
+                    echo "<tr>";
+                    echo "<td>" . htmlspecialchars($row['id_cliente']) . "</td>";
+                    echo "<td>" . htmlspecialchars($row['num_ext']) . "</td>";
+                    echo "<td>" . htmlspecialchars($row['num_int']) . "</td>";
+                    echo "<td>" . htmlspecialchars($row['calle']) . "</td>";
+                    echo "<td>" . htmlspecialchars($row['ciudad']) . "</td>";
+                    echo "<td>" . htmlspecialchars($row['estado']) . "</td>";
+                    echo "<td>" . htmlspecialchars($row['codigo_postal']) . "</td>";
+                    echo "<td>";
+                        echo "<button class='btn btn-info btn-sm me-1' onclick='openEditCustomerAddressModal(" . json_encode($row) . ")' title='Edit Customer Addres'>
+                                <i class='fas fa-edit'></i>
+                            </button>
+                            <a href='delete_customer_address.php?id=" . $row['id_direccion_cliente'] . "' class='btn btn-danger btn-sm' onclick='return confirm(\"¿Estás seguro de que deseas eliminar esta direccion de cliente?\")' title='Delete Customer Address'>
+                                <i class='fas fa-trash'></i>
+                            </a>
+                        </td>";
+                        echo "</tr>";
+                    }
+                } else {
+                    echo "<tr><td colspan='11'>No hay empleados registrados.</td></tr>";
+                }
+            ?>
+        </tbody>
+    </table>
 </section>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
 <script>
-function openEditModal(customerData) {
-    $('#edit_id_cliente').val(customerData.id_cliente);
-    $('#edit_nombre_cliente').val(customerData.nombre_cliente);
-    $('#edit_apellido_paterno').val(customerData.apellido_paterno);
-    $('#edit_apellido_materno').val(customerData.apellido_materno);
-    $('#edit_genero_cliente').val(customerData.genero_cliente);
-    $('#edit_telefono_personal').val(customerData.telefono_personal);
-    $('#edit_correo_electronico').val(customerData.correo_electronico);
-    $('#edit_contrasena').val(customerData.contrasena);
-    $('#edit_edad').val(customerData.edad);
-    $('#edit_rol').val(customerData.rol);
 
-    $('#editCustomerModal').modal('show');
-}
+    function openEditModal(customerData) {
+        $('#edit_id_cliente').val(customerData.id_cliente);
+        $('#edit_nombre_cliente').val(customerData.nombre_cliente);
+        $('#edit_apellido_paterno').val(customerData.apellido_paterno);
+        $('#edit_apellido_materno').val(customerData.apellido_materno);
+        $('#edit_genero_cliente').val(customerData.genero_cliente);
+        $('#edit_telefono_personal').val(customerData.telefono_personal);
+        $('#edit_correo_electronico').val(customerData.correo_electronico);
+        $('#edit_contrasena').val(customerData.contrasena);
+        $('#edit_edad').val(customerData.edad);
+        $('#edit_rol').val(customerData.rol);
 
-function mostrarToast(titulo, mensaje, tipo) {
+        $('#editCustomerModal').modal('show');
+    }
+
+    function openEditCustomerAddressModal(customerData) {
+        $('#edit_id_direccion_cliente').val(customerData.id_direccion_cliente);
+        $('#hidden_id_cliente').val(customerData.id_cliente);
+        $('#edit_id_clientee').val(customerData.id_cliente);
+        $('#edit_num_ext').val(customerData.num_ext);
+        $('#edit_num_int').val(customerData.num_int);
+        $('#edit_calle').val(customerData.calle);
+        $('#edit_ciudad').val(customerData.ciudad);
+        $('#edit_estado').val(customerData.estado);
+        $('#edit_codigo_postal').val(customerData.codigo_postal);
+
+        $('#editCustomerAddressModal').modal('show');
+    }
+
+
+    function mostrarToast(titulo, mensaje, tipo) {
             let icon = '';
             let alertClass = '';
 

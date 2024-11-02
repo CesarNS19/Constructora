@@ -210,7 +210,7 @@ if (isset($_POST['status_action'])) {
                     <th>Salary</th>
                     <th>Phone</th>
                     <th>Email</th>
-                    <th>Position</th>
+                    <th>Role</th>
                     <th>Activities</th>
                     <th>Status</th>
                     <th>Actions</th>
@@ -232,7 +232,7 @@ if (isset($_POST['status_action'])) {
                         echo "<td>" . htmlspecialchars($row['salario']) . "</td>";
                         echo "<td>" . htmlspecialchars($row['telefono_personal']) . "</td>";
                         echo "<td>" . htmlspecialchars($row['correo_personal']) . "</td>";
-                        echo "<td>" . htmlspecialchars($row['cargo']) . "</td>";
+                        echo "<td>" . htmlspecialchars($row['rol']) . "</td>";
                         echo "<td>" . htmlspecialchars($row['actividades']) . "</td>";
                         echo "<td>" . htmlspecialchars($row['estatus']) . "</td>";
                         echo "<td>";
@@ -279,7 +279,7 @@ if (isset($_POST['status_action'])) {
         $('#edit_salario').val(customerData.salario);
         $('#edit_telefono_personal').val(customerData.telefono_personal);
         $('#edit_correo_personal').val(customerData.correo_personal);
-        $('#edit_cargo').val(customerData.cargo);
+        $('#edit_cargo').val(customerData.rol);
         $('#edit_actividades').val(customerData.actividades);
 
         $('#edit_id_empresa').empty().append('<option value="">Seleccione una empresa</option>');
