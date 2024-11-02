@@ -59,6 +59,10 @@
                         <i class="input-icon uil uil-user"></i>
                       </div>  
                       <div class="form-group mt-2">
+                        <input type="text" name="genero_cliente" class="form-style" placeholder="Genero">
+                        <i class="input-icon uil uil-user"></i>
+                      </div> 
+                      <div class="form-group mt-2">
                         <input type="tel" name="telefono_personal" class="form-style" placeholder="Teléfono Personal" required>
                         <i class="input-icon uil uil-phone"></i>
                       </div>  
@@ -66,6 +70,10 @@
                         <input type="email" name="correo_electronico" class="form-style" placeholder="Correo Electrónico" required>
                         <i class="input-icon uil uil-at"></i>
                       </div>
+                      <div class="form-group mt-2">
+                        <input type="number" name="edad" class="form-style" placeholder="Edad">
+                        <i class="input-icon uil uil-user"></i>
+                      </div> 
                       <div class="form-group mt-2">
                         <input type="password" name="contrasena" class="form-style" placeholder="Contraseña" required>
                         <i class="input-icon uil uil-lock-alt"></i>

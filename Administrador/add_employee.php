@@ -13,9 +13,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $cargo = $_POST['cargo'];
     $actividades = $_POST['actividades'];
     $id_empresa = $_POST['id_empresa'];
+    $estatus  = 'activo';
 
-    $sql = "INSERT INTO empleados (nombre, apellido_paterno, apellido_materno, hora_entrada, hora_salida, salario, telefono_personal, correo_personal, cargo, actividades, id_empresa)
-            VALUES ('$nombre', '$apellido_paterno', '$apellido_materno', '$hora_entrada', '$hora_salida', '$salario', '$telefono_personal', '$correo_personal', '$cargo', '$actividades', '$id_empresa')";
+    $sql = "INSERT INTO empleados (nombre, apellido_paterno, apellido_materno, hora_entrada, hora_salida, salario, telefono_personal, correo_personal, cargo, actividades, id_empresa, estatus)
+            VALUES ('$nombre', '$apellido_paterno', '$apellido_materno', '$hora_entrada', '$hora_salida', '$salario', '$telefono_personal', '$correo_personal', '$cargo', '$actividades', '$id_empresa', '$estatus')";
 
     if ($con->query($sql) === TRUE) {
         header("Location: employee.php");

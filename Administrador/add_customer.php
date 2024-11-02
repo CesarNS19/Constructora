@@ -12,6 +12,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $confirmar_contrasena = $_POST['confirmar_contrasena'];
     $edad = $_POST['edad'];
     $rol = $_POST['rol'];
+    $estatus = 'activo';
 
     if ($contrasena !== $confirmar_contrasena) {
         die("Las contraseñas no coinciden.");
@@ -19,8 +20,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     
     $hashed_password = password_hash($contrasena, PASSWORD_DEFAULT);
 
-    $sql = "INSERT INTO clientes (nombre_cliente, apellido_paterno, apellido_materno, genero_cliente, telefono_personal, correo_electronico, contrasena, edad, rol)
-        VALUES ('$nombre', '$apellido_paterno', '$apellido_materno', '$genero', '$telefono_personal', '$correo', '$hashed_password', '$edad', '$rol')";
+    $sql = "INSERT INTO clientes (nombre_cliente, apellido_paterno, apellido_materno, genero_cliente, telefono_personal, correo_electronico, contrasena, edad, rol, estatus)
+        VALUES ('$nombre', '$apellido_paterno', '$apellido_materno', '$genero', '$telefono_personal', '$correo', '$hashed_password', '$edad', '$rol', '$estatus')";
 
     if ($con->query($sql) === TRUE) {
         header("Location: customers.php");

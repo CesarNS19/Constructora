@@ -13,7 +13,7 @@
 <body>
 
 <?php if (isset($_SESSION['status_message'])): ?>
-    <div class="alert alert-success alert-dismissible fade show" role="alert">
+    <div class="alert alert-success alert-dismissible fade show" role="alert" id="statusAlert">
         <?php echo $_SESSION['status_message']; ?>
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
@@ -79,6 +79,81 @@
     </div>
 </div>
 
+<div class="modal fade" id="editEmployeeModal" tabindex="-1" role="dialog" aria-labelledby="editEmploteeModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editEmployeeLabel">Edit Employee</h5>
+            </div>
+            <form action="edit_employee.php" method="POST">
+                <div class="modal-body">
+                    <input type="hidden" name="id_empleado" id="edit_id_empleado">
+                    
+                    <div class="form-group mb-3">
+                        <label for="edit_nombre">First Name</label>
+                        <input type="text" name="nombre" id="edit_nombre" class="form-control" placeholder="Enter first name" required>
+                    </div>
+                    
+                    <div class="form-group mb-3">
+                        <label for="edit_apellido_paterno">Last Name</label>
+                        <input type="text" name="apellido_paterno" id="edit_apellido_paterno" class="form-control" placeholder="Enter last name" required>
+                    </div>
+                    
+                    <div class="form-group mb-3">
+                        <label for="edit_apellido_materno">Mother's Last Name</label>
+                        <input type="text" name="apellido_materno" id="edit_apellido_materno" class="form-control" placeholder="Enter mother's last name" required>
+                    </div>
+                    
+                    <div class="form-group mb-3">
+                        <label for="edit_hora_entrada">Hora entrada</label>
+                        <input type="time" name="hora_entrada" id="edit_hora_entrada" class="form-control" required>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="edit_hora_salida">Hora Salida</label>
+                        <input type="time" name="hora_entrada" id="edit_hora_salida" class="form-control" required>
+                    </div>
+                    
+                    <div class="form-group mb-3">
+                        <label for="edit_salario">Salary</label>
+                        <input type="number" name="salario" id="edit_salario" class="form-control" placeholder="Enter salary" required>
+                    </div>
+                    
+                    <div class="form-group mb-3">
+                        <label for="edit_telefono_personal">Phone Number</label>
+                        <input type="text" name="telefono_personal" id="edit_telefono_personal" class="form-control" placeholder="Enter phone number" required>
+                    </div>
+                    
+                    <div class="form-group mb-3">
+                        <label for="edit_correo_personal">Email</label>
+                        <input type="email" name="correo_personal" id="edit_correo_personal" class="form-control" placeholder="Enter email" required>
+                    </div>
+                    
+                    <div class="form-group mb-3">
+                        <label for="edit_cargo">cargo</label>
+                        <input type="text" name="cargo" id="edit_cargo" class="form-control" placeholder="Enter cargo" required>
+                    </div>
+                    
+                    <div class="form-group mb-3">
+                        <label for="edit_actividades">Activities</label>
+                        <input type="text" name="actividades" id="edit_actividades" class="form-control" placeholder="Enter activities" required>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="edit_id_empresa">Id Empresa</label>
+                        <input type="number" name="id_empresa" id="edit_id_empresa" class="form-control" placeholder="Enter Company ID" required>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
     <!-- Tabla de Empleados -->
     <section class="employee-table">
         <table class="table">
@@ -117,9 +192,24 @@
                         echo "<td>" . htmlspecialchars($row['cargo']) . "</td>";
                         echo "<td>" . htmlspecialchars($row['actividades']) . "</td>";
                         echo "<td>" . htmlspecialchars($row['estatus']) . "</td>";
-                        echo "<td>
-                            <a href='edit_employee.php?id=" . $row['id_empleado'] . "' class='btn btn-warning btn-sm'>Edit</a>
-                            <a href='delete_employee.php?id=" . $row['id_empleado'] . "' class='btn btn-danger btn-sm' onclick='return confirm(\"Are you sure you want to delete this employee?\")'>Delete</a>
+                        echo "<td>";
+                    
+                        if ($row['estatus'] === 'activo') {
+                            echo "<a href='status_employee.php?id=" . $row['id_empleado'] . "&estatus=inactivo' class='btn btn-warning btn-sm me-2' title='Desactivar empleado'>
+                                    <i class='fas fa-ban'></i>
+                                </a>";
+                        } else {
+                            echo "<a href='status_employee.php?id=" . $row['id_empleado'] . "&estatus=activo' class='btn btn-success btn-sm me-2' title='Activar empleado'>
+                                    <i class='fas fa-check-circle'></i>
+                                </a>";
+                        }
+
+                        echo "<button class='btn btn-info btn-sm me-1' onclick='openEditModal(" . json_encode($row) . ")' title='Editar empleado'>
+                                <i class='fas fa-edit'></i>
+                            </button>
+                            <a href='delete_employee.php?id=" . $row['id_empleado'] . "' class='btn btn-danger btn-sm' onclick='return confirm(\"¿Estás seguro de que deseas eliminar a este empleado?\")' title='Eliminar empleado'>
+                                <i class='fas fa-trash'></i>
+                            </a>
                         </td>";
                         echo "</tr>";
                     }
@@ -133,5 +223,38 @@
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+
+    function openEditModal(customerData) {
+        $('#edit_id_empleado').val(customerData.id_empleado);
+        $('#edit_nombre').val(customerData.nombre);
+        $('#edit_apellido_paterno').val(customerData.apellido_paterno);
+        $('#edit_apellido_materno').val(customerData.apellido_materno);
+        $('#edit_hora_entrada').val(customerData.hora_entrada);
+        $('#edit_hora_salida').val(customerData.hora_salida);
+        $('#edit_salario').val(customerData.salario);
+        $('#edit_telefono_personal').val(customerData.telefono_personal);
+        $('#edit_correo_personal').val(customerData.correo_personal);
+        $('#edit_cargo').val(customerData.cargo);
+        $('#edit_actividades').val(customerData.actividades);
+        $('#edit_id_empresa').val(customerData.id_empresa);
+
+        $('#editEmployeeModal').modal('show');
+    }    
+
+    document.addEventListener('DOMContentLoaded', function() {
+        var alert = document.getElementById('statusAlert');
+        if (alert) {
+            setTimeout(function() {
+                alert.classList.remove('show');
+                alert.classList.add('fade');
+                setTimeout(function() {
+                    alert.style.display = 'none';
+                }, 150);
+            }, 3000);
+        }
+    });
+    </script>
 </body>
 </html>

@@ -1,14 +1,16 @@
 <?php
-require 'conexion.php'; // Asegúrate de que esta ruta sea correcta
+require 'conexion.php';
 
-// Recibe los datos del formulario
 $nombre_cliente = $_POST['nombre_cliente'];
 $apellido_paterno = $_POST['apellido_paterno'];
-$apellido_materno = $_POST['apellido_materno'] ?? ''; // opcional
+$apellido_materno = $_POST['apellido_materno'] ?? '';
+$genero = $_POST['genero_cliente'];
 $telefono_personal = $_POST['telefono_personal'];
 $correo_electronico = $_POST['correo_electronico'];
+$edad = $_POST['edad'];
 $contrasena = $_POST['contrasena'];
 $confirmar_contrasena = $_POST['confirmar_contrasena'];
+$estatus = 'activo';
 
 // Verificar que las contraseñas coincidan
 if ($contrasena !== $confirmar_contrasena) {
@@ -19,12 +21,12 @@ if ($contrasena !== $confirmar_contrasena) {
 $hashed_password = password_hash($contrasena, PASSWORD_DEFAULT);
 
 // Procede a guardar en la base de datos
-$sql = "INSERT INTO clientes (nombre_cliente, apellido_paterno, apellido_materno, telefono_personal, correo_electronico, contrasena, rol) 
-        VALUES (?, ?, ?, ?, ?, ?, ?)";
+$sql = "INSERT INTO clientes (nombre_cliente, apellido_paterno, apellido_materno, genero_cliente, telefono_personal, correo_electronico, contrasena, edad, rol, estatus) 
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
 $stmt = $con->prepare($sql); // Prepara la declaración
 $rol = 'usuario'; // Valor por defecto para el rol
-$stmt->bind_param("sssssss", $nombre_cliente, $apellido_paterno, $apellido_materno, $telefono_personal, $correo_electronico, $hashed_password, $rol); // Vincula parámetros
+$stmt->bind_param("ssssssssss", $nombre_cliente, $apellido_paterno, $apellido_materno, $genero, $telefono_personal, $correo_electronico, $hashed_password, $edad, $rol, $estatus); // Vincula parámetros
 
 if ($stmt->execute()) {
     header("Location: login.php");

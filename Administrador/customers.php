@@ -168,29 +168,28 @@
                     echo "<td>" . htmlspecialchars($row['estatus']) . "</td>";
                     echo "<td>";
                     
-                    if ($row['estatus'] === 'activo') {
-                        echo "<a href='status.php?id=" . $row['id_cliente'] . "&estatus=inactivo' class='btn btn-danger btn-sm'>
-                                <i class='fas fa-ban'></i>
-                              </a>";
-                    } else {
-                        echo "<a href='status.php?id=" . $row['id_cliente'] . "&estatus=activo' class='btn btn-success btn-sm'>
-                                <i class='fas fa-check-circle'></i>
-                              </a>";
+                        if ($row['estatus'] === 'activo') {
+                            echo "<a href='status_customers.php?id=" . $row['id_cliente'] . "&estatus=inactivo' class='btn btn-warning btn-sm me-2' title='Desactivar cliente'>
+                                    <i class='fas fa-ban'></i>
+                                </a>";
+                        } else {
+                            echo "<a href='status_customers.php?id=" . $row['id_cliente'] . "&estatus=activo' class='btn btn-success btn-sm me-2' title='Activar cliente'>
+                                    <i class='fas fa-check-circle'></i>
+                                </a>";
+                        }
+
+                        echo "<button class='btn btn-info btn-sm me-1' onclick='openEditModal(" . json_encode($row) . ")' title='Editar cliente'>
+                                <i class='fas fa-edit'></i>
+                            </button>
+                            <a href='delete_employee.php?id=" . $row['id_cliente'] . "' class='btn btn-danger btn-sm' onclick='return confirm(\"¿Estás seguro de que deseas eliminar a este cliente?\")' title='Eliminar cliente'>
+                                <i class='fas fa-trash'></i>
+                            </a>
+                        </td>";
+                        echo "</tr>";
                     }
-
-                    echo "<button class='btn btn-warning btn-sm' onclick='openEditModal(" . json_encode($row) . ")'>
-                            <i class='fas fa-edit'></i>
-                          </button>
-                          <a href='delete_customer.php?id=" . $row['id_cliente'] . "' class='btn btn-danger btn-sm' onclick='return confirm(\"Are you sure you want to delete this customer?\")'>
-                            <i class='fas fa-trash'></i>
-                          </a>
-                    </td>";
-                    echo "</tr>";
-
+                } else {
+                    echo "<tr><td colspan='11'>No hay empleados registrados.</td></tr>";
                 }
-            } else {
-                echo "<tr><td colspan='11'>No hay empleados registrados.</td></tr>";
-            }
             ?>
         </tbody>
     </table>
