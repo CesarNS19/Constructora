@@ -37,11 +37,11 @@
                 $hour = date('H');
                 
                 if ($hour >= 5 && $hour < 12) {
-                    $greeting = "Buenos días";
+                    $greeting = "Good Morning";
                 } elseif ($hour >= 12 && $hour < 19) {
-                    $greeting = "Buenas tardes";
+                    $greeting = "Good Afternoon";
                 } else {
-                    $greeting = "Buenas noches";
+                    $greeting = "Good night";
                 }
 
                 echo "

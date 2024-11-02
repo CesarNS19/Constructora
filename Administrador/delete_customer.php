@@ -1,20 +1,30 @@
 <?php
 require '../Login/conexion.php';
+session_start();
 
 if (isset($_GET['id'])) {
-    $id = $_GET['id'];
+    $id = intval($_GET['id']);
 
     $sql = "DELETE FROM clientes WHERE id_cliente = ?";
     $stmt = $con->prepare($sql);
     $stmt->bind_param("i", $id);
 
     if ($stmt->execute()) {
-        header("Location: customers.php");
-        exit();
+        $_SESSION['status_message'] = 'Cliente eliminado correctamente.';
+        $_SESSION['status_type'] = 'success';
     } else {
-        echo "Error al eliminar el cliente.";
+        $_SESSION['status_message'] = 'Error al eliminar el cliente: ' . $stmt->error;
+        $_SESSION['status_type'] = 'danger';
     }
+
+    $stmt->close();
 } else {
-    echo "ID de cliente no especificado.";
+    $_SESSION['status_message'] = 'ID de cliente no especificado.';
+    $_SESSION['status_type'] = 'warning';
 }
+
+header('Location: customers.php');
+exit();
+
+$con->close();
 ?>

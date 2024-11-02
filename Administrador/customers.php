@@ -1,5 +1,21 @@
 <?php require '../Login/conexion.php'; ?>
-<?php require '../Administrador/superior_admin.php'; ?>
+
+<?php
+require '../Administrador/superior_admin.php';
+
+if (isset($_POST['status_action'])) {
+    $accion = $_POST['status_action'];
+    if ($accion === 'activate') {
+        $_SESSION['status_message'] = 'Empleado activado correctamente';
+        $_SESSION['status_type'] = 'success';
+    } else {
+        $_SESSION['status_message'] = 'Empleado desactivado correctamente';
+        $_SESSION['status_type'] = 'warning';
+    }
+    header("Location: employee.php");
+    exit();
+}
+?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -9,15 +25,11 @@
     <title>Customer</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
-<?php if (isset($_SESSION['status_message'])): ?>
-    <div class="alert alert-success alert-dismissible fade show" role="alert" id="statusAlert">
-        <?php echo $_SESSION['status_message']; ?>
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-    <?php unset($_SESSION['status_message']); ?>
-<?php endif; ?>
+
+<div id="Alert"></div>
 
 <section class="employee-header">
     <button class="btn btn-success" data-toggle="modal" data-target="#addCustomerModal" style="float: right; margin: 10px;">
@@ -181,7 +193,7 @@
                         echo "<button class='btn btn-info btn-sm me-1' onclick='openEditModal(" . json_encode($row) . ")' title='Editar cliente'>
                                 <i class='fas fa-edit'></i>
                             </button>
-                            <a href='delete_employee.php?id=" . $row['id_cliente'] . "' class='btn btn-danger btn-sm' onclick='return confirm(\"¿Estás seguro de que deseas eliminar a este cliente?\")' title='Eliminar cliente'>
+                            <a href='delete_customer.php?id=" . $row['id_cliente'] . "' class='btn btn-danger btn-sm' onclick='return confirm(\"¿Estás seguro de que deseas eliminar a este cliente?\")' title='Eliminar cliente'>
                                 <i class='fas fa-trash'></i>
                             </a>
                         </td>";
@@ -214,23 +226,59 @@ function openEditModal(customerData) {
     $('#editCustomerModal').modal('show');
 }
 
-    // Espera a que el documento esté completamente cargado
-    document.addEventListener('DOMContentLoaded', function() {
-        // Verifica si la alerta existe en el DOM
-        var alert = document.getElementById('statusAlert');
-        if (alert) {
-            // Espera 3 segundos y luego oculta la alerta
-            setTimeout(function() {
-                alert.classList.remove('show'); // Remueve la clase 'show' para ocultar la alerta
-                alert.classList.add('fade'); // Añade la clase 'fade' para aplicar la transición
-                // Opcional: Elimina el elemento del DOM después de ocultarlo
-                setTimeout(function() {
-                    alert.style.display = 'none'; // Oculta el elemento
-                }, 150); // 150 milisegundos para esperar que la clase 'fade' se aplique
-            }, 3000); // 3000 milisegundos = 3 segundos
-        }
-    });
+function mostrarToast(titulo, mensaje, tipo) {
+            let icon = '';
+            let alertClass = '';
 
-</script>
+            switch (tipo) {
+                case 'success':
+                    icon = '<span class="fas fa-check-circle text-white fs-6"></span>';
+                    alertClass = 'alert-success';
+                    break;
+                case 'error':
+                    icon = '<span class="fas fa-times-circle text-white fs-6"></span>';
+                    alertClass = 'alert-danger';
+                    break;
+                case 'warning':
+                    icon = '<span class="fas fa-exclamation-circle text-white fs-6"></span>';
+                    alertClass = 'alert-warning';
+                    break;
+                case 'info':
+                    icon = '<span class="fas fa-info-circle text-white fs-6"></span>';
+                    alertClass = 'alert-info';
+                    break;
+                default:
+                    icon = '<span class="fas fa-info-circle text-white fs-6"></span>';
+                    alertClass = 'alert-info';
+                    break;
+            }
+
+            const alert = `
+            <div class="alert ${alertClass} d-flex align-items-center alert-dismissible fade show" role="alert">
+                <div class="me-2">${icon}</div>
+                <div>${titulo}: ${mensaje}</div>
+                <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>`;
+
+            $("#Alert").html(alert);
+
+            setTimeout(() => {
+                $(".alert").alert('close');
+            }, 4000);
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            <?php if (isset($_SESSION['status_message']) && isset($_SESSION['status_type'])): ?>
+                mostrarToast(
+                    '<?= $_SESSION["status_type"] === "warning" ? "Advertencia" : "Éxito" ?>',
+                    '<?= $_SESSION["status_message"] ?>',
+                    '<?= $_SESSION["status_type"] ?>'
+                );
+                <?php unset($_SESSION['status_message'], $_SESSION['status_type']); ?>
+            <?php endif; ?>
+        });
+    </script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

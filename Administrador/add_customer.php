@@ -1,5 +1,6 @@
 <?php
 require '../Login/conexion.php';
+session_start();
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $nombre = $_POST['nombre_cliente'];
@@ -24,11 +25,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         VALUES ('$nombre', '$apellido_paterno', '$apellido_materno', '$genero', '$telefono_personal', '$correo', '$hashed_password', '$edad', '$rol', '$estatus')";
 
     if ($con->query($sql) === TRUE) {
-        header("Location: customers.php");
+        $_SESSION['status_message'] = "Cliente agregado exitosamente.";
+        $_SESSION['status_type'] = "success";
     } else {
-        echo "Error: " . $sql . "<br>" . $con->error;
+        $_SESSION['status_message'] = "Error al agregar el cliente: " . $con->error;
+        $_SESSION['status_type'] = "danger";
     }
-}
+
+    header("Location: customers.php");
+    exit();
+    }
 
 $con->close();
 ?>

@@ -1,10 +1,10 @@
 <?php
 require '../Login/conexion.php';
+session_start();
 
 if (isset($_POST['id_empleado'])) {
     $id = $_POST['id_empleado'];
 
-    // Obtener datos actuales del cliente
     $sql = "SELECT * FROM empleados WHERE id_empleado = ?";
     $stmt = $con->prepare($sql);
     $stmt->bind_param("i", $id);
@@ -13,7 +13,6 @@ if (isset($_POST['id_empleado'])) {
     $cliente = $result->fetch_assoc();
 
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-        // Obtener datos actualizados
         $nombre = $_POST['nombre'];
         $apellido_paterno = $_POST['apellido_paterno'];
         $apellido_materno = $_POST['apellido_materno'];
@@ -26,22 +25,26 @@ if (isset($_POST['id_empleado'])) {
         $actividades = $_POST['actividades'];
         $id_empresa = $_POST['id_empresa'];
     
-        // Actualizar datos del cliente
         $sql = "UPDATE empleados SET nombre = ?, apellido_paterno = ?, apellido_materno = ?, hora_entrada = ?, hora_salida = ?, salario = ?, telefono_personal = ?, correo_personal = ?, cargo = ?, actividades = ?, id_empresa = ? WHERE id_empleado = ?";
         $stmt = $con->prepare($sql);
         $stmt->bind_param("sssssssssssi", $nombre, $apellido_paterno, $apellido_materno, $hora_entrada, $hora_salida, $salario, $telefono, $email, $cargo, $actividades, $id_empresa, $id);
     
         if ($stmt->execute()) {
             if ($stmt->affected_rows > 0) {
-                echo "Empleado actualizado exitosamente.";
-                header("Location: employee.php");
-                exit();
+                $_SESSION['status_message'] = 'Empleado actualizado exitosamente.';
+                $_SESSION['status_type'] = 'success';
             } else {
-                echo "No se realizaron cambios. Verifica los datos.";
+                $_SESSION['status_message'] = 'No se realizaron cambios. Verifica los datos.';
+                $_SESSION['status_type'] = 'warning';
             }
         } else {
-            echo "Error al actualizar los datos: " . $stmt->error;
+            $_SESSION['status_message'] = 'Error al actualizar los datos: ' . $stmt->error;
+            $_SESSION['status_type'] = 'danger';
         }
+
+        $stmt->close();
+        header("Location: employee.php");
+        exit();
     }
-}    
+}
 ?>

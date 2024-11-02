@@ -1,5 +1,6 @@
 <?php
 require '../Login/conexion.php';
+session_start();
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $nombre = $_POST['nombre'];
@@ -19,10 +20,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             VALUES ('$nombre', '$apellido_paterno', '$apellido_materno', '$hora_entrada', '$hora_salida', '$salario', '$telefono_personal', '$correo_personal', '$cargo', '$actividades', '$id_empresa', '$estatus')";
 
     if ($con->query($sql) === TRUE) {
-        header("Location: employee.php");
+        $_SESSION['status_message'] = "Empleado agregado exitosamente.";
+        $_SESSION['status_type'] = "success";
     } else {
-        echo "Error: " . $sql . "<br>" . $con->error;
+        $_SESSION['status_message'] = "Error al agregar el empleado: " . $con->error;
+        $_SESSION['status_type'] = "danger";
     }
+
+    header("Location: employee.php");
+    exit();
 }
 
 $con->close();
