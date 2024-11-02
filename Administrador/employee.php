@@ -11,6 +11,15 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 <body>
+
+<?php if (isset($_SESSION['status_message'])): ?>
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <?php echo $_SESSION['status_message']; ?>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    <?php unset($_SESSION['status_message']); ?>
+<?php endif; ?>
+
 <section class="employee-header">
         <button class="btn btn-success" data-toggle="modal" data-target="#addEmployeeModal" style="float: right; margin: 10px;">
             Add Employee
@@ -85,6 +94,7 @@
                     <th>Email</th>
                     <th>Position</th>
                     <th>Activities</th>
+                    <th>Status</th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -106,6 +116,7 @@
                         echo "<td>" . htmlspecialchars($row['correo_personal']) . "</td>";
                         echo "<td>" . htmlspecialchars($row['cargo']) . "</td>";
                         echo "<td>" . htmlspecialchars($row['actividades']) . "</td>";
+                        echo "<td>" . htmlspecialchars($row['estatus']) . "</td>";
                         echo "<td>
                             <a href='edit_employee.php?id=" . $row['id_empleado'] . "' class='btn btn-warning btn-sm'>Edit</a>
                             <a href='delete_employee.php?id=" . $row['id_empleado'] . "' class='btn btn-danger btn-sm' onclick='return confirm(\"Are you sure you want to delete this employee?\")'>Delete</a>

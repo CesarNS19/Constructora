@@ -52,7 +52,7 @@ nav .nav-links {
 }
 
 .nav-links li a {
-    color: white;
+    color: black;
     text-decoration: none;
     font-size: 20px;
     transition: color 0.3s, transform 0.3s;
@@ -84,7 +84,7 @@ body.dark-mode .nav-links li a:hover {
 .vr {
     width: 1px;
     height: 30px;
-    background-color: white;
+    background-color: black;
     margin: 0 15px;
 }
 
@@ -113,7 +113,7 @@ body.dark-mode .nav-item a.nav-link:hover {
 .language-toggle {
     background: none;
     border: none;
-    color: white;
+    color: black;
     font-size: 24px;
     cursor: pointer;
     transition: color 0.3s;
@@ -123,15 +123,11 @@ body.dark-mode .nav-item a.nav-link:hover {
     color: #00ffcc;
 }
 
-body.dark-mode .language-toggle {
-    color: #ecf0f1;
-}
-
 /* Botón de modo oscuro */
 #themeToggle {
     background: none;
     border: none;
-    color: white;
+    color: black;
     font-size: 24px;
     cursor: pointer;
     transition: color 0.3s, transform 0.3s;

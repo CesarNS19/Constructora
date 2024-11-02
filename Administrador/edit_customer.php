@@ -20,15 +20,13 @@ if (isset($_POST['id_cliente'])) {
         $genero = $_POST['genero_cliente'];
         $telefono = $_POST['telefono_personal'];
         $email = $_POST['correo_electronico'];
+        $edad = $_POST['edad'];
         $rol = $_POST['rol'];
     
-        // Si se envió una contraseña, encripta la nueva
-        $contrasena = !empty($_POST['contrasena']) ? password_hash($_POST['contrasena'], PASSWORD_DEFAULT) : $cliente['contrasena'];
-    
         // Actualizar datos del cliente
-        $sql = "UPDATE clientes SET nombre_cliente = ?, apellido_paterno = ?, apellido_materno = ?, genero_cliente = ?, telefono_personal = ?, correo_electronico = ?, contrasena = ?, rol = ? WHERE id_cliente = ?";
+        $sql = "UPDATE clientes SET nombre_cliente = ?, apellido_paterno = ?, apellido_materno = ?, genero_cliente = ?, telefono_personal = ?, correo_electronico = ?, edad = ?, rol = ? WHERE id_cliente = ?";
         $stmt = $con->prepare($sql);
-        $stmt->bind_param("ssssssssi", $nombre, $apellido_paterno, $apellido_materno, $genero, $telefono, $email, $contrasena, $rol, $id);
+        $stmt->bind_param("ssssssssi", $nombre, $apellido_paterno, $apellido_materno, $genero, $telefono, $email, $edad, $rol, $id);
     
         if ($stmt->execute()) {
             if ($stmt->affected_rows > 0) {

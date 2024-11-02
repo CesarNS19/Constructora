@@ -41,16 +41,16 @@
 
                 echo "
                 <div class='nav-item' style='display: flex; align-items: center;'>
-                    <a class='nav-link' href='perfil.php' style='color: white; font-size: 18px; text-decoration: none; font-weight: 600;'>
+                    <a class='nav-link' href='perfil.php' style='color: black; font-size: 18px; text-decoration: none; font-weight: 600;'>
                         $greeting $fullName
                     </a>
                     <div class='vr' style='height: 24px; width: 1px; background-color: #ffffff; margin: 0 10px;'></div>
-                    <button id='themeToggle' style='background: none; border: none; color: white; font-size: 20px; cursor: pointer;'>
+                    <button id='themeToggle' style='background: none; border: none; color: black; font-size: 20px; cursor: pointer;'>
                         <i class='fas fa-adjust'></i>
                     </button>
                 </div>";
             } else {
-                echo "<a class='nav-link' href='../Login/login.php' style='color: white; font-size: 18px; text-decoration: none; font-weight: 600;'>Iniciar sesión</a>";
+                echo "<a class='nav-link' href='../Login/login.php' style='color: black; font-size: 18px; text-decoration: none; font-weight: 600;'>Iniciar sesión</a>";
             }
             ?>
         </div>

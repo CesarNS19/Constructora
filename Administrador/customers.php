@@ -11,6 +11,14 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 <body>
+<?php if (isset($_SESSION['status_message'])): ?>
+    <div class="alert alert-success alert-dismissible fade show" role="alert" id="statusAlert">
+        <?php echo $_SESSION['status_message']; ?>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    <?php unset($_SESSION['status_message']); ?>
+<?php endif; ?>
+
 <section class="employee-header">
     <button class="btn btn-success" data-toggle="modal" data-target="#addCustomerModal" style="float: right; margin: 10px;">
         Add Customer
@@ -107,11 +115,6 @@
                     </div>
                     
                     <div class="form-group mb-3">
-                        <label for="edit_contrasena">Password</label>
-                        <input type="password" name="contrasena" id="edit_contrasena" class="form-control" placeholder="Enter password" required>
-                    </div>
-                    
-                    <div class="form-group mb-3">
                         <label for="edit_edad">Age</label>
                         <input type="number" name="edad" id="edit_edad" class="form-control" placeholder="Enter age" required>
                     </div>
@@ -140,9 +143,9 @@
                 <th>Gender</th>
                 <th>Phone</th>
                 <th>Email</th>
-                <th>Password</th>
                 <th>Age</th>
                 <th>Rol</th>
+                <th>Status</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -160,14 +163,30 @@
                     echo "<td>" . htmlspecialchars($row['genero_cliente']) . "</td>";
                     echo "<td>" . htmlspecialchars($row['telefono_personal']) . "</td>";
                     echo "<td>" . htmlspecialchars($row['correo_electronico']) . "</td>";
-                    echo "<td>" . htmlspecialchars($row['contrasena']) . "</td>";
                     echo "<td>" . htmlspecialchars($row['edad']) . "</td>";
                     echo "<td>" . htmlspecialchars($row['rol']) . "</td>";
-                    echo "<td>
-                        <button class='btn btn-warning btn-sm' onclick='openEditModal(" . json_encode($row) . ")'>Edit</button>
-                        <a href='delete_customer.php?id=" . $row['id_cliente'] . "' class='btn btn-danger btn-sm' onclick='return confirm(\"Are you sure you want to delete this customer?\")'>Delete</a>
+                    echo "<td>" . htmlspecialchars($row['estatus']) . "</td>";
+                    echo "<td>";
+                    
+                    if ($row['estatus'] === 'activo') {
+                        echo "<a href='status.php?id=" . $row['id_cliente'] . "&estatus=inactivo' class='btn btn-danger btn-sm'>
+                                <i class='fas fa-ban'></i>
+                              </a>";
+                    } else {
+                        echo "<a href='status.php?id=" . $row['id_cliente'] . "&estatus=activo' class='btn btn-success btn-sm'>
+                                <i class='fas fa-check-circle'></i>
+                              </a>";
+                    }
+
+                    echo "<button class='btn btn-warning btn-sm' onclick='openEditModal(" . json_encode($row) . ")'>
+                            <i class='fas fa-edit'></i>
+                          </button>
+                          <a href='delete_customer.php?id=" . $row['id_cliente'] . "' class='btn btn-danger btn-sm' onclick='return confirm(\"Are you sure you want to delete this customer?\")'>
+                            <i class='fas fa-trash'></i>
+                          </a>
                     </td>";
                     echo "</tr>";
+
                 }
             } else {
                 echo "<tr><td colspan='11'>No hay empleados registrados.</td></tr>";
@@ -195,6 +214,24 @@ function openEditModal(customerData) {
 
     $('#editCustomerModal').modal('show');
 }
+
+    // Espera a que el documento esté completamente cargado
+    document.addEventListener('DOMContentLoaded', function() {
+        // Verifica si la alerta existe en el DOM
+        var alert = document.getElementById('statusAlert');
+        if (alert) {
+            // Espera 3 segundos y luego oculta la alerta
+            setTimeout(function() {
+                alert.classList.remove('show'); // Remueve la clase 'show' para ocultar la alerta
+                alert.classList.add('fade'); // Añade la clase 'fade' para aplicar la transición
+                // Opcional: Elimina el elemento del DOM después de ocultarlo
+                setTimeout(function() {
+                    alert.style.display = 'none'; // Oculta el elemento
+                }, 150); // 150 milisegundos para esperar que la clase 'fade' se aplique
+            }, 3000); // 3000 milisegundos = 3 segundos
+        }
+    });
+
 </script>
 </body>
 </html>
