@@ -10,14 +10,16 @@
 <body>
     <header>
         <nav>
-            <button class="language-toggle" id="languageButton" aria-label="Change Language">
+            <!-- Botón de idioma -->
+            <button class="language-toggle" id="languageButton" aria-label="Change Language" title="Cambiar idioma">
                 <i class="fas fa-globe"></i>
             </button>
             <ul class="nav-links">
-                <li><a href="index.php"><i class="fas fa-home"></i></a></li>
+                <li><a href="index_employee.php" title="Inicio"><i class="fas fa-home"></i></a></li>
                 <li><a href="perfil.php" title="Perfil"><i class="fas fa-user"></i></a></li>
-                <li><a href="#services"><i class="fas fa-concierge-bell"></i></a></li>
-                <li><a href="#contact"><i class="fas fa-envelope"></i></a></li>
+                <li><a href="#services" title="Servicios"><i class="fas fa-concierge-bell"></i></a></li>
+                <li><a href="#contact" title="Contacto"><i class="fas fa-envelope"></i></a></li>
+                <li><a href="customers.php" title="Clientes"><i class="fas fa-users"></i></a></li>
             </ul>
             <div class="user-controls" style="display: flex; align-items: center; margin-left: auto;">
             <?php
@@ -45,7 +47,7 @@
                     <a class='nav-link' href='perfil.php' style='color: black; font-size: 18px; text-decoration: none; font-weight: 600;'>
                         $greeting $fullName
                     </a>
-                    <div class='vr' style='height: 24px; width: 1px; background-color: #ffffff; margin: 0 10px;'></div>
+                    <div class='vr' style='height: 24px; width: 1px; background-color: black; margin: 0 10px;'></div>
                     <button id='themeToggle' style='background: none; border: none; color: black; font-size: 20px; cursor: pointer;'>
                         <i class='fas fa-adjust'></i>
                     </button>
@@ -56,12 +58,11 @@
             ?>
         </div>
         </nav>
-
     </header>
+
     <script>
-    document.cookie = "timezone=" + Intl.DateTimeFormat().resolvedOptions().timeZone;
-</script>
+        document.cookie = "timezone=" + Intl.DateTimeFormat().resolvedOptions().timeZone;
+    </script>
 
 </body>
 </html>
-

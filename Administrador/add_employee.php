@@ -11,25 +11,32 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $salario = $_POST['salario'];
     $telefono_personal = $_POST['telefono_personal'];
     $correo_personal = $_POST['correo_personal'];
-    $cargo = $_POST['cargo'];
+    $contrasena = $_POST['contrasena'];
+    $estatus = 'activo';
+    $rol = 'empleado';
     $actividades = $_POST['actividades'];
     $id_empresa = $_POST['id_empresa'];
-    $estatus  = 'activo';
 
-    $sql = "INSERT INTO empleados (nombre, apellido_paterno, apellido_materno, hora_entrada, hora_salida, salario, telefono_personal, correo_personal, cargo, actividades, id_empresa, estatus)
-            VALUES ('$nombre', '$apellido_paterno', '$apellido_materno', '$hora_entrada', '$hora_salida', '$salario', '$telefono_personal', '$correo_personal', '$cargo', '$actividades', '$id_empresa', '$estatus')";
+    $hashed_password = password_hash($contrasena, PASSWORD_DEFAULT);
 
-    if ($con->query($sql) === TRUE) {
+    $sql = "INSERT INTO empleados (nombre, apellido_paterno, apellido_materno, hora_entrada, hora_salida, salario, telefono_personal, correo_personal, contrasena, rol, actividades, id_empresa, estatus) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    
+    $stmt = $con->prepare($sql);
+    $stmt->bind_param("sssssssssssss", $nombre, $apellido_paterno, $apellido_materno, $hora_entrada, $hora_salida, $salario, $telefono_personal, $correo_personal, $hashed_password, $rol, $actividades, $id_empresa, $estatus);
+
+    if ($stmt->execute()) {
         $_SESSION['status_message'] = "Empleado agregado exitosamente.";
         $_SESSION['status_type'] = "success";
     } else {
-        $_SESSION['status_message'] = "Error al agregar el empleado: " . $con->error;
+        $_SESSION['status_message'] = "Error al agregar el empleado: " . $stmt->error;
         $_SESSION['status_type'] = "danger";
     }
+
+    $stmt->close();
+    $con->close();
 
     header("Location: employee.php");
     exit();
 }
-
-$con->close();
 ?>

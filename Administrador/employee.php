@@ -39,8 +39,8 @@ if (isset($_POST['status_action'])) {
 <section class="employee-header">
         <button class="btn btn-success" data-toggle="modal" data-target="#addEmployeeModal" style="float: right; margin: 10px;">
             Add Employee
-        </button>
-    </section>
+        </button><br/>
+    </section><br/>
 
     <div class="modal fade" id="addEmployeeModal" tabindex="-1" role="dialog" aria-labelledby="addEmployeeModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -77,7 +77,7 @@ if (isset($_POST['status_action'])) {
                         <input type="email" name="correo_personal" class="form-control" placeholder="Correo Personal" required>
                     </div>
                     <div class="form-group mb-3">
-                        <input type="text" name="cargo" class="form-control" placeholder="Cargo" required>
+                        <input type="password" name="contrasena" class="form-control" placeholder="Password" required>
                     </div>
                     <div class="form-group mb-3">
                         <textarea name="actividades" class="form-control" placeholder="Actividades" required></textarea>
@@ -159,11 +159,6 @@ if (isset($_POST['status_action'])) {
                     </div>
                     
                     <div class="form-group mb-3">
-                        <label for="edit_cargo">Cargo</label>
-                        <input type="text" name="cargo" id="edit_cargo" class="form-control" placeholder="Ingresa el cargo" required>
-                    </div>
-                    
-                    <div class="form-group mb-3">
                         <label for="edit_actividades">Actividades</label>
                         <input type="text" name="actividades" id="edit_actividades" class="form-control" placeholder="Ingresa las actividades" required>
                     </div>
@@ -202,6 +197,7 @@ if (isset($_POST['status_action'])) {
         <table class="table">
             <thead class="thead-dark">
                 <tr>
+                    <h2 class="text-center">Manage Employees</h2><br/>
                     <th>Name</th>
                     <th>Last Name</th>
                     <th>Mother's Last Name</th>
@@ -212,6 +208,7 @@ if (isset($_POST['status_action'])) {
                     <th>Email</th>
                     <th>Role</th>
                     <th>Activities</th>
+                    <th>Company ID</th>
                     <th>Status</th>
                     <th>Actions</th>
                 </tr>
@@ -234,6 +231,7 @@ if (isset($_POST['status_action'])) {
                         echo "<td>" . htmlspecialchars($row['correo_personal']) . "</td>";
                         echo "<td>" . htmlspecialchars($row['rol']) . "</td>";
                         echo "<td>" . htmlspecialchars($row['actividades']) . "</td>";
+                        echo "<td>" . htmlspecialchars($row['id_empresa']) . "</td>";
                         echo "<td>" . htmlspecialchars($row['estatus']) . "</td>";
                         echo "<td>";
                     
@@ -279,7 +277,6 @@ if (isset($_POST['status_action'])) {
         $('#edit_salario').val(customerData.salario);
         $('#edit_telefono_personal').val(customerData.telefono_personal);
         $('#edit_correo_personal').val(customerData.correo_personal);
-        $('#edit_cargo').val(customerData.rol);
         $('#edit_actividades').val(customerData.actividades);
 
         $('#edit_id_empresa').empty().append('<option value="">Seleccione una empresa</option>');

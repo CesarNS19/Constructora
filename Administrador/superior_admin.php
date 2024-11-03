@@ -27,8 +27,8 @@
             <?php
             session_start();
 
-            if (isset($_SESSION['nombre_cliente'], $_SESSION['apellido_paterno'], $_SESSION['apellido_materno'])) {
-                $fullName = $_SESSION['nombre_cliente'] . ' ' . $_SESSION['apellido_paterno'] . ' ' . $_SESSION['apellido_materno'];
+            if (isset($_SESSION['nombre'], $_SESSION['apellido_paterno'], $_SESSION['apellido_materno'])) {
+                $fullName = $_SESSION['nombre'] . ' ' . $_SESSION['apellido_paterno'] . ' ' . $_SESSION['apellido_materno'];
                 
                 if (isset($_COOKIE['timezone'])) {
                     date_default_timezone_set($_COOKIE['timezone']);

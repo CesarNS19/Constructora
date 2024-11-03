@@ -1,18 +1,18 @@
 <?php
 session_start();
-require '../Login/conexion.php';
+require '../Login/conexion.php'; // Asegúrate de incluir tu conexión a la base de datos
 
-// Verificar si el usuario está autenticado como cliente
-if (!isset($_SESSION['id_cliente'])) {
+// Verificar si el usuario está autenticado como empleado
+if (!isset($_SESSION['id_empleado'])) {
     header("Location: ../Login/login.php"); // Redirigir a la página de inicio de sesión si no está autenticado
     exit;
 }
 
 // Supongamos que tienes una variable de sesión para el ID del usuario
-$user_id = $_SESSION['id_cliente'];
+$user_id = $_SESSION['id_empleado'];
 
 // Obtener los datos del usuario de la base de datos
-$query = "SELECT * FROM clientes WHERE id_cliente = ?";
+$query = "SELECT * FROM empleados WHERE id_empleado = ?";
 $stmt = $con->prepare($query);
 $stmt->bind_param("i", $user_id);
 $stmt->execute();
@@ -25,7 +25,6 @@ if (!$user) {
 }
 
 ?>
-
 
 <!DOCTYPE html>
 <html lang="es">
@@ -58,6 +57,7 @@ if (!$user) {
             <p><strong>Apellidos:</strong> <?php echo htmlspecialchars(($user['apellido_paterno'] ?? '') . ' ' . ($user['apellido_materno'] ?? '')); ?></p>
             <p><strong>Correo:</strong> <?php echo htmlspecialchars($user['correo_electronico'] ?? 'No disponible'); ?></p>
             <p><strong>Teléfono:</strong> <?php echo htmlspecialchars($user['telefono_personal'] ?? 'No disponible'); ?></p>
+
         </div>
     </div>
 

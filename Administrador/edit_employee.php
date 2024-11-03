@@ -21,13 +21,12 @@ if (isset($_POST['id_empleado'])) {
         $salario = $_POST['salario'];
         $telefono = $_POST['telefono_personal'];
         $email = $_POST['correo_personal'];
-        $cargo = $_POST['cargo'];
         $actividades = $_POST['actividades'];
         $id_empresa = $_POST['id_empresa'];
     
-        $sql = "UPDATE empleados SET nombre = ?, apellido_paterno = ?, apellido_materno = ?, hora_entrada = ?, hora_salida = ?, salario = ?, telefono_personal = ?, correo_personal = ?, cargo = ?, actividades = ?, id_empresa = ? WHERE id_empleado = ?";
+        $sql = "UPDATE empleados SET nombre = ?, apellido_paterno = ?, apellido_materno = ?, hora_entrada = ?, hora_salida = ?, salario = ?, telefono_personal = ?, correo_personal = ?, actividades = ?, id_empresa = ? WHERE id_empleado = ?";
         $stmt = $con->prepare($sql);
-        $stmt->bind_param("sssssssssssi", $nombre, $apellido_paterno, $apellido_materno, $hora_entrada, $hora_salida, $salario, $telefono, $email, $cargo, $actividades, $id_empresa, $id);
+        $stmt->bind_param("ssssssssssi", $nombre, $apellido_paterno, $apellido_materno, $hora_entrada, $hora_salida, $salario, $telefono, $email, $actividades, $id_empresa, $id);
     
         if ($stmt->execute()) {
             if ($stmt->affected_rows > 0) {

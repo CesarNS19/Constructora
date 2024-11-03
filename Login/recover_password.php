@@ -20,9 +20,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Configurar codificación UTF-8 para la conexión
     $conn->set_charset('utf8');
 
-    // Consultar la contraseña del usuario basada en el correo electrónico
-    $sql = "SELECT contrasena FROM clientes WHERE correo_electronico = '$email'";
-    $result = $conn->query($sql);
+    // Consultar la contraseña del usuario en las tablas clientes y empleados
+    $sql = "
+        SELECT contrasena, 'cliente' AS tipo_usuario 
+        FROM clientes 
+        WHERE correo_electronico = ?
+        UNION
+        SELECT contrasena, 'empleado' AS tipo_usuario 
+        FROM empleados 
+        WHERE correo_personal = ?
+    ";
+    
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("ss", $email, $email);
+    $stmt->execute();
+    $result = $stmt->get_result();
 
     if ($result && $result->num_rows > 0) {
         // Obtener la contraseña del resultado de la consulta
@@ -38,7 +50,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $mail->Host = 'smtp.gmail.com';
             $mail->SMTPAuth = true;
             $mail->Username = 'cesarneri803@gmail.com'; // Tu dirección de correo de Gmail
-            $mail->Password = 'kyoi thod ximj mipk'; // Tu contraseña de Gmail
+            $mail->Password = 'kyoi thod ximj mipk'; // Tu contraseña de Gmail o clave de aplicación
             $mail->SMTPSecure = 'tls';
             $mail->Port = 587;
 
