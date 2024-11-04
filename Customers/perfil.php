@@ -31,16 +31,16 @@ if (!$user) {
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="../Css/style.css">
 </head>
-<body class="dark-mode">
+<body style="background-color: #ffffff;">
 
 <header>
     <nav>
-        <div class="logo"></div>
         <ul class="nav-links">
-        <li><a href="index.php"><i class="fas fa-home"></i></a></li>
+        <li><a href="index.php" title="Inicio"><i class="fas fa-home"></i></a></li>
         <li><a href="perfil.php" title="Perfil"><i class="fas fa-user"></i></a></li>
-
-          <li><a href="../Login/logout.php"><i class="fas fa-sign-out-alt"></i></a></li>
+        <li><a href="services.php" title="Servicios"><i class="fas fa-concierge-bell"></i></a></li>
+        <li><a href="#contact" title="Contacto"><i class="fas fa-envelope"></i></a></li>
+        <li><a href="../Login/logout.php" title="Cerrar Sesión"><i class="fas fa-sign-out-alt"></i></a></li>
 
         </ul>
     </nav>

@@ -10,14 +10,14 @@
 <body>
     <header>
         <nav>
-            <button class="language-toggle" id="languageButton" aria-label="Change Language">
+            <button class="language-toggle" id="languageButton" aria-label="Change Language" title="Cambiar Idioma">
                 <i class="fas fa-globe"></i>
             </button>
             <ul class="nav-links">
-                <li><a href="index.php"><i class="fas fa-home"></i></a></li>
+                <li><a href="index.php" title="Iniico"><i class="fas fa-home"></i></a></li>
                 <li><a href="perfil.php" title="Perfil"><i class="fas fa-user"></i></a></li>
-                <li><a href="services.php"><i class="fas fa-concierge-bell"></i></a></li>
-                <li><a href="#contact"><i class="fas fa-envelope"></i></a></li>
+                <li><a href="services.php" title="Servicios"><i class="fas fa-concierge-bell"></i></a></li>
+                <li><a href="#contact" title="Contacto"><i class="fas fa-envelope"></i></a></li>
             </ul>
             <div class="user-controls" style="display: flex; align-items: center; margin-left: auto;">
             <?php

@@ -31,16 +31,21 @@ if (!$user) {
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="../Css/style.css">
 </head>
-<body class="dark-mode">
+<body style="background-color: #ffffff;">
 
 <header>
     <nav>
-        <div class="logo"></div>
         <ul class="nav-links">
-        <li><a href="index_admin.php"><i class="fas fa-home"></i></a></li>
+        <li><a href="index_admin.php" title="Inicio"><i class="fas fa-home"></i></a></li>
         <li><a href="perfil.php" title="Perfil"><i class="fas fa-user"></i></a></li>
-
-          <li><a href="../Login/logout.php"><i class="fas fa-sign-out-alt"></i></a></li>
+        <li><a href="servicios.php" title="Servicios"><i class="fas fa-concierge-bell"></i></a></li>
+        <li><a href="#contact" title="Contacto"><i class="fas fa-envelope"></i></a></li>
+        <li><a href="customers.php" title="Clientes"><i class="fas fa-users"></i></a></li>
+        <li><a href="employee.php" title="Empleados"><i class="fas fa-id-badge"></i></a></li>
+        <li><a href="company.php" title="Empresa"><i class="fas fa-building"></i></a></li>
+        <li><a href="works.php" title="Obras"><i class="fas fa-ruler-combined"></i></a></li>
+        <li><a href="budget.php" title="Presupuesto"><i class="fas fa-file-invoice-dollar"></i></a></li>
+        <li><a href="../Login/logout.php" title="Cerrar sesión"><i class="fas fa-sign-out-alt"></i></a></li>
 
         </ul>
     </nav>
