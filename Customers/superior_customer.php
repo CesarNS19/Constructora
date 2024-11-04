@@ -16,7 +16,7 @@
             <ul class="nav-links">
                 <li><a href="index.php"><i class="fas fa-home"></i></a></li>
                 <li><a href="perfil.php" title="Perfil"><i class="fas fa-user"></i></a></li>
-                <li><a href="#services"><i class="fas fa-concierge-bell"></i></a></li>
+                <li><a href="services.php"><i class="fas fa-concierge-bell"></i></a></li>
                 <li><a href="#contact"><i class="fas fa-envelope"></i></a></li>
             </ul>
             <div class="user-controls" style="display: flex; align-items: center; margin-left: auto;">
