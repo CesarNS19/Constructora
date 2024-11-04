@@ -12,21 +12,7 @@ $result_direccion_clientes = $con->query($sql_direccion_clientes);
 ?>
 
 <?php
-require '../Administrador/superior_admin.php';
-
-if (isset($_POST['status_action'])) {
-    $accion = $_POST['status_action'];
-    if ($accion === 'activate') {
-        $_SESSION['status_message'] = 'Empleado activado correctamente';
-        $_SESSION['status_type'] = 'success';
-    } else {
-        $_SESSION['status_message'] = 'Empleado desactivado correctamente';
-        $_SESSION['status_type'] = 'warning';
-    }
-    header("Location: employee.php");
-    exit();
-}
-?>
+require '../Administrador/superior_admin.php';?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -47,6 +33,7 @@ if (isset($_POST['status_action'])) {
         </button><br/>
     </section><br/>
 
+<!-- Modal para agregar presupuestos -->
     <div class="modal fade" id="addBudgetModal" tabindex="-1" role="dialog" aria-labelledby="addBudgetModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -121,6 +108,7 @@ if (isset($_POST['status_action'])) {
     </div>
 </div>
 
+<!-- Modal para editar presupuestos -->
 <div class="modal fade" id="editBudgetModal" tabindex="-1" role="dialog" aria-labelledby="editBudgetModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -155,12 +143,12 @@ if (isset($_POST['status_action'])) {
     </div>
 </div>
 
-    <!-- Tabla de Obras -->
+    <!-- Tabla de Presupuestos -->
     <section class="works-table">
         <table class="table">
             <thead class="thead-dark">
                 <tr>
-                    <h2 class="text-center">Manage Works</h2><br/>
+                    <h2 class="text-center">Manage Budgets</h2><br/>
                     <th>Company ID</th>
                     <th>Customer ID</th>
                     <th>Customer Address ID</th>

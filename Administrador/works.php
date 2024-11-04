@@ -12,21 +12,7 @@ $result_direccion_clientes = $con->query($sql_direccion_clientes);
 ?>
 
 <?php
-require '../Administrador/superior_admin.php';
-
-if (isset($_POST['status_action'])) {
-    $accion = $_POST['status_action'];
-    if ($accion === 'activate') {
-        $_SESSION['status_message'] = 'Empleado activado correctamente';
-        $_SESSION['status_type'] = 'success';
-    } else {
-        $_SESSION['status_message'] = 'Empleado desactivado correctamente';
-        $_SESSION['status_type'] = 'warning';
-    }
-    header("Location: employee.php");
-    exit();
-}
-?>
+require '../Administrador/superior_admin.php';?>
 <!DOCTYPE html>
 <html lang="en">
 <head>

@@ -17,7 +17,7 @@
             <ul class="nav-links">
                 <li><a href="index_admin.php" title="Inicio"><i class="fas fa-home"></i></a></li>
                 <li><a href="perfil.php" title="Perfil"><i class="fas fa-user"></i></a></li>
-                <li><a href="#services" title="Servicios"><i class="fas fa-concierge-bell"></i></a></li>
+                <li><a href="servicios.php" title="Servicios"><i class="fas fa-concierge-bell"></i></a></li>
                 <li><a href="#contact" title="Contacto"><i class="fas fa-envelope"></i></a></li>
                 <li><a href="customers.php" title="Clientes"><i class="fas fa-users"></i></a></li>
                 <li><a href="employee.php" title="Empleados"><i class="fas fa-id-badge"></i></a></li>
