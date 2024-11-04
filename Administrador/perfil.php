@@ -35,7 +35,7 @@ if (!$user) {
 
 <header>
     <nav>
-        <div class="logo">Mi Aplicación</div>
+        <div class="logo"></div>
         <ul class="nav-links">
         <li><a href="index_admin.php"><i class="fas fa-home"></i></a></li>
         <li><a href="perfil.php" title="Perfil"><i class="fas fa-user"></i></a></li>
