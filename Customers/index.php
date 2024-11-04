@@ -1,17 +1,25 @@
 <?php 
 require '../Customers/superior_customer.php'; 
-require '../Login/conexion.php'; // Asegúrate de incluir tu conexión a la base de datos
+require '../Login/conexion.php';
 
-// Consulta para obtener los servicios
-$query = "SELECT id_servicio, nombre_servicio, descripcion_servicio, imagen_servicio FROM servicios";
+$query = "SELECT id_servicio, nombre_servicio, descripcion_servicio, imagen_servicio FROM servicios LIMIT 3";
 $result = $con->query($query);
+
+$servicios = [];
+if ($result->num_rows > 0) {
+    while ($row = $result->fetch_assoc()) {
+        $servicios[] = $row;
+    }
+}
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <title>Our Services</title>
-    <link rel="stylesheet" href="../path/to/fontawesome/css/all.min.css"> <!-- Asegúrate de incluir FontAwesome si usas iconos -->
+    <link rel="stylesheet" href="../path/to/fontawesome/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 <body>
     <section class="hero" data-lang="en">
@@ -31,49 +39,63 @@ $result = $con->query($query);
     </section>
 
     <section class="plans" data-lang="en">
-        <h2>Our Services</h2>
-        <div class="plan-cards">
-            <?php if ($result->num_rows > 0): ?>
-                <?php while ($row = $result->fetch_assoc()): ?>
-                    <div class="card fade-in">
-                        <img src="<?php echo htmlspecialchars($row['imagen_servicio']); ?>" alt="<?php echo htmlspecialchars($row['nombre_servicio']); ?>" />
-                        <h3><?php echo htmlspecialchars($row['nombre_servicio']); ?></h3>
-                        <p><?php echo htmlspecialchars($row['descripcion_servicio']); ?></p>
-                        <a href="https://www.example.com" target="_blank">
-                            <button>Learn More</button>
-                        </a>
-                    </div>
-                <?php endwhile; ?>
-            <?php else: ?>
-                <p>No services found.</p>
-            <?php endif; ?>
+        <h2 class="text-center my-4">Our Services</h2>
+        <div class="container">
+            <div class="row">
+                <?php if (!empty($servicios)): ?>
+                    <?php foreach ($servicios as $servicio): ?>
+                        <div class="col-md-4 mb-4 d-flex align-items-stretch">
+                            <div class="card text-center h-100 shadow">
+                                <img src="<?php echo htmlspecialchars($servicio['imagen_servicio']); ?>" 
+                                     class="card-img-top img-fluid" 
+                                     alt="<?php echo htmlspecialchars($servicio['nombre_servicio']); ?>" 
+                                     style="height: 100px; object-fit: cover;">
+                                <div class="card-body">
+                                    <h5 class="card-title"><?php echo htmlspecialchars($servicio['nombre_servicio']); ?></h5>
+                                    <p class="card-text"><?php echo htmlspecialchars($servicio['descripcion_servicio']); ?></p>
+                                    <a href="https://www.example.com" target="_blank" class="btn btn-primary">Learn More</a>
+                                </div>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <p class="text-center">No services found.</p>
+                <?php endif; ?>
+            </div>
         </div>
     </section>
-    
+
     <section class="plans" data-lang="es" style="display:none;">
-        <h2>Servicios</h2>
-        <div class="plan-cards">
-            <?php if ($result->num_rows > 0): ?>
-                <?php while ($row = $result->fetch_assoc()): ?>
-                    <div class="card fade-in">
-                        <img src="<?php echo htmlspecialchars($row['imagen_servicio']); ?>" alt="<?php echo htmlspecialchars($row['nombre_servicio']); ?>" />
-                        <h3><?php echo htmlspecialchars($row['nombre_servicio']); ?></h3>
-                        <p><?php echo htmlspecialchars($row['descripcion_servicio']); ?></p>
-                        <a href="https://www.example.com" target="_blank">
-                            <button>Saber Más</button>
-                        </a>
-                    </div>
-                <?php endwhile; ?>
-            <?php else: ?>
-                <p>No se encontraron servicios.</p>
-            <?php endif; ?>
+        <h2 class="text-center my-4">Servicios</h2>
+        <div class="container">
+            <div class="row">
+                <?php if (!empty($servicios)): ?>
+                    <?php foreach ($servicios as $servicio): ?>
+                        <div class="col-md-4 mb-4 d-flex align-items-stretch">
+                            <div class="card text-center h-100 shadow">
+                                <img src="<?php echo htmlspecialchars($servicio['imagen_servicio']); ?>" 
+                                     class="card-img-top img-fluid" 
+                                     alt="<?php echo htmlspecialchars($servicio['nombre_servicio']); ?>" 
+                                     style="height: 100px; object-fit: cover;">
+                                <div class="card-body">
+                                    <h5 class="card-title"><?php echo htmlspecialchars($servicio['nombre_servicio']); ?></h5>
+                                    <p class="card-text"><?php echo htmlspecialchars($servicio['descripcion_servicio']); ?></p>
+                                    <a href="https://www.example.com" target="_blank" class="btn btn-primary">Leer más</a>
+                                </div>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <p class="text-center">No hay servicios.</p>
+                <?php endif; ?>
+            </div>
         </div>
     </section>
-    
+
     <footer data-lang="en">
         <p>© Family Drywall. All rights reserved.</p>
     </footer>
-    
+
     <footer data-lang="es" style="display:none;">
         <p>© Family Drywall. Todos los derechos reservados.</p>
     </footer>    
@@ -83,5 +105,5 @@ $result = $con->query($query);
 </html>
 
 <?php
-$con->close(); // Cierra la conexión a la base de datos
+$con->close();
 ?>
