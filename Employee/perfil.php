@@ -31,7 +31,7 @@ if (!$user) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Perfil de Usuario</title>
+    <title>Perfil de Empleado</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="../Css/style.css">
 </head>
@@ -53,9 +53,9 @@ if (!$user) {
     <div class="card mt-4">
         <div class="card-body">
             <h5>Datos Personales</h5>
-            <p><strong>Nombre:</strong> <?php echo htmlspecialchars($user['nombre_cliente'] ?? 'No disponible'); ?></p>
+            <p><strong>Nombre:</strong> <?php echo htmlspecialchars($user['nombre'] ?? 'No disponible'); ?></p>
             <p><strong>Apellidos:</strong> <?php echo htmlspecialchars(($user['apellido_paterno'] ?? '') . ' ' . ($user['apellido_materno'] ?? '')); ?></p>
-            <p><strong>Correo:</strong> <?php echo htmlspecialchars($user['correo_electronico'] ?? 'No disponible'); ?></p>
+            <p><strong>Correo:</strong> <?php echo htmlspecialchars($user['correo_personal'] ?? 'No disponible'); ?></p>
             <p><strong>Teléfono:</strong> <?php echo htmlspecialchars($user['telefono_personal'] ?? 'No disponible'); ?></p>
 
         </div>

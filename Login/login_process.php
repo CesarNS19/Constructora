@@ -35,12 +35,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
             // Redirige según el rol del usuario
             if ($row['rol'] === 'admin') {
+                $_SESSION['id_cliente'] = $row['id'];
                 header("Location: ../administrador/index_admin.php");
             } elseif ($row['rol'] === 'empleado') {
-                $_SESSION['id_empleado'] = $row['id']; // Almacena el ID del empleado
+                $_SESSION['id_empleado'] = $row['id'];
                 header("Location: ../Employee/index_employee.php");
             } else {
-                $_SESSION['id_cliente'] = $row['id']; // Almacena el ID del cliente
+                $_SESSION['id_cliente'] = $row['id'];
                 header("Location: ../Customers/index.php");
             }
             exit();

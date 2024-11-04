@@ -10,14 +10,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['email'])) {
         // Encriptar la nueva contraseña
         $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
 
-        // Actualizar la contraseña en la base de datos
-        $stmt = $con->prepare("
-            UPDATE clientes SET contrasena = ? WHERE correo_electronico = ?
-            UNION
-            UPDATE empleados SET contrasena = ? WHERE correo_personal = ?
-        ");
-        
-        // Hay que preparar dos declaraciones para el UNION
+        // Preparar dos declaraciones para actualizar la contraseña
         $stmt1 = $con->prepare("UPDATE clientes SET contrasena = ? WHERE correo_electronico = ?");
         $stmt1->bind_param("ss", $hashedPassword, $email);
         
@@ -28,6 +21,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['email'])) {
         $updatedCliente = $stmt1->execute();
         $updatedEmpleado = $stmt2->execute();
 
+        // Verifica si al menos una actualización fue exitosa
         if ($updatedCliente || $updatedEmpleado) {
             // Redirigir al usuario al inicio de sesión
             header("Location: login.php");
@@ -36,6 +30,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['email'])) {
             echo "Hubo un problema al restablecer la contraseña.";
         }
         
+        // Cerrar las declaraciones
         $stmt1->close();
         $stmt2->close();
     } else {

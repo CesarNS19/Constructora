@@ -22,6 +22,8 @@
                 <li><a href="customers.php" title="Clientes"><i class="fas fa-users"></i></a></li>
                 <li><a href="employee.php" title="Empleados"><i class="fas fa-id-badge"></i></a></li>
                 <li><a href="company.php" title="Empresa"><i class="fas fa-building"></i></a></li>
+                <li><a href="works.php" title="Obras"><i class="fas fa-ruler-combined"></i></a></li>
+                <li><a href="budget.php" title="Presupuesto"><i class="fas fa-file-invoice-dollar"></i></a></li>
             </ul>
             <div class="user-controls" style="display: flex; align-items: center; margin-left: auto;">
             <?php

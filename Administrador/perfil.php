@@ -1,8 +1,8 @@
 <?php
 session_start();
-require '../Login/conexion.php';
+require '../Login/conexion.php'; // Asegúrate de incluir tu conexión a la base de datos
 
-// Verificar si el usuario está autenticado como cliente
+// Verificar si el usuario está autenticado
 if (!isset($_SESSION['id_cliente'])) {
     header("Location: ../Login/login.php"); // Redirigir a la página de inicio de sesión si no está autenticado
     exit;
@@ -23,7 +23,6 @@ if (!$user) {
     echo "No se encontraron datos para este usuario.";
     exit;
 }
-
 ?>
 
 
@@ -32,7 +31,7 @@ if (!$user) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Perfil de Usuario</title>
+    <title>Perfil de Administrador</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="../Css/style.css">
 </head>
