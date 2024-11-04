@@ -1,39 +1,40 @@
 <?php
+require '../Login/conexion.php';
 session_start();
-require '../Login/conexion.php'; // Asegúrate de incluir tu conexión a la base de datos
-
-$user_id = $_SESSION['id_cliente'];
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    // Agregar dirección
-    if (!empty($_POST['direccion'])) {
-        $direccion = $_POST['direccion'];
-        $query = "INSERT INTO direcciones (id_cliente, direccion) VALUES (?, ?)";
-        $stmt = $con->prepare($query);
-        $stmt->bind_param("is", $user_id, $direccion);
-        $stmt->execute();
-        echo "Dirección agregada exitosamente.";
+    if (!isset($_SESSION['id_cliente'])) {
+        header("Location: ../Login/login.php");
+        exit;
     }
 
-    // Cambiar contraseña
-    if (!empty($_POST['password']) && !empty($_POST['confirm_password'])) {
-        $password = $_POST['password'];
-        $confirm_password = $_POST['confirm_password'];
-
-        if ($password === $confirm_password) {
-            // Actualizar contraseña
-            $hashed_password = password_hash($password, PASSWORD_DEFAULT);
-            $query = "UPDATE personas SET Clave = ? WHERE id_persona = ?";
-            $stmt = $con->prepare($query);
-            $stmt->bind_param("si", $hashed_password, $user_id);
-            $stmt->execute();
-            echo "Contraseña cambiada exitosamente.";
+    $user_id = $_SESSION['id_cliente'];
+    
+    $nombre = $_POST['nombre_cliente'] ?? '';
+    $apellido_paterno = $_POST['apellido_paterno'] ?? '';
+    $apellido_materno = $_POST['apellido_materno'] ?? '';
+    $correo = $_POST['correo_electronico'] ?? '';
+    $telefono = $_POST['telefono_personal'] ?? '';
+    
+    $sql = "UPDATE clientes SET nombre_cliente = ?, apellido_paterno = ?, apellido_materno = ?, correo_electronico = ?, telefono_personal = ? WHERE id_cliente = ?";
+    $stmt = $con->prepare($sql);
+    $stmt->bind_param("sssssi", $nombre, $apellido_paterno, $apellido_materno, $correo, $telefono, $user_id);
+    
+    if ($stmt->execute()) {
+        if ($stmt->affected_rows > 0) {
+            $_SESSION['status_message'] = 'Perfil actualizado exitosamente.';
+            $_SESSION['status_type'] = 'success';
         } else {
-            echo "Las contraseñas no coinciden.";
+            $_SESSION['status_message'] = 'No se realizaron cambios. Verifica los datos.';
+            $_SESSION['status_type'] = 'warning';
         }
+    } else {
+        $_SESSION['status_message'] = 'Error al actualizar los datos: ' . $stmt->error;
+        $_SESSION['status_type'] = 'danger';
     }
+    
+    $stmt->close();
+    header("Location: perfil.php");
+    exit();
 }
-
-header("Location: perfil.php");
-exit;
 ?>

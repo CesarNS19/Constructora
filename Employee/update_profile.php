@@ -3,20 +3,20 @@ require '../Login/conexion.php';
 session_start();
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    if (!isset($_SESSION['id_cliente'])) {
+    if (!isset($_SESSION['id_empleado'])) {
         header("Location: ../Login/login.php");
         exit;
     }
 
-    $user_id = $_SESSION['id_cliente'];
+    $user_id = $_SESSION['id_empleado'];
     
-    $nombre = $_POST['nombre_cliente'] ?? '';
+    $nombre = $_POST['nombre'] ?? '';
     $apellido_paterno = $_POST['apellido_paterno'] ?? '';
     $apellido_materno = $_POST['apellido_materno'] ?? '';
-    $correo = $_POST['correo_electronico'] ?? '';
+    $correo = $_POST['correo_personal'] ?? '';
     $telefono = $_POST['telefono_personal'] ?? '';
     
-    $sql = "UPDATE clientes SET nombre_cliente = ?, apellido_paterno = ?, apellido_materno = ?, correo_electronico = ?, telefono_personal = ? WHERE id_cliente = ?";
+    $sql = "UPDATE empleados SET nombre = ?, apellido_paterno = ?, apellido_materno = ?, correo_personal = ?, telefono_personal = ? WHERE id_empleado = ?";
     $stmt = $con->prepare($sql);
     $stmt->bind_param("sssssi", $nombre, $apellido_paterno, $apellido_materno, $correo, $telefono, $user_id);
     
