@@ -38,9 +38,11 @@ if (!$user) {
     <nav>
         <div class="logo">Mi Aplicación</div>
         <ul class="nav-links">
-            <li><a href="index_employee.php">Inicio</a></li>
-            <li><a href="perfil.php">Perfil</a></li>
-            <li><a href="../Login/logout.php">Cerrar Sesión</a></li>
+        <li><a href="index_employee.php"><i class="fas fa-home"></i></a></li>
+        <li><a href="perfil.php" title="Perfil"><i class="fas fa-user"></i></a></li>
+
+          <li><a href="../Login/logout.php"><i class="fas fa-sign-out-alt"></i></a></li>
+
         </ul>
     </nav>
 </header>
