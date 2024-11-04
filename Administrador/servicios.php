@@ -38,7 +38,7 @@ require '../Administrador/superior_admin.php';?>
                         <textarea name="descripcion_servicio" class="form-control" placeholder="Description of the service" required></textarea>
                     </div>
                     <div class="form-group mb-3">
-                        <input type="file" name="imagen_servicio" class="form-control" placeholder="Service Image" required>
+                        <input type="file" name="imagen_servicio" class="form-control" placeholder="Service Image">
                     </div>
                 </div>
                 <div class="modal-footer">
