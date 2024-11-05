@@ -6,9 +6,6 @@ $result_empresas = $con->query($sql_empresas);
 
 $sql_clientes = "SELECT id_cliente, nombre_cliente, apellido_paterno, apellido_materno FROM clientes WHERE rol = 'usuario'";
 $result_clientes = $con->query($sql_clientes);
-
-$sql_direccion_clientes = "SELECT id_direccion_cliente, ciudad FROM direccion_cliente";
-$result_direccion_clientes = $con->query($sql_direccion_clientes);
 ?>
 
 <?php
@@ -58,13 +55,18 @@ require '../Administrador/superior_admin.php';?>
                     </div>
                     <div class="form-group mb-3">
                         <label for="id_cliente">Seleccione un cliente</label>
-                        <select name="id_cliente" class="form-control" required>
+                        <select name="id_cliente" id="select_cliente" class="form-control" required>
                             <option value="">Seleccione un cliente</option>
                             <?php
                             if ($result_clientes->num_rows > 0) {
                                 while ($clientes = $result_clientes->fetch_assoc()) {
                                     $nombre_completo = htmlspecialchars($clientes['nombre_cliente'] . ' ' . $clientes['apellido_paterno'] . ' ' . $clientes['apellido_materno']);
-                                    echo "<option value='" . htmlspecialchars($clientes['id_cliente']) . "'>" . $nombre_completo . "</option>";
+                                    
+                                    $direccion_sql = "SELECT ciudad FROM direccion_cliente WHERE id_cliente = " . (int)$clientes['id_cliente'];
+                                    $direccion_result = $con->query($direccion_sql);
+                                    $direccion = $direccion_result->fetch_assoc();
+                                    
+                                    echo "<option value='" . htmlspecialchars($clientes['id_cliente']) . "' data-direccion='" . htmlspecialchars($direccion['ciudad']) . "'>" . $nombre_completo . "</option>";
                                 }
                             } else {
                                 echo "<option value=''>No hay clientes disponibles</option>";
@@ -73,21 +75,9 @@ require '../Administrador/superior_admin.php';?>
                         </select>
                     </div>
                     <div class="form-group mb-3">
-                        <label for="id_direccion_cliente">Seleccione la dirección del cliente</label>
-                        <select name="id_direccion_cliente" class="form-control" required>
-                            <option value="">Seleccione la dirección del cliente</option>
-                            <?php
-                            if ($result_direccion_clientes->num_rows > 0) {
-                                while ($direccion = $result_direccion_clientes->fetch_assoc()) {
-                                    echo "<option value='" . htmlspecialchars($direccion['id_direccion_cliente']) . "'>" . htmlspecialchars($direccion['ciudad']) . "</option>";
-                                }
-                            } else {
-                                echo "<option value=''>No hay empresas disponibles</option>";
-                            }
-                            ?>
-                        </select>
+                        <label for="direccion_cliente">Dirección del Cliente</label>
+                        <input type="text" id="direccion_cliente" class="form-control" readonly>
                     </div>
-
                     <div class="form-group mb-3">
                         <input type="date" step="0.01" name="fecha_inicio" class="form-control" placeholder="Start Date" required>
                     </div>
@@ -278,6 +268,20 @@ require '../Administrador/superior_admin.php';?>
     </script>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    
+document.addEventListener('DOMContentLoaded', function() {
+    const clienteSelect = document.getElementById('select_cliente');
+    const direccionInput = document.getElementById('direccion_cliente');
+
+    clienteSelect.addEventListener('change', function() {
+        const direccion = clienteSelect.options[clienteSelect.selectedIndex].getAttribute('data-direccion');
+        direccionInput.value = direccion || '';
+    });
+});
+</script>
+
 
 </body>
 </html>

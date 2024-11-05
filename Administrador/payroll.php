@@ -21,13 +21,11 @@ $result_empleados = $con->query($sql_empleados);
 
 <div id="Alert"></div>
 
-<section class="company-header">
-        <button class="btn btn-success" data-toggle="modal" data-target="#addPayrollModal" style="float: right; margin: 10px;">
-            Add Payroll
-        </button><br/>
-    </section><br/>
+<button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addPayrollModal" style="float: right; margin: 10px;">
+    Add Payroll
+</button><br/>
 
-    <div class="modal fade" id="addPayrollModal" tabindex="-1" role="dialog" aria-labelledby="addPayrollModalLabel" aria-hidden="true">
+<div class="modal fade" id="addPayrollModal" tabindex="-1" aria-labelledby="addPayrollModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -35,9 +33,7 @@ $result_empleados = $con->query($sql_empleados);
             </div>
             <form action="add_payroll.php" method="POST">
                 <div class="modal-body">
-                <form action="add_customer_address.php" method="POST">
-                <div class="modal-body">
-                <div class="form-group mb-3">
+                    <div class="form-group mb-3">
                         <label for="id_empleado">Seleccione un empleado</label>
                         <select name="id_empleado" class="form-control" required>
                             <option value="">Seleccione un empleado</option>
@@ -54,18 +50,65 @@ $result_empleados = $con->query($sql_empleados);
                         </select>
                     </div>
                     <div class="form-group mb-3">
-                        <input type="number" name="sueldo_diario" class="form-control" placeholder="Sueldo diario" required>
+                        <input type="number" id="sueldo_diario" name="sueldo_diario" class="form-control" placeholder="Sueldo diario" required>
                     </div>
                     <div class="form-group mb-3">
-                        <input type="number" name="dias_trabajados" class="form-control" placeholder="Dias trabajados" required>
+                        <input type="number" id="dias_trabajados" name="dias_trabajados" class="form-control" placeholder="Dias trabajados" required>
                     </div>
                     <div class="form-group mb-3">
-                        <input type="text" name="total" class="form-control" placeholder="Total">
+                        <input type="text" id="total" name="total" class="form-control" placeholder="Total" readonly>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Add Payroll</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para editar la nómina -->
+<div class="modal fade" id="editPayrollModal" tabindex="-1" role="dialog" aria-labelledby="editPayrollModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editPayrollLabel">Edit Payroll</h5>
+            </div>
+            <form action="edit_payroll.php" method="POST">
+                <div class="modal-body">
+                    <input type="hidden" name="id_nomina" id="edit_id_nomina">
+                    <div class="form-group mb-3">
+                        <label for="edit_id_empleado">Seleccione un empleado</label>
+                        <select name="id_empleado" id="edit_id_empleado" class="form-control" required>
+                            <option value="">Seleccione un empleado</option>
+                            <?php
+                            $result_empleados->data_seek(0);
+                            while ($empleados = $result_empleados->fetch_assoc()) {
+                                $nombre_completo = htmlspecialchars($empleados['nombre'] . ' ' . $empleados['apellido_paterno'] . ' ' . $empleados['apellido_materno']);
+                                echo "<option value='" . htmlspecialchars($empleados['id_empleado']) . "'>$nombre_completo</option>";
+                            }
+                            ?>
+                        </select>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="edit_sueldo_diario">Sueldo diario</label>
+                        <input type="number" id="edit_sueldo_diario" name="sueldo_diario" class="form-control" placeholder="Enter sueldo diario" required>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="edit_dias_trabajados">Días trabajados</label>
+                        <input type="number" id="edit_dias_trabajados" name="dias_trabajados" class="form-control" placeholder="Enter Días trabajados" required>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="edit_total">Total</label>
+                        <input type="number" id="edit_total" name="total" class="form-control" placeholder="Enter Total" readonly>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Add Payroll</button>
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
                 </div>
             </form>
         </div>
@@ -100,9 +143,6 @@ $result_empleados = $con->query($sql_empleados);
                         echo "<button class='btn btn-info btn-sm me-1' onclick='openEditModal(" . json_encode($row) . ")' title='Edit Payroll'>
                                 <i class='fas fa-edit'></i>
                             </button>
-                            <a href='delete_payroll.php?id=" . $row['id_nomina'] . "' class='btn btn-danger btn-sm' onclick='return confirm(\"¿Estás seguro de que deseas eliminar esta nomina?\")' title='Delete Payroll'>
-                                <i class='fas fa-trash'></i>
-                            </a>
                         </td>";
                         echo "</tr>";
                     }
@@ -113,7 +153,6 @@ $result_empleados = $con->query($sql_empleados);
         </tbody>
     </table>
 </section>
-
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
@@ -126,7 +165,8 @@ $result_empleados = $con->query($sql_empleados);
         $('#edit_sueldo_diario').val(customerData.sueldo_diario);
         $('#edit_dias_trabajados').val(customerData.dias_trabajados);
         $('#edit_total').val(customerData.total);
-        $('#editCustomerModal').modal('show');
+
+        $('#editPayrollModal').modal('show');
     }
 
     function mostrarToast(titulo, mensaje, tipo) {
@@ -183,5 +223,29 @@ $result_empleados = $con->query($sql_empleados);
     </script>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    document.getElementById('sueldo_diario').addEventListener('input', calcularTotal);
+    document.getElementById('dias_trabajados').addEventListener('input', calcularTotal);
+
+    function calcularTotal() {
+        const sueldoDiario = parseFloat(document.getElementById('sueldo_diario').value) || 0;
+        const diasTrabajados = parseFloat(document.getElementById('dias_trabajados').value) || 0;
+        const total = sueldoDiario * diasTrabajados;
+        document.getElementById('total').value = total.toFixed(2);
+    }
+
+    document.getElementById('edit_sueldo_diario').addEventListener('input', calcularTotalEdit);
+    document.getElementById('edit_dias_trabajados').addEventListener('input', calcularTotalEdit);
+
+    function calcularTotalEdit() {
+        const sueldoDiario = parseFloat(document.getElementById('edit_sueldo_diario').value) || 0;
+        const diasTrabajados = parseFloat(document.getElementById('edit_dias_trabajados').value) || 0;
+        const total = sueldoDiario * diasTrabajados;
+        document.getElementById('edit_total').value = total.toFixed(2);
+    }
+</script>
+
+
 </body>
 </html>
