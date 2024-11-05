@@ -24,6 +24,7 @@
                 <li><a href="company.php" title="Empresa"><i class="fas fa-building"></i></a></li>
                 <li><a href="works.php" title="Obras"><i class="fas fa-ruler-combined"></i></a></li>
                 <li><a href="budget.php" title="Presupuesto"><i class="fas fa-file-invoice-dollar"></i></a></li>
+                <li><a href="payroll.php" title="Nómina Empleado"><i class="fas fa-money-check-alt"></i></a></li>
             </ul>
             <div class="user-controls" style="display: flex; align-items: center; margin-left: auto;">
             <?php
