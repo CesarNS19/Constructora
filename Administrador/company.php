@@ -155,13 +155,13 @@ require '../Administrador/superior_admin.php';?>
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="editCompanyAddressLabel">Edit Customer Address</h5>
+                <h5 class="modal-title" id="editCompanyAddressLabel">Edit Company Address</h5>
             </div>
             <form action="edit_company_address.php" method="POST">
                 <div class="modal-body">
-                    <input type="hidden" name="id_direccion_empresa" id="edit_id_direccion_empresa">
-                    <div class="form-group mb-3">
-                        <label for="edit_id_empresaa">Seleccione una empresa</label>
+                <input type="hidden" name="id_direccion_empresa" id="edit_id_direccion_empresa">
+                <div class="form-group mb-3">
+                        <label for="edit_id_empresaa">Selecciona la Empresa</label>
                         <select name="id_empresa" id="edit_id_empresaa" class="form-control" required>
                             <option value="">Seleccione una empresa</option>
                             <?php
@@ -177,6 +177,7 @@ require '../Administrador/superior_admin.php';?>
                                 echo "<option value=''>No hay empresas disponibles</option>";
                             }
                             ?>
+                        </select>
                     </div>
 
                     <div class="form-group mb-3">
@@ -332,10 +333,19 @@ require '../Administrador/superior_admin.php';?>
     $('#editCompanyModal').modal('show');
 }
 
-function openEditCustomerAddressModal(customerData) {
-        $('#edit_id_direccion_cliente').val(customerData.id_direccion_empresa);
-        $('#hidden_id_empresa').val(customerData.id_cliente);
-        $('#edit_id_empresaa').val(customerData.id_empresaa);
+function openEditCompanyAddressModal(customerData) {
+        $('#edit_id_direccion_empresa').val(customerData.id_direccion_empresa);
+        $('#edit_id_empresaa').empty().append('<option value="">Seleccione una empresa</option>');
+        <?php
+        $result_empresas->data_seek(0);
+        while ($empresa = $result_empresas->fetch_assoc()) {
+            ?>
+            $('#edit_id_empresaa').append('<option value="<?php echo $empresa['id_empresa']; ?>" ' +
+                (customerData.id_empresa == <?php echo $empresa['id_empresa']; ?> ? 'selected' : '') + 
+                '> <?php echo addslashes($empresa['nombre_empresa']); ?></option>');
+            <?php
+        }
+        ?>
         $('#edit_num_ext').val(customerData.num_ext);
         $('#edit_num_int').val(customerData.num_int);
         $('#edit_calle').val(customerData.calle);
@@ -345,6 +355,7 @@ function openEditCustomerAddressModal(customerData) {
 
         $('#editCompanyAddressModal').modal('show');
     }
+
 
 function mostrarToast(titulo, mensaje, tipo) {
             let icon = '';
