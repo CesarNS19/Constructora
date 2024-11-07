@@ -75,8 +75,9 @@ require '../Administrador/superior_admin.php';?>
                         </select>
                     </div>
                     <div class="form-group mb-3">
-                        <label for="direccion_cliente">Dirección del Cliente</label>
+                        <label for="direccion_cliente">Dirección del cliente</label>
                         <input type="text" id="direccion_cliente" class="form-control" readonly>
+                        <input type="hidden" name="id_direccion_cliente" id="id_direccion_cliente">
                     </div>
                     <div class="form-group mb-3">
                         <input type="date" step="0.01" name="fecha_inicio" class="form-control" placeholder="Start Date" required>
@@ -270,17 +271,28 @@ require '../Administrador/superior_admin.php';?>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
-    
-document.addEventListener('DOMContentLoaded', function() {
-    const clienteSelect = document.getElementById('select_cliente');
-    const direccionInput = document.getElementById('direccion_cliente');
+        $(document).ready(function () {
+    $('select[name="id_cliente"]').on('change', function () {
+        var id_cliente = $(this).val();
 
-    clienteSelect.addEventListener('change', function() {
-        const direccion = clienteSelect.options[clienteSelect.selectedIndex].getAttribute('data-direccion');
-        direccionInput.value = direccion || '';
+        if (id_cliente) {
+            $.ajax({
+                url: 'get_direccion_cliente.php',
+                type: 'POST',
+                data: { id_cliente: id_cliente },
+                success: function (data) {
+                    var direccion = JSON.parse(data);
+                    $('#direccion_cliente').val(direccion.ciudad);
+                    $('#id_direccion_cliente').val(direccion.id_direccion_cliente);
+                }
+            });
+        } else {
+            $('#direccion_cliente').val('');
+            $('#id_direccion_cliente').val('');
+        }
     });
 });
-</script>
+    </script>
 
 
 </body>

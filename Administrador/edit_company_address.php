@@ -39,7 +39,7 @@ if (isset($_POST['id_direccion_empresa'])) {
         }
 
         $stmt->close();
-        header("Location: company.php");
+        header("Location: company_address.php");
         exit();
     }
 }

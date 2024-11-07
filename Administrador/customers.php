@@ -331,7 +331,8 @@ require '../Administrador/superior_admin.php';?>
         <thead class="thead-dark">
         <h2 class="text-center">Manage Customers Address</h2><br/>
             <tr>
-                <th>Customer ID</th>
+                <th>Addres ID</th>
+                <th>Customomer</th>
                 <th>Outside Number</th>
                 <th>Inner Number</th>
                 <th>Street</th>
@@ -342,14 +343,18 @@ require '../Administrador/superior_admin.php';?>
             </tr>
         </thead>
         <tbody>
-            <?php
-            $sql = "SELECT * FROM direccion_cliente";
+        <?php
+            $sql = "SELECT d.id_direccion_cliente, c.nombre_cliente, c.apellido_paterno, c.apellido_materno, d.num_ext, d.num_int, d.calle, d.ciudad, d.estado, d.codigo_postal
+                    FROM direccion_cliente d
+                    JOIN clientes c ON d.id_cliente = c.id_cliente";
             $result = $con->query($sql);
 
             if ($result->num_rows > 0) {
                 while ($row = $result->fetch_assoc()) {
+                    $nombre_completo = htmlspecialchars($row['nombre_cliente'] . ' ' . $row['apellido_paterno'] . ' ' . $row['apellido_materno']);
                     echo "<tr>";
-                    echo "<td>" . htmlspecialchars($row['id_cliente']) . "</td>";
+                    echo "<td>" . htmlspecialchars($row['id_direccion_cliente']) . "</td>";
+                    echo "<td>" . $nombre_completo . "</td>";
                     echo "<td>" . htmlspecialchars($row['num_ext']) . "</td>";
                     echo "<td>" . htmlspecialchars($row['num_int']) . "</td>";
                     echo "<td>" . htmlspecialchars($row['calle']) . "</td>";
@@ -367,7 +372,7 @@ require '../Administrador/superior_admin.php';?>
                         echo "</tr>";
                     }
                 } else {
-                    echo "<tr><td colspan='11'>No hay empleados registrados.</td></tr>";
+                    echo "<tr><td colspan='11'>No hay clientes registrados.</td></tr>";
                 }
             ?>
         </tbody>

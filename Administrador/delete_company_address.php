@@ -23,7 +23,7 @@ if (isset($_GET['id'])) {
     $_SESSION['status_type'] = 'warning';
 }
 
-header('Location: company.php');
+header('Location: company_address.php');
 exit();
 
 $con->close();

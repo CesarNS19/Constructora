@@ -74,21 +74,10 @@ require '../Administrador/superior_admin.php';?>
                         </select>
                     </div>
                     <div class="form-group mb-3">
-                        <label for="id_direccion_cliente">Seleccione la dirección del cliente</label>
-                        <select name="id_direccion_cliente" class="form-control" required>
-                            <option value="">Seleccione la dirección del cliente</option>
-                            <?php
-                            if ($result_direccion_clientes->num_rows > 0) {
-                                while ($direccion = $result_direccion_clientes->fetch_assoc()) {
-                                    echo "<option value='" . htmlspecialchars($direccion['id_direccion_cliente']) . "'>" . htmlspecialchars($direccion['ciudad']) . "</option>";
-                                }
-                            } else {
-                                echo "<option value=''>No hay empresas disponibles</option>";
-                            }
-                            ?>
-                        </select>
+                        <label for="direccion_cliente">Dirección del cliente</label>
+                        <input type="text" id="direccion_cliente" class="form-control" readonly>
+                        <input type="hidden" name="id_direccion_cliente" id="id_direccion_cliente">
                     </div>
-
                     <div class="form-group mb-3">
                         <input type="date" step="0.01" name="fecha_elaboracion" class="form-control" placeholder="Start Date" required>
                     </div>
@@ -255,6 +244,30 @@ require '../Administrador/superior_admin.php';?>
                 <?php unset($_SESSION['status_message'], $_SESSION['status_type']); ?>
             <?php endif; ?>
         });
+    </script>
+
+    <script>
+        $(document).ready(function () {
+    $('select[name="id_cliente"]').on('change', function () {
+        var id_cliente = $(this).val();
+
+        if (id_cliente) {
+            $.ajax({
+                url: 'get_direccion_cliente.php',
+                type: 'POST',
+                data: { id_cliente: id_cliente },
+                success: function (data) {
+                    var direccion = JSON.parse(data);
+                    $('#direccion_cliente').val(direccion.ciudad);
+                    $('#id_direccion_cliente').val(direccion.id_direccion_cliente);
+                }
+            });
+        } else {
+            $('#direccion_cliente').val('');
+            $('#id_direccion_cliente').val('');
+        }
+    });
+});
     </script>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>

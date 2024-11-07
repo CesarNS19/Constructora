@@ -5,6 +5,13 @@ $sql_empleados = "SELECT id_empleado, nombre, apellido_paterno, apellido_materno
 $result_empleados = $con->query($sql_empleados);
 ?>
 
+<?php
+$sql = "SELECT n.id_nomina, e.nombre, e.apellido_paterno, e.apellido_materno, n.sueldo_diario, n.dias_trabajados, n.total
+        FROM nomina n
+        JOIN empleados e ON n.id_empleado = e.id_empleado";
+$result = $con->query($sql);
+?>
+
 <?php require '../Administrador/superior_admin.php';?>
 
 <!DOCTYPE html>
@@ -118,9 +125,10 @@ $result_empleados = $con->query($sql_empleados);
 <section>
     <table class="table">
         <thead class="thead-dark">
-        <h2 class="text-center">Manage Payroll</h2><br/>
+            <h2 class="text-center">Manage Payroll</h2><br/>
             <tr>
-                <th>Employee ID</th>
+                <th>Payroll ID</th>
+                <th>Employee</th>
                 <th>Sueldo diario</th>
                 <th>Días trabajados</th>
                 <th>Total</th>
@@ -129,26 +137,25 @@ $result_empleados = $con->query($sql_empleados);
         </thead>
         <tbody>
             <?php
-            $sql = "SELECT * FROM nomina";
-            $result = $con->query($sql);
-
             if ($result->num_rows > 0) {
                 while ($row = $result->fetch_assoc()) {
+                    $nombre_completo = htmlspecialchars($row['nombre'] . ' ' . $row['apellido_paterno'] . ' ' . $row['apellido_materno']);
                     echo "<tr>";
-                    echo "<td>" . htmlspecialchars($row['id_empleado']) . "</td>";
+                    echo "<td>" . htmlspecialchars($row['id_nomina']) . "</td>";
+                    echo "<td>" . $nombre_completo . "</td>";
                     echo "<td>" . htmlspecialchars($row['sueldo_diario']) . "</td>";
                     echo "<td>" . htmlspecialchars($row['dias_trabajados']) . "</td>";
                     echo "<td>" . htmlspecialchars($row['total']) . "</td>";
                     echo "<td>";
-                        echo "<button class='btn btn-info btn-sm me-1' onclick='openEditModal(" . json_encode($row) . ")' title='Edit Payroll'>
-                                <i class='fas fa-edit'></i>
-                            </button>
-                        </td>";
-                        echo "</tr>";
-                    }
-                } else {
-                    echo "<tr><td colspan='11'>No hay nóminas registradas.</td></tr>";
+                    echo "<button class='btn btn-info btn-sm me-1' onclick='openEditModal(" . json_encode($row) . ")' title='Edit Payroll'>
+                            <i class='fas fa-edit'></i>
+                          </button>";
+                    echo "</td>";
+                    echo "</tr>";
                 }
+            } else {
+                echo "<tr><td colspan='6'>No hay nóminas registradas.</td></tr>";
+            }
             ?>
         </tbody>
     </table>
@@ -245,7 +252,5 @@ $result_empleados = $con->query($sql_empleados);
         document.getElementById('edit_total').value = total.toFixed(2);
     }
 </script>
-
-
 </body>
 </html>

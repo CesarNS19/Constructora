@@ -1,11 +1,5 @@
 <?php
 require '../Login/conexion.php';
-
-$sql_empresas = "SELECT id_empresa, nombre_empresa FROM empresa";
-$result_empresas = $con->query($sql_empresas);
-?>
-
-<?php
 require '../Administrador/superior_admin.php';?>
 
 <!DOCTYPE html>
@@ -23,6 +17,9 @@ require '../Administrador/superior_admin.php';?>
 <div id="Alert"></div>
 
 <section class="company-header">
+        <a href="../Administrador/company_address.php" class="btn btn-primary" style="float: right; margin: 10px;">
+            View Address
+        </a>
         <button class="btn btn-success" data-toggle="modal" data-target="#addCompanyModal" style="float: right; margin: 10px;">
             Add Company
         </button><br/>
@@ -62,7 +59,7 @@ require '../Administrador/superior_admin.php';?>
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="editCompanyLabel">Edit Customer</h5>
+                <h5 class="modal-title" id="editCompanyLabel">Edit Company</h5>
             </div>
             <form action="edit_company.php" method="POST">
                 <div class="modal-body">
@@ -107,20 +104,10 @@ require '../Administrador/superior_admin.php';?>
             </div>
             <form action="add_company_address.php" method="POST">
                 <div class="modal-body">
-                <div class="form-group mb-3">
-                        <label for="id_empresa">Seleccione una empresa</label>
-                        <select name="id_empresa" class="form-control" required>
-                            <option value="">Seleccione una empresa</option>
-                            <?php
-                            if ($result_empresas->num_rows > 0) {
-                                while ($empresa = $result_empresas->fetch_assoc()) {
-                                    echo "<option value='" . htmlspecialchars($empresa['id_empresa']) . "'>" . htmlspecialchars($empresa['nombre_empresa']) . "</option>";
-                                }
-                            } else {
-                                echo "<option value=''>No hay empresas disponibles</option>";
-                            }
-                            ?>
-                        </select>
+                    <input type="hidden" name="id_empresa" id="id_empresa_modal">
+                    <div class="form-group mb-3">
+                        <label>Empresa seleccionada</label>
+                        <input type="text" id="nombre_empresa_modal" class="form-control" readonly>
                     </div>
                     <div class="form-group mb-3">
                         <input type="number" name="num_ext" class="form-control" placeholder="Outside number" required>
@@ -150,176 +137,55 @@ require '../Administrador/superior_admin.php';?>
     </div>
 </div>
 
-<!-- Modal para editar dirección de la empresa -->
-<div class="modal fade" id="editCompanyAddressModal" tabindex="-1" role="dialog" aria-labelledby="editCompanyAddressModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="editCompanyAddressLabel">Edit Company Address</h5>
-            </div>
-            <form action="edit_company_address.php" method="POST">
-                <div class="modal-body">
-                <input type="hidden" name="id_direccion_empresa" id="edit_id_direccion_empresa">
-                <div class="form-group mb-3">
-                        <label for="edit_id_empresaa">Selecciona la Empresa</label>
-                        <select name="id_empresa" id="edit_id_empresaa" class="form-control" required>
-                            <option value="">Seleccione una empresa</option>
-                            <?php
-                            
-                            if ($result_empresas->num_rows > 0) {
-                                while ($empresa = $result_empresas->fetch_assoc()) {
-                                    echo "<option value='" . htmlspecialchars($empresa['id_empresa']) . "'";
-                                    echo " id='option_" . htmlspecialchars($empresa['id_empresa']) . "'>";
-                                    echo htmlspecialchars($empresa['nombre_empresa']);
-                                    echo "</option>";
-                                }
-                            } else {
-                                echo "<option value=''>No hay empresas disponibles</option>";
-                            }
-                            ?>
-                        </select>
-                    </div>
-
-                    <div class="form-group mb-3">
-                        <label for="edit_num_ext">Outside Number</label>
-                        <input type="number" name="num_ext" id="edit_num_ext" class="form-control" placeholder="Enter Outside Number" required>
-                    </div>
-                    
-                    <div class="form-group mb-3">
-                        <label for="edit_num_int">Inner Number</label>
-                        <input type="number" name="num_int" id="edit_num_int" class="form-control" placeholder="Enter Inner Number" required>
-                    </div>
-                    
-                    <div class="form-group mb-3">
-                        <label for="edit_calle">Street</label>
-                        <input type="text" name="calle" id="edit_calle" class="form-control" placeholder="Enter Street" required>
-                    </div>
-
-                    <div class="form-group mb-3">
-                        <label for="edit_ciudad">City</label>
-                        <input type="text" name="ciudad" id="edit_ciudad" class="form-control" placeholder="Enter City" required>
-                    </div>
-                    
-                    <div class="form-group mb-3">
-                        <label for="edit_estado">State</label>
-                        <input type="text" name="estado" id="edit_estado" class="form-control" placeholder="Enter State" required>
-                    </div>
-
-                    <div class="form-group mb-3">
-                        <label for="edit_codigo_postal">Postal Code</label>
-                        <input type="number" name="codigo_postal" id="edit_codigo_postal" class="form-control" placeholder="Enter Postal Code" required>
-                    </div>
-
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Save Changes</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
 <section>
-        <table class="table">
-            <thead class="thead-dark">
-                <h2 class="text-center">Manage Company</h2><br/>
-                <tr>
-                    <th>Company ID</th>
-                    <th>Name of company</th>
-                    <th>Phone</th>
-                    <th>Web Page</th>
-                    <th>Email</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php
-                $sql = "SELECT * FROM empresa";
-                $result = $con->query($sql);
-
-                if ($result->num_rows > 0) {
-                    while ($row = $result->fetch_assoc()) {
-                        echo "<tr>";
-                        echo "<td>" . htmlspecialchars($row['id_empresa']) . "</td>";
-                        echo "<td>" . htmlspecialchars($row['nombre_empresa']) . "</td>";
-                        echo "<td>" . htmlspecialchars($row['telefono']) . "</td>";
-                        echo "<td>" . htmlspecialchars($row['pagina_web']) . "</td>";
-                        echo "<td>" . htmlspecialchars($row['correo_empresa']) . "</td>";
-                        echo "<td>";
-                        echo "<button class='btn btn-info btn-sm me-1' onclick='openEditModal(" . json_encode($row) . ")' title='Editar Empresa'>
-                                <i class='fas fa-edit'></i>
-                            </button>";
-                        echo "<a href='delete_company.php?id=" . $row['id_empresa'] . "' class='btn btn-danger btn-sm' onclick='return confirm(\"¿Estás seguro de que deseas eliminar esta empresa?\")' title='Eliminar Empresa'>
-                                <i class='fas fa-trash'></i>
-                            </a>";
-                        echo "</td>";
-
-                        echo "</tr>";
-                    }
-                } else {
-                    echo "<tr><td colspan='5'>No hay empresas registradas.</td></tr>";
-                }
-                ?>
-            </tbody>
-        </table>
-    </section><br/>
-
-    <section>
-    <button class="btn btn-info" data-toggle="modal" data-target="#addCompanyAddressModal" style="float: right; margin: 10px;">
-        Add Company Address
-    </button>
-</section><br/>
-
-    <section>
     <table class="table">
         <thead class="thead-dark">
-        <h2 class="text-center">Manage Company Address</h2><br/>
+            <h2 class="text-center">Manage Company</h2><br/>
             <tr>
                 <th>Company ID</th>
-                <th>Outside Number</th>
-                <th>Inner Number</th>
-                <th>Street</th>
-                <th>City</th>
-                <th>State</th>
-                <th>Postal Code</th>
+                <th>Name of company</th>
+                <th>Phone</th>
+                <th>Web Page</th>
+                <th>Email</th>
                 <th>Actions</th>
             </tr>
         </thead>
         <tbody>
             <?php
-            $sql = "SELECT * FROM direccion_empresa";
+            $sql = "SELECT * FROM empresa";
             $result = $con->query($sql);
 
             if ($result->num_rows > 0) {
                 while ($row = $result->fetch_assoc()) {
                     echo "<tr>";
                     echo "<td>" . htmlspecialchars($row['id_empresa']) . "</td>";
-                    echo "<td>" . htmlspecialchars($row['num_ext']) . "</td>";
-                    echo "<td>" . htmlspecialchars($row['num_int']) . "</td>";
-                    echo "<td>" . htmlspecialchars($row['calle']) . "</td>";
-                    echo "<td>" . htmlspecialchars($row['ciudad']) . "</td>";
-                    echo "<td>" . htmlspecialchars($row['estado']) . "</td>";
-                    echo "<td>" . htmlspecialchars($row['codigo_postal']) . "</td>";
+                    echo "<td>" . htmlspecialchars($row['nombre_empresa']) . "</td>";
+                    echo "<td>" . htmlspecialchars($row['telefono']) . "</td>";
+                    echo "<td>" . htmlspecialchars($row['pagina_web']) . "</td>";
+                    echo "<td>" . htmlspecialchars($row['correo_empresa']) . "</td>";
                     echo "<td>";
-                        echo "<button class='btn btn-info btn-sm me-1' onclick='openEditCompanyAddressModal(" . json_encode($row) . ")' title='Edit Company Addres'>
-                                <i class='fas fa-edit'></i>
-                            </button>
-                            <a href='delete_company_address.php?id=" . $row['id_direccion_empresa'] . "' class='btn btn-danger btn-sm' onclick='return confirm(\"¿Estás seguro de que deseas eliminar esta direccion de la empresa?\")' title='Delete Customer Address'>
-                                <i class='fas fa-trash'></i>
-                            </a>
-                        </td>";
-                        echo "</tr>";
-                    }
-                } else {
-                    echo "<tr><td colspan='11'>No hay empleados registrados.</td></tr>";
+                    echo "<button class='btn btn-info btn-sm me-1' onclick='openEditModal(" . json_encode($row) . ")' title='Editar Empresa'>
+                            <i class='fas fa-edit'></i>
+                        </button>";
+                    echo "<a href='delete_company.php?id=" . $row['id_empresa'] . "' class='btn btn-danger btn-sm me-1' onclick='return confirm(\"¿Estás seguro de que deseas eliminar esta empresa?\")' title='Eliminar Empresa'>
+                            <i class='fas fa-trash'></i>
+                        </a>";
+                    echo "<button class='btn btn-success btn-sm' onclick='openAddAddressModal(" . json_encode($row) . ")' title='Agregar Dirección'>
+                            <i class='fas fa-plus'></i>
+                        </button>";
+                    echo "</td>";
+                    echo "</tr>";
                 }
+            } else {
+                echo "<tr><td colspan='6'>No hay empresas registradas.</td></tr>";
+            }
             ?>
         </tbody>
     </table>
 </section>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
 <script>
     function openEditModal(customerData) {
@@ -332,29 +198,11 @@ require '../Administrador/superior_admin.php';?>
     $('#editCompanyModal').modal('show');
 }
 
-function openEditCompanyAddressModal(customerData) {
-        $('#edit_id_direccion_empresa').val(customerData.id_direccion_empresa);
-        $('#edit_id_empresaa').empty().append('<option value="">Seleccione una empresa</option>');
-        <?php
-        $result_empresas->data_seek(0);
-        while ($empresa = $result_empresas->fetch_assoc()) {
-            ?>
-            $('#edit_id_empresaa').append('<option value="<?php echo $empresa['id_empresa']; ?>" ' +
-                (customerData.id_empresa == <?php echo $empresa['id_empresa']; ?> ? 'selected' : '') + 
-                '> <?php echo addslashes($empresa['nombre_empresa']); ?></option>');
-            <?php
-        }
-        ?>
-        $('#edit_num_ext').val(customerData.num_ext);
-        $('#edit_num_int').val(customerData.num_int);
-        $('#edit_calle').val(customerData.calle);
-        $('#edit_ciudad').val(customerData.ciudad);
-        $('#edit_estado').val(customerData.estado);
-        $('#edit_codigo_postal').val(customerData.codigo_postal);
-
-        $('#editCompanyAddressModal').modal('show');
-    }
-
+function openAddAddressModal(empresa) {
+    document.getElementById('id_empresa_modal').value = empresa.id_empresa;
+    document.getElementById('nombre_empresa_modal').value = empresa.nombre_empresa;
+    $('#addCompanyAddressModal').modal('show');
+}
 
 function mostrarToast(titulo, mensaje, tipo) {
             let icon = '';
