@@ -6,15 +6,16 @@
     <title>Family Drywall</title>
     <link rel="stylesheet" href="../Css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 <body>
     <header>
         <nav>
-            <!-- Botón de idioma -->
+            <ul class="nav-links">
             <button class="language-toggle" id="languageButton" aria-label="Change Language" title="Cambiar idioma">
                 <i class="fas fa-globe"></i>
             </button>
-            <ul class="nav-links">
                 <li><a href="index_employee.php" title="Inicio"><i class="fas fa-home"></i></a></li>
                 <li><a href="perfil.php" title="Perfil"><i class="fas fa-user"></i></a></li>
                 <li><a href="servicios.php" title="Servicios"><i class="fas fa-concierge-bell"></i></a></li>
@@ -64,5 +65,6 @@
         document.cookie = "timezone=" + Intl.DateTimeFormat().resolvedOptions().timeZone;
     </script>
 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
