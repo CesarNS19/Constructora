@@ -30,19 +30,11 @@ require '../Administrador/superior_admin.php';?>
             <form action="edit_company_address.php" method="POST">
                 <div class="modal-body">
                 <input type="hidden" name="id_direccion_empresa" id="edit_id_direccion_empresa">
-                <div class="form-group mb-3">
-                        <label for="edit_id_empresa">Selecciona la Empresa</label>
-                        <select name="id_empresa" id="edit_id_empresa" class="form-control" required>
-                            <option value="">Seleccione una empresa</option>
-                            <?php
-                            $sql_empresas = "SELECT id_empresa, nombre_empresa FROM empresa";
-                            $result_empresas = $con->query($sql_empresas);
 
-                            while ($empresa = $result_empresas->fetch_assoc()) {
-                                echo "<option value='" . htmlspecialchars($empresa['id_empresa']) . "'>" . htmlspecialchars($empresa['nombre_empresa']) . "</option>";
-                            }
-                            ?>
-                        </select>
+                <div class="form-group mb-3">
+                        <label for="edit_id_empresa">Company</label>
+                        <input type="text" name="edit_id_empresa" id="edit_id_empresa" class="form-control" readonly>
+                        <input type="hidden" name="id_empresa" id="id_empresa">
                     </div>
 
                     <div class="form-group mb-3">
@@ -141,17 +133,16 @@ require '../Administrador/superior_admin.php';?>
 <script>
 
 function openEditCompanyAddressModal(customerData) {
-    console.log(customerData);
+    var empresa = customerData.nombre_empresa;
 
     $('#edit_id_direccion_empresa').val(customerData.id_direccion_empresa);
+    $('#edit_id_empresa').val(empresa);
     $('#edit_num_ext').val(customerData.num_ext);
     $('#edit_num_int').val(customerData.num_int);
     $('#edit_calle').val(customerData.calle);
     $('#edit_ciudad').val(customerData.ciudad);
     $('#edit_estado').val(customerData.estado);
     $('#edit_codigo_postal').val(customerData.codigo_postal);
-
-    $('#edit_id_empresa').val(customerData.id_empresa).change();
 
     $('#editCompanyAddressModal').modal('show');
 }

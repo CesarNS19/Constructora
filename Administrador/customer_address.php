@@ -46,17 +46,11 @@ if (!$result) {
             <form action="edit_customer_address.php" method="POST">
                 <div class="modal-body">
                     <input type="hidden" name="id_direccion_cliente" id="edit_id_direccion_cliente">
+
                     <div class="form-group mb-3">
-                        <label for="edit_id_cliente">Seleccione un cliente</label>
-                        <select name="id_cliente" id="edit_id_cliente" class="form-control" required>
-                            <option value="">Seleccione un cliente</option>
-                            <?php while ($clientes = $result_clientes->fetch_assoc()): ?>
-                                <?php 
-                                    $nombre_completo = htmlspecialchars($clientes['nombre_cliente'] . ' ' . $clientes['apellido_paterno'] . ' ' . $clientes['apellido_materno']);
-                                ?>
-                                <option value="<?= htmlspecialchars($clientes['id_cliente']) ?>"><?= $nombre_completo ?></option>
-                            <?php endwhile; ?>
-                        </select>
+                        <label for="edit_id_cliente">Cliente</label>
+                        <input type="text" name="edit_id_cliente" id="edit_id_cliente" class="form-control" readonly>
+                        <input type="hidden" name="id_cliente" id="id_cliente">
                     </div>
                     
                     <div class="form-group mb-3">
@@ -148,9 +142,13 @@ if (!$result) {
 </section>
 
 <script>
+
     function openEditCustomerAddressModal(customerData) {
         $('#edit_id_direccion_cliente').val(customerData.id_direccion_cliente);
-        $('#edit_id_cliente').val(customerData.id_cliente);
+        
+        var nombreCompleto = customerData.nombre_cliente + ' ' + customerData.apellido_paterno + ' ' + customerData.apellido_materno;
+        $('#edit_id_cliente').val(nombreCompleto);
+        $('#id_cliente').val(customerData.id_cliente);
         $('#edit_num_ext').val(customerData.num_ext);
         $('#edit_num_int').val(customerData.num_int);
         $('#edit_calle').val(customerData.calle);
