@@ -84,17 +84,9 @@ require '../Administrador/superior_admin.php';
                 <div class="modal-body">
                     <input type="hidden" name="id_nomina" id="edit_id_nomina">
                     <div class="form-group mb-3">
-                        <label for="edit_id_empleado">Seleccione un empleado</label>
-                        <select name="id_empleado" id="edit_id_empleado" class="form-control" required>
-                            <option value="">Seleccione un empleado</option>
-                            <?php
-                            $result_empleados->data_seek(0);
-                            while ($empleados = $result_empleados->fetch_assoc()) {
-                                $nombre_completo = htmlspecialchars($empleados['nombre'] . ' ' . $empleados['apellido_paterno'] . ' ' . $empleados['apellido_materno']);
-                                echo "<option value='" . htmlspecialchars($empleados['id_empleado']) . "'>$nombre_completo</option>";
-                            }
-                            ?>
-                        </select>
+                        <label for="edit_id_empleado">Empleado</label>
+                        <input type="text" name="edit_id_empleado" id="edit_id_empleado" class="form-control" readonly>
+                        <input type="hidden" name="id_empleado" id="id_empleado">
                     </div>
                     <div class="form-group mb-3">
                         <label for="edit_sueldo_diario">Sueldo diario</label>
@@ -162,8 +154,10 @@ require '../Administrador/superior_admin.php';
 <script>
 
     function openEditModal(customerData) {
+        var nombreCompleto = customerData.nombre + ' ' + customerData.apellido_paterno + ' ' + customerData.apellido_materno;
+
         $('#edit_id_nomina').val(customerData.id_nomina);
-        $('#edit_id_empleado').val(customerData.id_empleado);
+        $('#edit_id_empleado').val(nombreCompleto);
         $('#edit_sueldo_diario').val(customerData.sueldo_diario);
         $('#edit_dias_trabajados').val(customerData.dias_trabajados);
         $('#edit_total').val(customerData.total);

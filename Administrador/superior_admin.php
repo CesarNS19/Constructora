@@ -16,16 +16,16 @@
             <button class="language-toggle" id="languageButton" aria-label="Change Language" title="Cambiar idioma">
                 <i class="fas fa-globe"></i>
             </button>
-                <li><a href="index_admin.php" title="Inicio"><i class="fas fa-home"></i></a></li>
-                <li><a href="perfil.php" title="Perfil"><i class="fas fa-user"></i></a></li>
-                <li><a href="servicios.php" title="Servicios"><i class="fas fa-concierge-bell"></i></a></li>
-                <li><a href="#contact" title="Contacto"><i class="fas fa-envelope"></i></a></li>
-                <li><a href="customers.php" title="Clientes"><i class="fas fa-users"></i></a></li>
-                <li><a href="employee.php" title="Empleados"><i class="fas fa-id-badge"></i></a></li>
-                <li><a href="company.php" title="Empresa"><i class="fas fa-building"></i></a></li>
-                <li><a href="works.php" title="Obras"><i class="fas fa-ruler-combined"></i></a></li>
-                <li><a href="budget.php" title="Presupuesto"><i class="fas fa-file-invoice-dollar"></i></a></li>
-                <li><a href="payroll.php" title="Nómina Empleado"><i class="fas fa-money-check-alt"></i></a></li>
+                <li><a href="index_admin.php" title="Home"><i class="fas fa-home"></i></a></li>
+                <li><a href="perfil.php" title="Profile"><i class="fas fa-user"></i></a></li>
+                <li><a href="servicios.php" title="Services"><i class="fas fa-concierge-bell"></i></a></li>
+                <li><a href="#contact" title="Contact"><i class="fas fa-envelope"></i></a></li>
+                <li><a href="customers.php" title="Customers"><i class="fas fa-users"></i></a></li>
+                <li><a href="employee.php" title="Employee"><i class="fas fa-id-badge"></i></a></li>
+                <li><a href="company.php" title="Company"><i class="fas fa-building"></i></a></li>
+                <li><a href="works.php" title="Works"><i class="fas fa-ruler-combined"></i></a></li>
+                <li><a href="budget.php" title="Budget"><i class="fas fa-file-invoice-dollar"></i></a></li>
+                <li><a href="payroll.php" title="Employee Payroll"><i class="fas fa-money-check-alt"></i></a></li>
             </ul>
             <div class="user-controls" style="display: flex; align-items: center; margin-left: auto;">
             <?php
@@ -69,7 +69,5 @@
     <script>
         document.cookie = "timezone=" + Intl.DateTimeFormat().resolvedOptions().timeZone;
     </script>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
