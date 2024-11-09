@@ -1,6 +1,7 @@
 <?php
 require '../Login/conexion.php';
-require '../Administrador/superior_admin.php';?>
+require '../Administrador/superior_admin.php';
+?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -20,7 +21,7 @@ require '../Administrador/superior_admin.php';?>
         <a href="../Administrador/company_address.php" class="btn btn-primary" style="float: right; margin: 10px;">
             View Address
         </a>
-        <button class="btn btn-success" data-toggle="modal" data-target="#addCompanyModal" style="float: right; margin: 10px;">
+        <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addCompanyModal" style="float: right; margin: 10px;">
             Add Company
         </button><br/>
     </section><br/>
@@ -47,7 +48,7 @@ require '../Administrador/superior_admin.php';?>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     <button type="submit" class="btn btn-primary">Add Company</button>
                 </div>
             </form>
@@ -87,7 +88,7 @@ require '../Administrador/superior_admin.php';?>
 
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     <button type="submit" class="btn btn-primary">Save Changes</button>
                 </div>
             </form>
@@ -129,7 +130,7 @@ require '../Administrador/superior_admin.php';?>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     <button type="submit" class="btn btn-primary">Add Company Address</button>
                 </div>
             </form>
@@ -183,9 +184,6 @@ require '../Administrador/superior_admin.php';?>
         </tbody>
     </table>
 </section>
-
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
 <script>
     function openEditModal(customerData) {
@@ -256,7 +254,5 @@ function mostrarToast(titulo, mensaje, tipo) {
             <?php endif; ?>
         });
     </script>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

@@ -3,16 +3,14 @@ require '../Login/conexion.php';
 
 $sql_empleados = "SELECT id_empleado, nombre, apellido_paterno, apellido_materno FROM empleados";
 $result_empleados = $con->query($sql_empleados);
-?>
 
-<?php
 $sql = "SELECT n.id_nomina, e.nombre, e.apellido_paterno, e.apellido_materno, n.sueldo_diario, n.dias_trabajados, n.total
         FROM nomina n
         JOIN empleados e ON n.id_empleado = e.id_empleado";
 $result = $con->query($sql);
-?>
 
-<?php require '../Administrador/superior_admin.php';?>
+require '../Administrador/superior_admin.php';
+?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -114,7 +112,7 @@ $result = $con->query($sql);
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     <button type="submit" class="btn btn-primary">Save Changes</button>
                 </div>
             </form>
@@ -160,9 +158,6 @@ $result = $con->query($sql);
         </tbody>
     </table>
 </section>
-
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
 <script>
 
@@ -227,11 +222,7 @@ $result = $con->query($sql);
                 <?php unset($_SESSION['status_message'], $_SESSION['status_type']); ?>
             <?php endif; ?>
         });
-    </script>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-
-<script>
     document.getElementById('sueldo_diario').addEventListener('input', calcularTotal);
     document.getElementById('dias_trabajados').addEventListener('input', calcularTotal);
 

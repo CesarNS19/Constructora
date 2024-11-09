@@ -6,10 +6,10 @@ $result_empresas = $con->query($sql_empresas);
 
 $sql_clientes = "SELECT id_cliente, nombre_cliente, apellido_paterno, apellido_materno FROM clientes WHERE rol = 'usuario'";
 $result_clientes = $con->query($sql_clientes);
+
+require '../Administrador/superior_admin.php';
 ?>
 
-<?php
-require '../Administrador/superior_admin.php';?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -25,7 +25,7 @@ require '../Administrador/superior_admin.php';?>
 <div id="Alert"></div>
 
 <section class="company-header">
-        <button class="btn btn-success" data-toggle="modal" data-target="#addWorksModal" style="float: right; margin: 10px;">
+        <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addWorksModal" style="float: right; margin: 10px;">
             Add Works
         </button><br/>
     </section><br/>
@@ -96,7 +96,7 @@ require '../Administrador/superior_admin.php';?>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
                     <button type="submit" class="btn btn-primary">Agregar Obra</button>
                 </div>
             </form>
@@ -140,7 +140,7 @@ require '../Administrador/superior_admin.php';?>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
                     <button type="submit" class="btn btn-primary">Guardar Cambios</button>
                 </div>
             </form>
@@ -198,9 +198,6 @@ require '../Administrador/superior_admin.php';?>
             </tbody>
         </table>
     </section>
-
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
     <script>
 
@@ -266,34 +263,28 @@ require '../Administrador/superior_admin.php';?>
                 <?php unset($_SESSION['status_message'], $_SESSION['status_type']); ?>
             <?php endif; ?>
         });
-    </script>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-
-<script>
         $(document).ready(function () {
-    $('select[name="id_cliente"]').on('change', function () {
-        var id_cliente = $(this).val();
+            $('select[name="id_cliente"]').on('change', function () {
+                var id_cliente = $(this).val();
 
-        if (id_cliente) {
-            $.ajax({
-                url: 'get_direccion_cliente.php',
-                type: 'POST',
-                data: { id_cliente: id_cliente },
-                success: function (data) {
-                    var direccion = JSON.parse(data);
-                    $('#direccion_cliente').val(direccion.ciudad);
-                    $('#id_direccion_cliente').val(direccion.id_direccion_cliente);
+                if (id_cliente) {
+                    $.ajax({
+                        url: 'get_direccion_cliente.php',
+                        type: 'POST',
+                        data: { id_cliente: id_cliente },
+                        success: function (data) {
+                            var direccion = JSON.parse(data);
+                            $('#direccion_cliente').val(direccion.ciudad);
+                            $('#id_direccion_cliente').val(direccion.id_direccion_cliente);
+                        }
+                    });
+                } else {
+                    $('#direccion_cliente').val('');
+                    $('#id_direccion_cliente').val('');
                 }
             });
-        } else {
-            $('#direccion_cliente').val('');
-            $('#id_direccion_cliente').val('');
-        }
-    });
-});
+        });
     </script>
-
-
 </body>
 </html>

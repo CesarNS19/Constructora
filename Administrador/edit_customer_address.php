@@ -39,7 +39,7 @@ if (isset($_POST['id_direccion_cliente'])) {
         }
 
         $stmt->close();
-        header("Location: customers.php");
+        header("Location: customer_address.php");
         exit();
     }
 }

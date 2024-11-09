@@ -3,10 +3,9 @@ require '../Login/conexion.php';
 
 $sql_empresas = "SELECT id_empresa, nombre_empresa FROM empresa";
 $result_empresas = $con->query($sql_empresas);
-?>
 
-<?php
-require '../Administrador/superior_admin.php';?>
+require '../Administrador/superior_admin.php';
+?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -23,12 +22,12 @@ require '../Administrador/superior_admin.php';?>
 <div id="Alert"></div>
 
 <section class="employee-header">
-        <button class="btn btn-success" data-toggle="modal" data-target="#addEmployeeModal" style="float: right; margin: 10px;">
-            Add Employee
-        </button><br/>
-    </section><br/>
+    <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addEmployeeModal" style="float: right; margin: 10px;">
+        Add Employee
+    </button><br/>
+</section><br/>
 
-    <div class="modal fade" id="addEmployeeModal" tabindex="-1" role="dialog" aria-labelledby="addEmployeeModalLabel" aria-hidden="true">
+<div class="modal fade" id="addEmployeeModal" tabindex="-1" role="dialog" aria-labelledby="addEmployeeModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -86,7 +85,7 @@ require '../Administrador/superior_admin.php';?>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
                     <button type="submit" class="btn btn-primary">Agregar Empleado</button>
                 </div>
             </form>
@@ -170,7 +169,7 @@ require '../Administrador/superior_admin.php';?>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
                     <button type="submit" class="btn btn-primary">Guardar Cambios</button>
                 </div>
             </form>
@@ -247,10 +246,6 @@ require '../Administrador/superior_admin.php';?>
             </tbody>
         </table>
     </section>
-
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
     <script>
 
     function openEditModal(customerData) {
@@ -332,8 +327,6 @@ require '../Administrador/superior_admin.php';?>
             <?php endif; ?>
         });
     </script>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
 </html>

@@ -1,13 +1,30 @@
 <?php
 require '../Login/conexion.php';
-require '../Administrador/superior_admin.php';?>
+require '../Administrador/superior_admin.php';
+
+$sql_clientes = "SELECT id_cliente, nombre_cliente, apellido_paterno, apellido_materno FROM clientes WHERE rol = 'usuario'";
+$result_clientes = $con->query($sql_clientes);
+
+if (!$result_clientes) {
+    die("Error al cargar clientes: " . $con->error);
+}
+
+$sql = "SELECT d.id_direccion_cliente, c.nombre_cliente, c.apellido_paterno, c.apellido_materno, d.num_ext, d.num_int, d.calle, d.ciudad, d.estado, d.codigo_postal
+        FROM direccion_cliente d
+        JOIN clientes c ON d.id_cliente = c.id_cliente";
+$result = $con->query($sql);
+
+if (!$result) {
+    die("Error en la consulta de direcciones: " . $con->error);
+}
+?>
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Company</title>
+    <title>Customer</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -16,35 +33,32 @@ require '../Administrador/superior_admin.php';?>
 
 <div id="Alert"></div>
 
-        <a href="../Administrador/company.php" class="btn btn-primary" style="float: right; margin: 20px;">
-            Back
-        </a><br/>
+<a href="../Administrador/customers.php" class="btn btn-primary" style="float: right; margin: 20px;">
+    Back
+</a><br/>
 
-<!-- Modal para editar dirección de la empresa -->
-<div class="modal fade" id="editCompanyAddressModal" tabindex="-1" role="dialog" aria-labelledby="editCompanyAddressModalLabel" aria-hidden="true">
+<div class="modal fade" id="editCustomerAddressModal" tabindex="-1" role="dialog" aria-labelledby="editCustomerAddressModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="editCompanyAddressLabel">Edit Company Address</h5>
+                <h5 class="modal-title" id="editCustomerAddressLabel">Edit Customer Address</h5>
             </div>
-            <form action="edit_company_address.php" method="POST">
+            <form action="edit_customer_address.php" method="POST">
                 <div class="modal-body">
-                <input type="hidden" name="id_direccion_empresa" id="edit_id_direccion_empresa">
-                <div class="form-group mb-3">
-                        <label for="edit_id_empresa">Selecciona la Empresa</label>
-                        <select name="id_empresa" id="edit_id_empresa" class="form-control" required>
-                            <option value="">Seleccione una empresa</option>
-                            <?php
-                            $sql_empresas = "SELECT id_empresa, nombre_empresa FROM empresa";
-                            $result_empresas = $con->query($sql_empresas);
-
-                            while ($empresa = $result_empresas->fetch_assoc()) {
-                                echo "<option value='" . htmlspecialchars($empresa['id_empresa']) . "'>" . htmlspecialchars($empresa['nombre_empresa']) . "</option>";
-                            }
-                            ?>
+                    <input type="hidden" name="id_direccion_cliente" id="edit_id_direccion_cliente">
+                    <div class="form-group mb-3">
+                        <label for="edit_id_cliente">Seleccione un cliente</label>
+                        <select name="id_cliente" id="edit_id_cliente" class="form-control" required>
+                            <option value="">Seleccione un cliente</option>
+                            <?php while ($clientes = $result_clientes->fetch_assoc()): ?>
+                                <?php 
+                                    $nombre_completo = htmlspecialchars($clientes['nombre_cliente'] . ' ' . $clientes['apellido_paterno'] . ' ' . $clientes['apellido_materno']);
+                                ?>
+                                <option value="<?= htmlspecialchars($clientes['id_cliente']) ?>"><?= $nombre_completo ?></option>
+                            <?php endwhile; ?>
                         </select>
                     </div>
-
+                    
                     <div class="form-group mb-3">
                         <label for="edit_num_ext">Outside Number</label>
                         <input type="number" name="num_ext" id="edit_num_ext" class="form-control" placeholder="Enter Outside Number" required>
@@ -85,13 +99,13 @@ require '../Administrador/superior_admin.php';?>
     </div>
 </div>
 
-<section><br/>
+<section>
     <table class="table">
         <thead class="thead-dark">
-        <h2 class="text-center">Manage Company Address</h2><br/>
+            <h2 class="text-center">Manage Customers Address</h2><br/>
             <tr>
                 <th>Address ID</th>
-                <th>Company</th>
+                <th>Customer</th>
                 <th>Outside Number</th>
                 <th>Inner Number</th>
                 <th>Street</th>
@@ -102,61 +116,52 @@ require '../Administrador/superior_admin.php';?>
             </tr>
         </thead>
         <tbody>
-            <?php
-            $sql = "SELECT d.id_direccion_empresa, e.nombre_empresa, d.num_ext, d.num_int, d.calle, d.ciudad, d.estado, d.codigo_postal
-                    FROM direccion_empresa d
-                    JOIN empresa e ON d.id_empresa = e.id_empresa";
-            $result = $con->query($sql);
-
+        <?php
             if ($result->num_rows > 0) {
                 while ($row = $result->fetch_assoc()) {
-                    $nombre_empresa = htmlspecialchars($row['nombre_empresa']);
+                    $nombre_completo = htmlspecialchars($row['nombre_cliente'] . ' ' . $row['apellido_paterno'] . ' ' . $row['apellido_materno']);
                     echo "<tr>";
-                    echo "<td>" . htmlspecialchars($row['id_direccion_empresa']) . "</td>";
-                    echo "<td>" . $nombre_empresa . "</td>";
+                    echo "<td>" . htmlspecialchars($row['id_direccion_cliente']) . "</td>";
+                    echo "<td>" . $nombre_completo . "</td>";
                     echo "<td>" . htmlspecialchars($row['num_ext']) . "</td>";
                     echo "<td>" . htmlspecialchars($row['num_int']) . "</td>";
                     echo "<td>" . htmlspecialchars($row['calle']) . "</td>";
                     echo "<td>" . htmlspecialchars($row['ciudad']) . "</td>";
                     echo "<td>" . htmlspecialchars($row['estado']) . "</td>";
                     echo "<td>" . htmlspecialchars($row['codigo_postal']) . "</td>";
-                    echo "<td>";
-                        echo "<button class='btn btn-info btn-sm me-1' onclick='openEditCompanyAddressModal(" . json_encode($row) . ")' title='Edit Company Addres'>
+                    echo "<td>
+                            <button class='btn btn-info btn-sm me-1' onclick='openEditCustomerAddressModal(" . json_encode($row) . ")' title='Edit Customer Address'>
                                 <i class='fas fa-edit'></i>
                             </button>
-                            <a href='delete_company_address.php?id=" . $row['id_direccion_empresa'] . "' class='btn btn-danger btn-sm' onclick='return confirm(\"¿Estás seguro de que deseas eliminar esta direccion de la empresa?\")' title='Delete Customer Address'>
+                            <a href='delete_customer_address.php?id=" . $row['id_direccion_cliente'] . "' class='btn btn-danger btn-sm' onclick='return confirm(\"¿Estás seguro de que deseas eliminar esta dirección de cliente?\")' title='Delete Customer Address'>
                                 <i class='fas fa-trash'></i>
                             </a>
-                        </td>";
-                        echo "</tr>";
-                    }
-                } else {
-                    echo "<tr><td colspan='11'>No hay empleados registrados.</td></tr>";
+                          </td>";
+                    echo "</tr>";
                 }
-            ?>
+            } else {
+                echo "<tr><td colspan='9'>No hay clientes registrados.</td></tr>";
+            }
+        ?>
         </tbody>
     </table>
 </section>
 
 <script>
+    function openEditCustomerAddressModal(customerData) {
+        $('#edit_id_direccion_cliente').val(customerData.id_direccion_cliente);
+        $('#edit_id_cliente').val(customerData.id_cliente);
+        $('#edit_num_ext').val(customerData.num_ext);
+        $('#edit_num_int').val(customerData.num_int);
+        $('#edit_calle').val(customerData.calle);
+        $('#edit_ciudad').val(customerData.ciudad);
+        $('#edit_estado').val(customerData.estado);
+        $('#edit_codigo_postal').val(customerData.codigo_postal);
 
-function openEditCompanyAddressModal(customerData) {
-    console.log(customerData);
+        $('#editCustomerAddressModal').modal('show');
+    }
 
-    $('#edit_id_direccion_empresa').val(customerData.id_direccion_empresa);
-    $('#edit_num_ext').val(customerData.num_ext);
-    $('#edit_num_int').val(customerData.num_int);
-    $('#edit_calle').val(customerData.calle);
-    $('#edit_ciudad').val(customerData.ciudad);
-    $('#edit_estado').val(customerData.estado);
-    $('#edit_codigo_postal').val(customerData.codigo_postal);
-
-    $('#edit_id_empresa').val(customerData.id_empresa).change();
-
-    $('#editCompanyAddressModal').modal('show');
-}
-
-function mostrarToast(titulo, mensaje, tipo) {
+    function mostrarToast(titulo, mensaje, tipo) {
             let icon = '';
             let alertClass = '';
 
@@ -207,6 +212,6 @@ function mostrarToast(titulo, mensaje, tipo) {
                 <?php unset($_SESSION['status_message'], $_SESSION['status_type']); ?>
             <?php endif; ?>
         });
-    </script>
+</script>
 </body>
 </html>

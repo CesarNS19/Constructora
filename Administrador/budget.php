@@ -9,10 +9,10 @@ $result_clientes = $con->query($sql_clientes);
 
 $sql_direccion_clientes = "SELECT id_direccion_cliente, ciudad FROM direccion_cliente";
 $result_direccion_clientes = $con->query($sql_direccion_clientes);
+
+require '../Administrador/superior_admin.php';
 ?>
 
-<?php
-require '../Administrador/superior_admin.php';?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -28,7 +28,7 @@ require '../Administrador/superior_admin.php';?>
 <div id="Alert"></div>
 
 <section class="company-header">
-        <button class="btn btn-success" data-toggle="modal" data-target="#addBudgetModal" style="float: right; margin: 10px;">
+        <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addBudgetModal" style="float: right; margin: 10px;">
             Add Budget
         </button><br/>
     </section><br/>
@@ -89,7 +89,7 @@ require '../Administrador/superior_admin.php';?>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
                     <button type="submit" class="btn btn-primary">Agregar Presupuesto</button>
                 </div>
             </form>
@@ -102,7 +102,7 @@ require '../Administrador/superior_admin.php';?>
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="editBudgetLabel">Editar Obras</h5>
+                <h5 class="modal-title" id="editBudgetLabel">Editar Presupuesto</h5>
             </div>
             <form action="edit_budget.php" method="POST">
                 <div class="modal-body">
@@ -124,7 +124,7 @@ require '../Administrador/superior_admin.php';?>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
                     <button type="submit" class="btn btn-primary">Guardar Cambios</button>
                 </div>
             </form>
@@ -178,9 +178,6 @@ require '../Administrador/superior_admin.php';?>
             </tbody>
         </table>
     </section>
-
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
     <script>
 
@@ -244,33 +241,29 @@ require '../Administrador/superior_admin.php';?>
                 <?php unset($_SESSION['status_message'], $_SESSION['status_type']); ?>
             <?php endif; ?>
         });
-    </script>
 
-    <script>
         $(document).ready(function () {
-    $('select[name="id_cliente"]').on('change', function () {
-        var id_cliente = $(this).val();
+            $('select[name="id_cliente"]').on('change', function () {
+                var id_cliente = $(this).val();
 
-        if (id_cliente) {
-            $.ajax({
-                url: 'get_direccion_cliente.php',
-                type: 'POST',
-                data: { id_cliente: id_cliente },
-                success: function (data) {
-                    var direccion = JSON.parse(data);
-                    $('#direccion_cliente').val(direccion.ciudad);
-                    $('#id_direccion_cliente').val(direccion.id_direccion_cliente);
+                if (id_cliente) {
+                    $.ajax({
+                        url: 'get_direccion_cliente.php',
+                        type: 'POST',
+                        data: { id_cliente: id_cliente },
+                        success: function (data) {
+                            var direccion = JSON.parse(data);
+                            $('#direccion_cliente').val(direccion.ciudad);
+                            $('#id_direccion_cliente').val(direccion.id_direccion_cliente);
+                        }
+                    });
+                } else {
+                    $('#direccion_cliente').val('');
+                    $('#id_direccion_cliente').val('');
                 }
             });
-        } else {
-            $('#direccion_cliente').val('');
-            $('#id_direccion_cliente').val('');
-        }
-    });
-});
+        });
     </script>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
 </html>

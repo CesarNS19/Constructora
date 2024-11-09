@@ -48,9 +48,9 @@ if (!$user) {
         <li><a href="works.php" title="Obras"><i class="fas fa-ruler-combined"></i></a></li>
         <li><a href="budget.php" title="Presupuesto"><i class="fas fa-file-invoice-dollar"></i></a></li>
         <li><a href="payroll.php" title="Nómina Empleado"><i class="fas fa-money-check-alt"></i></a></li>
-        <li><a href="../Login/logout.php" title="Cerrar sesión"><i class="fas fa-sign-out-alt"></i></a></li>
 
         </ul>
+        <li class="nav-links"><a href="../Login/logout.php" title="Cerrar sesión"><i class="fas fa-sign-out-alt text-dark"></i></a></li>
     </nav>
 </header>
 

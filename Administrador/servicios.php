@@ -1,8 +1,8 @@
 <?php
-require '../Login/conexion.php';?>
+require '../Login/conexion.php';
+require '../Administrador/superior_admin.php';
+?>
 
-<?php
-require '../Administrador/superior_admin.php';?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -18,7 +18,7 @@ require '../Administrador/superior_admin.php';?>
 <div id="Alert"></div>
 
 <section class="company-header">
-        <button class="btn btn-success" data-toggle="modal" data-target="#addServicesModal" style="float: right; margin: 10px;">
+        <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addServicesModal" style="float: right; margin: 10px;">
             Add Service
         </button><br/>
     </section><br/>
@@ -42,14 +42,13 @@ require '../Administrador/superior_admin.php';?>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
                     <button type="submit" class="btn btn-primary">Agregar Servicio</button>
                 </div>
             </form>
         </div>
     </div>
 </div>
-
 
 <div class="modal fade" id="editServicesModal" tabindex="-1" role="dialog" aria-labelledby="editServicesLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -85,14 +84,13 @@ require '../Administrador/superior_admin.php';?>
                 </div>
 
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     <button type="submit" class="btn btn-primary">Save Changes</button>
                 </div>
             </form>
         </div>
     </div>
 </div>
-
 
     <!-- Tabla de Servicios -->
     <section class="services-table">
@@ -136,9 +134,6 @@ require '../Administrador/superior_admin.php';?>
             </tbody>
         </table>
     </section>
-
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
     <script>
 
@@ -204,8 +199,6 @@ require '../Administrador/superior_admin.php';?>
             <?php endif; ?>
         });
     </script>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
 </html>
