@@ -153,13 +153,9 @@ require '../Administrador/superior_admin.php';
                         <select name="id_empresa" id="edit_id_empresa" class="form-control" required>
                             <option value="">Seleccione una empresa</option>
                             <?php
-                            
                             if ($result_empresas->num_rows > 0) {
                                 while ($empresa = $result_empresas->fetch_assoc()) {
-                                    echo "<option value='" . htmlspecialchars($empresa['id_empresa']) . "'";
-                                    echo " id='option_" . htmlspecialchars($empresa['id_empresa']) . "'>";
-                                    echo htmlspecialchars($empresa['nombre_empresa']);
-                                    echo "</option>";
+                                    echo "<option value='" . htmlspecialchars($empresa['id_empresa']) . "'>" . htmlspecialchars($empresa['nombre_empresa']) . "</option>";
                                 }
                             } else {
                                 echo "<option value=''>No hay empresas disponibles</option>";
@@ -177,76 +173,78 @@ require '../Administrador/superior_admin.php';
     </div>
 </div>
 
-    <!-- Tabla de Empleados -->
-    <section class="employee-table">
-        <table class="table">
-            <thead class="thead-dark">
-                <tr>
-                    <h2 class="text-center">Manage Employees</h2><br/>
-                    <th>Name</th>
-                    <th>Last Name</th>
-                    <th>Mother's Last Name</th>
-                    <th>Entry Time</th>
-                    <th>Exit Time</th>
-                    <th>Salary</th>
-                    <th>Phone</th>
-                    <th>Email</th>
-                    <th>Role</th>
-                    <th>Activities</th>
-                    <th>Company ID</th>
-                    <th>Status</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php
-                $sql = "SELECT * FROM empleados";
-                $result = $con->query($sql);
+<!-- Tabla de Empleados -->
+<section class="employee-table">
+    <table class="table">
+        <thead class="thead-dark">
+            <tr>
+                <h2 class="text-center">Manage Employees</h2><br/>
+                <th>Name</th>
+                <th>Last Name</th>
+                <th>Mother's Last Name</th>
+                <th>Entry Time</th>
+                <th>Exit Time</th>
+                <th>Salary</th>
+                <th>Personal Phone</th>
+                <th>Personal Email</th>
+                <th>Position</th>
+                <th>Activities</th>
+                <th>Company</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php
+            $sql = "SELECT e.*, emp.nombre_empresa FROM empleados e
+                    LEFT JOIN empresa emp ON e.id_empresa = emp.id_empresa";
+            $result = $con->query($sql);
 
-                if ($result->num_rows > 0) {
-                    while ($row = $result->fetch_assoc()) {
-                        echo "<tr>";
-                        echo "<td>" . htmlspecialchars($row['nombre']) . "</td>";
-                        echo "<td>" . htmlspecialchars($row['apellido_paterno']) . "</td>";
-                        echo "<td>" . htmlspecialchars($row['apellido_materno']) . "</td>";
-                        echo "<td>" . htmlspecialchars($row['hora_entrada']) . "</td>";
-                        echo "<td>" . htmlspecialchars($row['hora_salida']) . "</td>";
-                        echo "<td>" . htmlspecialchars($row['salario']) . "</td>";
-                        echo "<td>" . htmlspecialchars($row['telefono_personal']) . "</td>";
-                        echo "<td>" . htmlspecialchars($row['correo_personal']) . "</td>";
-                        echo "<td>" . htmlspecialchars($row['rol']) . "</td>";
-                        echo "<td>" . htmlspecialchars($row['actividades']) . "</td>";
-                        echo "<td>" . htmlspecialchars($row['id_empresa']) . "</td>";
-                        echo "<td>" . htmlspecialchars($row['estatus']) . "</td>";
-                        echo "<td>";
-                    
-                        if ($row['estatus'] === 'activo') {
-                            echo "<a href='status_employee.php?id=" . $row['id_empleado'] . "&estatus=inactivo' class='btn btn-warning btn-sm me-2' title='Desactivar empleado'>
-                                    <i class='fas fa-ban'></i>
-                                </a>";
-                        } else {
-                            echo "<a href='status_employee.php?id=" . $row['id_empleado'] . "&estatus=activo' class='btn btn-success btn-sm me-2' title='Activar empleado'>
-                                    <i class='fas fa-check-circle'></i>
-                                </a>";
-                        }
-
-                        echo "<button class='btn btn-info btn-sm me-1' onclick='openEditModal(" . json_encode($row) . ")' title='Editar empleado'>
-                                <i class='fas fa-edit'></i>
-                            </button>
-                            <a href='delete_employee.php?id=" . $row['id_empleado'] . "' class='btn btn-danger btn-sm' onclick='return confirm(\"¿Estás seguro de que deseas eliminar a este empleado?\")' title='Eliminar empleado'>
-                                <i class='fas fa-trash'></i>
-                            </a>
-                        </td>";
-                        echo "</tr>";
+            if ($result->num_rows > 0) {
+                while ($row = $result->fetch_assoc()) {
+                    echo "<tr>";
+                    echo "<td>" . htmlspecialchars($row['nombre']) . "</td>";
+                    echo "<td>" . htmlspecialchars($row['apellido_paterno']) . "</td>";
+                    echo "<td>" . htmlspecialchars($row['apellido_materno']) . "</td>";
+                    echo "<td>" . htmlspecialchars($row['hora_entrada']) . "</td>";
+                    echo "<td>" . htmlspecialchars($row['hora_salida']) . "</td>";
+                    echo "<td>" . htmlspecialchars($row['salario']) . "</td>";
+                    echo "<td>" . htmlspecialchars($row['telefono_personal']) . "</td>";
+                    echo "<td>" . htmlspecialchars($row['correo_personal']) . "</td>";
+                    echo "<td>" . htmlspecialchars($row['rol']) . "</td>";
+                    echo "<td>" . htmlspecialchars($row['actividades']) . "</td>";
+                    echo "<td>" . htmlspecialchars($row['nombre_empresa']) . "</td>";
+                    echo "<td>" . htmlspecialchars($row['estatus']) . "</td>";
+                    echo "<td>";
+                
+                    if ($row['estatus'] === 'activo') {
+                        echo "<a href='status_employee.php?id=" . $row['id_empleado'] . "&estatus=inactivo' class='btn btn-warning btn-sm me-2' title='Desactivar empleado'>
+                                <i class='fas fa-ban'></i>
+                            </a>";
+                    } else {
+                        echo "<a href='status_employee.php?id=" . $row['id_empleado'] . "&estatus=activo' class='btn btn-success btn-sm me-2' title='Activar empleado'>
+                                <i class='fas fa-check-circle'></i>
+                            </a>";
                     }
-                } else {
-                    echo "<tr><td colspan='11'>No hay empleados registrados.</td></tr>";
+
+                    echo "<button class='btn btn-info btn-sm me-1' onclick='openEditModal(" . json_encode($row) . ")' title='Editar empleado'>
+                            <i class='fas fa-edit'></i>
+                        </button>
+                        <a href='delete_employee.php?id=" . $row['id_empleado'] . "' class='btn btn-danger btn-sm' onclick='return confirm(\"¿Estás seguro de que deseas eliminar a este empleado?\")' title='Eliminar empleado'>
+                            <i class='fas fa-trash'></i>
+                        </a>
+                    </td>";
+                    echo "</tr>";
                 }
-                ?>
-            </tbody>
-        </table>
-    </section>
-    <script>
+            } else {
+                echo "<tr><td colspan='11'>No hay empleados registrados.</td></tr>";
+            }
+            ?>
+        </tbody>
+    </table>
+</section>
+
+<script>
 
     function openEditModal(customerData) {
         $('#edit_id_empleado').val(customerData.id_empleado);
@@ -326,7 +324,7 @@ require '../Administrador/superior_admin.php';
                 <?php unset($_SESSION['status_message'], $_SESSION['status_type']); ?>
             <?php endif; ?>
         });
-    </script>
+</script>
 
 </body>
 </html>

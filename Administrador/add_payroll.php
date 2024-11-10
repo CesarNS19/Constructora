@@ -8,19 +8,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $dias_trabajados = $_POST['dias_trabajados'];
     $total = $_POST['total'];
 
-    $sql = "INSERT INTO nomina (id_empleado, sueldo_diario, dias_trabajados, total)
-            VALUES ('$id_empleado', '$sueldo_diario', '$dias_trabajados', '$total')";
+    $fecha = "NOW()";
 
-if ($con->query($sql) === TRUE) {
-    $_SESSION['status_message'] = "Nómina agregada exitosamente.";
-    $_SESSION['status_type'] = "success";
-} else {
-    $_SESSION['status_message'] = "Error al agregar la Nómina: " . $con->error;
-    $_SESSION['status_type'] = "danger";
-}
+    $sql = "INSERT INTO nomina (id_empleado, fecha, sueldo_diario, dias_trabajados, total)
+            VALUES ('$id_empleado', $fecha, '$sueldo_diario', '$dias_trabajados', '$total')";
 
-header("Location: payroll.php");
-exit();
+    if ($con->query($sql) === TRUE) {
+        $_SESSION['status_message'] = "Nómina agregada exitosamente.";
+        $_SESSION['status_type'] = "success";
+    } else {
+        $_SESSION['status_message'] = "Error al agregar la Nómina: " . $con->error;
+        $_SESSION['status_type'] = "danger";
+    }
+
+    header("Location: payroll.php");
+    exit();
 }
 
 $con->close();

@@ -4,7 +4,7 @@ require '../Login/conexion.php';
 $sql_empleados = "SELECT id_empleado, nombre, apellido_paterno, apellido_materno FROM empleados";
 $result_empleados = $con->query($sql_empleados);
 
-$sql = "SELECT n.id_nomina, e.nombre, e.apellido_paterno, e.apellido_materno, n.sueldo_diario, n.dias_trabajados, n.total
+$sql = "SELECT n.id_nomina, e.nombre, e.apellido_paterno, e.apellido_materno, n.fecha, n.sueldo_diario, n.dias_trabajados, n.total
         FROM nomina n
         JOIN empleados e ON n.id_empleado = e.id_empleado";
 $result = $con->query($sql);
@@ -55,12 +55,15 @@ require '../Administrador/superior_admin.php';
                         </select>
                     </div>
                     <div class="form-group mb-3">
+                        <label for="sueldo_diario">Sueldo Diario</label>
                         <input type="number" id="sueldo_diario" name="sueldo_diario" class="form-control" placeholder="Sueldo diario" required>
                     </div>
                     <div class="form-group mb-3">
+                        <label for="dias_trabajados">Días Trabajados</label>
                         <input type="number" id="dias_trabajados" name="dias_trabajados" class="form-control" placeholder="Dias trabajados" required>
                     </div>
                     <div class="form-group mb-3">
+                        <label for="total">Total</label>
                         <input type="text" id="total" name="total" class="form-control" placeholder="Total" readonly>
                     </div>
                 </div>
@@ -119,6 +122,7 @@ require '../Administrador/superior_admin.php';
             <tr>
                 <th>Payroll ID</th>
                 <th>Employee</th>
+                <th>Date</th>
                 <th>Sueldo diario</th>
                 <th>Días trabajados</th>
                 <th>Total</th>
@@ -133,6 +137,7 @@ require '../Administrador/superior_admin.php';
                     echo "<tr>";
                     echo "<td>" . htmlspecialchars($row['id_nomina']) . "</td>";
                     echo "<td>" . $nombre_completo . "</td>";
+                    echo "<td>" . htmlspecialchars($row['fecha']) . "</td>";
                     echo "<td>" . htmlspecialchars($row['sueldo_diario']) . "</td>";
                     echo "<td>" . htmlspecialchars($row['dias_trabajados']) . "</td>";
                     echo "<td>" . htmlspecialchars($row['total']) . "</td>";
