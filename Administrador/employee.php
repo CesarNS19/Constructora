@@ -174,7 +174,7 @@ require '../Administrador/superior_admin.php';
 </div>
 
 <!-- Tabla de Empleados -->
-<section class="employee-table">
+<section class="employee-table"><br/>
     <table class="table">
         <thead class="thead-dark">
             <tr>
@@ -185,8 +185,8 @@ require '../Administrador/superior_admin.php';
                 <th>Entry Time</th>
                 <th>Exit Time</th>
                 <th>Salary</th>
-                <th>Personal Phone</th>
-                <th>Personal Email</th>
+                <th>Phone</th>
+                <th>Email</th>
                 <th>Position</th>
                 <th>Activities</th>
                 <th>Company</th>

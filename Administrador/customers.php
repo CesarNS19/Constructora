@@ -23,7 +23,7 @@ require '../Administrador/superior_admin.php';
 
 <section>
         <a href="../Administrador/customer_address.php" class="btn btn-primary" style="float: right; margin: 10px;">
-            View Address
+            View Addresses
         </a>
     <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addCustomerModal" style="float: right; margin: 10px;">
         Add Customer
@@ -182,7 +182,7 @@ require '../Administrador/superior_admin.php';
     </div>
 </div>
 
-<section>
+<section><br/>
     <table class="table">
         <thead class="thead-dark">
         <h2 class="text-center">Manage Customers</h2><br/>

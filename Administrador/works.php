@@ -30,7 +30,8 @@ require '../Administrador/superior_admin.php';
         </button><br/>
     </section><br/>
 
-    <div class="modal fade" id="addWorksModal" tabindex="-1" role="dialog" aria-labelledby="addWorksModalLabel" aria-hidden="true">
+<!-- Modal de Agregar Obra -->
+<div class="modal fade" id="addWorksModal" tabindex="-1" role="dialog" aria-labelledby="addWorksModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -38,7 +39,7 @@ require '../Administrador/superior_admin.php';
             </div>
             <form action="add_work.php" method="POST">
                 <div class="modal-body">
-                <div class="form-group mb-3">
+                    <div class="form-group mb-3">
                         <label for="id_empresa">Selecciona la Empresa</label>
                         <select name="id_empresa" class="form-control" required>
                             <option value="">Seleccione una empresa</option>
@@ -80,19 +81,19 @@ require '../Administrador/superior_admin.php';
                         <input type="hidden" name="id_direccion_cliente" id="id_direccion_cliente">
                     </div>
                     <div class="form-group mb-3">
-                        <input type="date" step="0.01" name="fecha_inicio" class="form-control" placeholder="Start Date" required>
+                        <input type="date" step="0.01" name="fecha_inicio" class="form-control" placeholder="Fecha de Inicio" required>
                     </div>
                     <div class="form-group mb-3">
-                        <input type="number" name="anticipo" class="form-control" placeholder="Advance Payment" required>
+                        <input type="number" name="anticipo" id="anticipo" class="form-control" placeholder="Anticipo" required>
                     </div>
                     <div class="form-group mb-3">
-                        <input type="number" name="adeudo" class="form-control" placeholder="Debit" required>
+                        <input type="number" name="adeudo" id="adeudo" class="form-control" placeholder="Adeudo" required>
                     </div>
                     <div class="form-group mb-3">
-                        <input type="number" name="total_obra" class="form-control" placeholder="Total Work" required>
+                        <input type="number" name="total_obra" id="total_obra" class="form-control" placeholder="Total de la Obra" readonly>
                     </div>
                     <div class="form-group mb-3">
-                        <textarea name="observaciones" class="form-control" placeholder="Observations" required></textarea>
+                        <textarea name="observaciones" class="form-control" placeholder="Observaciones" required></textarea>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -104,6 +105,7 @@ require '../Administrador/superior_admin.php';
     </div>
 </div>
 
+<!-- Modal de Editar Obra -->
 <div class="modal fade" id="editWorksModal" tabindex="-1" role="dialog" aria-labelledby="editWorksModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -115,27 +117,27 @@ require '../Administrador/superior_admin.php';
                     <input type="hidden" name="folio_obra" id="edit_folio_obra">
                     
                     <div class="form-group mb-3">
-                        <label for="edit_fecha_inicio">Start Date</label>
+                        <label for="edit_fecha_inicio">Fecha de Inicio</label>
                         <input type="date" name="fecha_inicio" id="edit_fecha_inicio" class="form-control" required>
                     </div>
 
                     <div class="form-group mb-3">
-                        <label for="edit_anticipo">Advance Payment</label>
+                        <label for="edit_anticipo">Anticipo</label>
                         <input type="number" name="anticipo" id="edit_anticipo" class="form-control" placeholder="Ingresa el anticipo" required>
                     </div>
                     
                     <div class="form-group mb-3">
-                        <label for="edit_adeudo">Debit</label>
-                        <input type="number"  name="adeudo" id="edit_adeudo" class="form-control" placeholder="Ingresa el adeudo" required>
+                        <label for="edit_adeudo">Adeudo</label>
+                        <input type="number" name="adeudo" id="edit_adeudo" class="form-control" placeholder="Ingresa el adeudo" required>
                     </div>
                     
                     <div class="form-group mb-3">
-                        <label for="edit_total_obra">Total Work</label>
-                        <input type="number" name="total_obra" id="edit_total_obra" class="form-control" placeholder="Ingresa el total de la obra" required>
+                        <label for="edit_total_obra">Total de la Obra</label>
+                        <input type="number" name="total_obra" id="edit_total_obra" class="form-control" readonly>
                     </div>
                     
                     <div class="form-group mb-3">
-                        <label for="edit_observaciones">Observations</label>
+                        <label for="edit_observaciones">Observaciones</label>
                         <input type="text" name="observaciones" id="edit_observaciones" class="form-control" placeholder="Ingresa las observaciones" required>
                     </div>
                 </div>
@@ -149,66 +151,73 @@ require '../Administrador/superior_admin.php';
 </div>
 
     <!-- Tabla de Obras -->
-    <section class="works-table">
-        <table class="table">
-            <thead class="thead-dark">
-                <tr>
-                    <h2 class="text-center">Manage Works</h2><br/>
-                    <th>Company ID</th>
-                    <th>Customer ID</th>
-                    <th>Customer Address ID</th>
-                    <th>Start Date</th>
-                    <th>Advance Payment</th>
-                    <th>Debit</th>
-                    <th>Total work</th>
-                    <th>Observations</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php
-                $sql = "SELECT * FROM obras";
-                $result = $con->query($sql);
+    <section class="works-table"><br/>
+    <table class="table">
+        <thead class="thead-dark">
+            <tr>
+                <h2 class="text-center">Manage Works</h2><br/>
+                <th>Company Name</th>
+                <th>Customer Name</th>
+                <th>Customer Address</th>
+                <th>Start Date</th>
+                <th>Advance Payment</th>
+                <th>Debit</th>
+                <th>Total Work</th>
+                <th>Observations</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php
+            $sql = "SELECT o.*, e.nombre_empresa, c.nombre_cliente, c.apellido_paterno, c.apellido_materno, d.ciudad 
+                    FROM obras o
+                    LEFT JOIN empresa e ON o.id_empresa = e.id_empresa
+                    LEFT JOIN clientes c ON o.id_cliente = c.id_cliente
+                    LEFT JOIN direccion_cliente d ON o.id_direccion_cliente = d.id_direccion_cliente";
+            $result = $con->query($sql);
 
-                if ($result->num_rows > 0) {
-                    while ($row = $result->fetch_assoc()) {
-                        echo "<tr>";
-                        echo "<td>" . htmlspecialchars($row['id_empresa']) . "</td>";
-                        echo "<td>" . htmlspecialchars($row['id_cliente']) . "</td>";
-                        echo "<td>" . htmlspecialchars($row['id_direccion_cliente']) . "</td>";
-                        echo "<td>" . htmlspecialchars($row['fecha_inicio']) . "</td>";
-                        echo "<td>" . htmlspecialchars($row['anticipo']) . "</td>";
-                        echo "<td>" . htmlspecialchars($row['adeudo']) . "</td>";
-                        echo "<td>" . htmlspecialchars($row['total_obra']) . "</td>";
-                        echo "<td>" . htmlspecialchars($row['observaciones']) . "</td>";
-                        echo "<td>";
-                        echo "<button class='btn btn-info btn-sm me-1' onclick='openEditModal(" . json_encode($row) . ")' title='Editar obra'>
-                                <i class='fas fa-edit'></i>
-                            </button>
-                            <a href='delete_work.php?id=" . $row['folio_obra'] . "' class='btn btn-danger btn-sm' onclick='return confirm(\"¿Estás seguro de que deseas eliminar esta obra?\")' title='Eliminar obra'>
-                                <i class='fas fa-trash'></i>
-                            </a>
-                        </td>";
-                        echo "</tr>";
-                    }
-                } else {
-                    echo "<tr><td colspan='11'>No hay obras registradas.</td></tr>";
+            if ($result->num_rows > 0) {
+                while ($row = $result->fetch_assoc()) {
+                    $nombre_cliente = htmlspecialchars($row['nombre_cliente'] . ' ' . $row['apellido_paterno'] . ' ' . $row['apellido_materno']);
+                    echo "<tr>";
+                    echo "<td>" . htmlspecialchars($row['nombre_empresa']) . "</td>";
+                    echo "<td>" . $nombre_cliente . "</td>";
+                    echo "<td>" . htmlspecialchars($row['ciudad']) . "</td>";
+                    echo "<td>" . htmlspecialchars($row['fecha_inicio']) . "</td>";
+                    echo "<td>" . htmlspecialchars($row['anticipo']) . "</td>";
+                    echo "<td>" . htmlspecialchars($row['adeudo']) . "</td>";
+                    echo "<td>" . htmlspecialchars($row['total_obra']) . "</td>";
+                    echo "<td>" . htmlspecialchars($row['observaciones']) . "</td>";
+                    echo "<td>";
+                    echo "<button class='btn btn-info btn-sm me-1' onclick='openEditModal(" . json_encode($row) . ")' title='Editar obra'>
+                            <i class='fas fa-edit'></i>
+                        </button>
+                        <a href='delete_work.php?id=" . $row['folio_obra'] . "' class='btn btn-danger btn-sm' onclick='return confirm(\"¿Estás seguro de que deseas eliminar esta obra?\")' title='Eliminar obra'>
+                            <i class='fas fa-trash'></i>
+                        </a>
+                    </td>";
+                    echo "</tr>";
                 }
-                ?>
-            </tbody>
-        </table>
-    </section>
+            } else {
+                echo "<tr><td colspan='9'>No hay obras registradas.</td></tr>";
+            }
+            ?>
+        </tbody>
+    </table>
+</section>
 
     <script>
 
-    function openEditModal(customerData) {
-        $('#edit_folio_obra').val(customerData.folio_obra);
-        $('#edit_fecha_inicio').val(customerData.fecha_inicio);
-        $('#edit_anticipo').val(customerData.anticipo);
-        $('#edit_adeudo').val(customerData.adeudo);
-        $('#edit_total_obra').val(customerData.total_obra);
-        $('#edit_observaciones').val(customerData.observaciones);
-        
+    function openEditModal(obraData) {
+        $('#edit_folio_obra').val(obraData.folio_obra);
+        $('#edit_fecha_inicio').val(obraData.fecha_inicio);
+        $('#edit_anticipo').val(obraData.anticipo);
+        $('#edit_adeudo').val(obraData.adeudo);
+        $('#edit_total_obra').val(obraData.total_obra);
+        $('#edit_observaciones').val(obraData.observaciones);
+
+        calcularTotal();
+
         $('#editWorksModal').modal('show');
     }
 
@@ -285,6 +294,46 @@ require '../Administrador/superior_admin.php';
                 }
             });
         });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            function calcularTotalAgregar() {
+                var anticipo = parseFloat(document.getElementById('anticipo').value) || 0;
+                var adeudo = parseFloat(document.getElementById('adeudo').value) || 0;
+                document.getElementById('total_obra').value = (anticipo + adeudo).toFixed(2);
+            }
+
+            function calcularTotalEditar() {
+                var anticipo = parseFloat(document.getElementById('edit_anticipo').value) || 0;
+                var adeudo = parseFloat(document.getElementById('edit_adeudo').value) || 0;
+                document.getElementById('edit_total_obra').value = (anticipo + adeudo).toFixed(2);
+            }
+
+            if (document.getElementById('anticipo')) {
+                document.getElementById('anticipo').addEventListener('input', calcularTotalAgregar);
+            }
+            if (document.getElementById('adeudo')) {
+                document.getElementById('adeudo').addEventListener('input', calcularTotalAgregar);
+            }
+
+            if (document.getElementById('edit_anticipo')) {
+                document.getElementById('edit_anticipo').addEventListener('input', calcularTotalEditar);
+            }
+            if (document.getElementById('edit_adeudo')) {
+                document.getElementById('edit_adeudo').addEventListener('input', calcularTotalEditar);
+            }
+
+            window.openEditModal = function(obraData) {
+                document.getElementById('edit_folio_obra').value = obraData.folio_obra;
+                document.getElementById('edit_fecha_inicio').value = obraData.fecha_inicio;
+                document.getElementById('edit_anticipo').value = obraData.anticipo;
+                document.getElementById('edit_adeudo').value = obraData.adeudo;
+                document.getElementById('edit_total_obra').value = (parseFloat(obraData.anticipo) + parseFloat(obraData.adeudo)).toFixed(2);
+                document.getElementById('edit_observaciones').value = obraData.observaciones;
+
+                $('#editWorksModal').modal('show');
+            }
+        });
+
     </script>
 </body>
 </html>

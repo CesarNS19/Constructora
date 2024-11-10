@@ -19,7 +19,7 @@ require '../Administrador/superior_admin.php';
 
 <section class="company-header">
         <a href="../Administrador/company_address.php" class="btn btn-primary" style="float: right; margin: 10px;">
-            View Address
+            View Addresses
         </a>
         <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addCompanyModal" style="float: right; margin: 10px;">
             Add Company
@@ -138,7 +138,7 @@ require '../Administrador/superior_admin.php';
     </div>
 </div>
 
-<section>
+<section><br/>
     <table class="table">
         <thead class="thead-dark">
             <h2 class="text-center">Manage Company</h2><br/>

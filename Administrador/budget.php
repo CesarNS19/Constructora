@@ -29,7 +29,7 @@ require '../Administrador/superior_admin.php';
 
 <section class="company-header">
         <a href="../Administrador/budget_address.php" class="btn btn-primary" style="float: right; margin: 10px;">
-            View Address
+            View Addresses
         </a>
         <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addBudgetModal" style="float: right; margin: 10px;">
             Add Budget
@@ -82,12 +82,15 @@ require '../Administrador/superior_admin.php';
                         <input type="hidden" name="id_direccion_cliente" id="id_direccion_cliente">
                     </div>
                     <div class="form-group mb-3">
+                        <label for="date">Start Date</label>
                         <input type="date" step="0.01" name="fecha_elaboracion" class="form-control" placeholder="Start Date" required>
                     </div>
                     <div class="form-group mb-3">
+                        <label for="">Total Work</label>
                         <input type="number" name="total_obra" class="form-control" placeholder="Total Work" required>
                     </div>
                     <div class="form-group mb-3">
+                        <label for="">Observations</label>
                         <textarea name="observaciones" class="form-control" placeholder="Observations" required></textarea>
                     </div>
                 </div>
@@ -178,54 +181,59 @@ require '../Administrador/superior_admin.php';
 </div>
 
     <!-- Tabla de Presupuestos -->
-    <section class="works-table">
-        <table class="table">
-            <thead class="thead-dark">
-                <tr>
-                    <h2 class="text-center">Manage Budgets</h2><br/>
-                    <th>Company ID</th>
-                    <th>Customer ID</th>
-                    <th>Customer Address ID</th>
-                    <th>Start Date</th>
-                    <th>Total work</th>
-                    <th>Observations</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php
-                $sql = "SELECT * FROM presupuestos";
-                $result = $con->query($sql);
+    <section class="works-table"><br/>
+    <table class="table">
+        <thead class="thead-dark">
+            <tr>
+                <h2 class="text-center">Manage Budgets</h2><br/>
+                <th>Company Name</th>
+                <th>Customer Name</th>
+                <th>Customer Address</th>
+                <th>Start Date</th>
+                <th>Total Work</th>
+                <th>Observations</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php
+            $sql = "SELECT p.*, e.nombre_empresa, 
+                           CONCAT(c.nombre_cliente, ' ', c.apellido_paterno, ' ', c.apellido_materno) AS nombre_cliente,
+                           d.ciudad AS direccion_cliente
+                    FROM presupuestos p
+                    LEFT JOIN empresa e ON p.id_empresa = e.id_empresa
+                    LEFT JOIN clientes c ON p.id_cliente = c.id_cliente
+                    LEFT JOIN direccion_cliente d ON p.id_direccion_cliente = d.id_direccion_cliente";
+                    
+            $result = $con->query($sql);
 
-                if ($result->num_rows > 0) {
-                    while ($row = $result->fetch_assoc()) {
-                        echo "<tr>";
-                        echo "<td>" . htmlspecialchars($row['id_empresa']) . "</td>";
-                        echo "<td>" . htmlspecialchars($row['id_cliente']) . "</td>";
-                        echo "<td>" . htmlspecialchars($row['id_direccion_cliente']) . "</td>";
-                        echo "<td>" . htmlspecialchars($row['fecha_elaboracion']) . "</td>";
-                        echo "<td>" . htmlspecialchars($row['total_obra']) . "</td>";
-                        echo "<td>" . htmlspecialchars($row['observaciones']) . "</td>";
-                        echo "<td>";
-                        echo "<button class='btn btn-info btn-sm me-1' onclick='openEditModal(" . json_encode($row) . ")' title='Editar presupuesto'>
-                                <i class='fas fa-edit'></i>
-                            </button>
-                            <a href='delete_budget.php?id=" . $row['folio_presupuesto'] . "' class='btn btn-danger btn-sm' onclick='return confirm(\"¿Estás seguro de que deseas eliminar este presupuesto?\")' title='Eliminar presupuesto'>
-                                <i class='fas fa-trash'></i>
-                            </a>
-                            <button class='btn btn-success btn-sm' onclick='openAddAddressModal(" . json_encode($row) . ")' title='Agregar Dirección'>
-                            <i class='fas fa-plus'></i>
+            if ($result->num_rows > 0) {
+                while ($row = $result->fetch_assoc()) {
+                    $nombre_cliente = htmlspecialchars($row['nombre_cliente']);
+                    echo "<tr>";
+                    echo "<td>" . htmlspecialchars($row['nombre_empresa']) . "</td>";
+                    echo "<td>" . $nombre_cliente . "</td>";
+                    echo "<td>" . htmlspecialchars($row['direccion_cliente']) . "</td>";
+                    echo "<td>" . htmlspecialchars($row['fecha_elaboracion']) . "</td>";
+                    echo "<td>" . htmlspecialchars($row['total_obra']) . "</td>";
+                    echo "<td>" . htmlspecialchars($row['observaciones']) . "</td>";
+                    echo "<td>";
+                    echo "<button class='btn btn-info btn-sm me-1' onclick='openEditModal(" . json_encode($row) . ")' title='Editar presupuesto'>
+                            <i class='fas fa-edit'></i>
                         </button>
-                        </td>";
-                        echo "</tr>";
-                    }
-                } else {
-                    echo "<tr><td colspan='11'>No hay obras registradas.</td></tr>";
+                        <a href='delete_budget.php?id=" . $row['folio_presupuesto'] . "' class='btn btn-danger btn-sm' onclick='return confirm(\"¿Estás seguro de que deseas eliminar este presupuesto?\")' title='Eliminar presupuesto'>
+                            <i class='fas fa-trash'></i>
+                        </a>
+                    </td>";
+                    echo "</tr>";
                 }
-                ?>
-            </tbody>
-        </table>
-    </section>
+            } else {
+                echo "<tr><td colspan='7'>No hay presupuestos registrados.</td></tr>";
+            }
+            ?>
+        </tbody>
+    </table>
+</section>
 
     <script>
 

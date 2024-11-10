@@ -93,7 +93,7 @@ require '../Administrador/superior_admin.php';
 </div>
 
     <!-- Tabla de Servicios -->
-    <section class="services-table">
+    <section class="services-table"><br/>
         <table class="table">
             <thead class="thead-dark">
                 <tr>

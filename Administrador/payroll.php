@@ -116,7 +116,7 @@ require '../Administrador/superior_admin.php';
 </div>
 
 <section>
-    <table class="table">
+    <table class="table"><br/>
         <thead class="thead-dark">
             <h2 class="text-center">Manage Payroll</h2><br/>
             <tr>
