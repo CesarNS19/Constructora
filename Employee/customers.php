@@ -183,7 +183,7 @@ require '../Employee/superior_employee.php';
 </div>
 
 <section>
-    <table class="table">
+    <table class="table"><br/>
         <thead class="thead-dark">
         <h2 class="text-center">Manage Customers</h2><br/>
             <tr>
