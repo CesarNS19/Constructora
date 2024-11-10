@@ -28,6 +28,9 @@ require '../Administrador/superior_admin.php';
 <div id="Alert"></div>
 
 <section class="company-header">
+        <a href="../Administrador/budget_address.php" class="btn btn-primary" style="float: right; margin: 10px;">
+            View Address
+        </a>
         <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addBudgetModal" style="float: right; margin: 10px;">
             Add Budget
         </button><br/>
@@ -132,6 +135,48 @@ require '../Administrador/superior_admin.php';
     </div>
 </div>
 
+<!-- Modal para añadir dirección del presupuesto -->
+<div class="modal fade" id="addBudgetAddressModal" tabindex="-1" role="dialog" aria-labelledby="addAddressBudgetModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addBudgetAddressLabel">Add Company Address</h5>
+            </div>
+            <form action="add_budget_address.php" method="POST">
+                <div class="modal-body">
+                    <input type="hidden" name="folio_presupuesto" id="folio_presupuesto_modal">
+                    <div class="form-group mb-3">
+                        <label>Presupuesto seleccionado</label>
+                        <input type="text" id="presupuesto_modal" class="form-control" readonly>
+                    </div>
+                    <div class="form-group mb-3">
+                        <input type="number" name="num_ext" class="form-control" placeholder="Outside number" required>
+                    </div>
+                    <div class="form-group mb-3">
+                        <input type="number" name="num_int" class="form-control" placeholder="Inner number" required>
+                    </div>
+                    <div class="form-group mb-3">
+                        <input type="text" name="calle" class="form-control" placeholder="Street" required>
+                    </div>
+                    <div class="form-group mb-3">
+                        <input type="text" name="ciudad" class="form-control" placeholder="City" required>
+                    </div>
+                    <div class="form-group mb-3">
+                        <input type="text" name="estado" class="form-control" placeholder="State" required>
+                    </div>
+                    <div class="form-group mb-3">
+                        <input type="number" name="codigo_postal" class="form-control" placeholder="Postal code" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Add Budget Address</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
     <!-- Tabla de Presupuestos -->
     <section class="works-table">
         <table class="table">
@@ -168,6 +213,9 @@ require '../Administrador/superior_admin.php';
                             <a href='delete_budget.php?id=" . $row['folio_presupuesto'] . "' class='btn btn-danger btn-sm' onclick='return confirm(\"¿Estás seguro de que deseas eliminar este presupuesto?\")' title='Eliminar presupuesto'>
                                 <i class='fas fa-trash'></i>
                             </a>
+                            <button class='btn btn-success btn-sm' onclick='openAddAddressModal(" . json_encode($row) . ")' title='Agregar Dirección'>
+                            <i class='fas fa-plus'></i>
+                        </button>
                         </td>";
                         echo "</tr>";
                     }
@@ -188,6 +236,12 @@ require '../Administrador/superior_admin.php';
         $('#edit_observaciones').val(customerData.observaciones);
         
         $('#editBudgetModal').modal('show');
+    }
+
+    function openAddAddressModal(presupuesto) {
+        document.getElementById('folio_presupuesto_modal').value = presupuesto.folio_presupuesto;
+        document.getElementById('presupuesto_modal').value = presupuesto.folio_presupuesto;
+        $('#addBudgetAddressModal').modal('show');
     }
 
         function mostrarToast(titulo, mensaje, tipo) {
@@ -264,6 +318,5 @@ require '../Administrador/superior_admin.php';
             });
         });
     </script>
-
 </body>
 </html>
