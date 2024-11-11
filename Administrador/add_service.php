@@ -5,6 +5,7 @@ session_start();
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $nombre_servicio = $_POST['nombre_servicio'];
     $descripcion_servicio = $_POST['descripcion_servicio'];
+    $total = $_POST['total'];
 
     // Verificar si se ha cargado el archivo sin errores
     if (isset($_FILES['imagen_servicio']) && $_FILES['imagen_servicio']['error'] === UPLOAD_ERR_OK) {
@@ -21,8 +22,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $relative_path = "../Img/" . basename($_FILES["imagen_servicio"]["name"]);
                 
                 // Insertar los datos en la base de datos
-                $sql = "INSERT INTO servicios (nombre_servicio, descripcion_servicio, imagen_servicio) 
-                        VALUES ('$nombre_servicio', '$descripcion_servicio', '$relative_path')";
+                $sql = "INSERT INTO servicios (nombre_servicio, descripcion_servicio, total, imagen_servicio) 
+                        VALUES ('$nombre_servicio', '$descripcion_servicio', '$total', '$relative_path')";
 
                 if ($con->query($sql) === TRUE) {
                     $_SESSION['status_message'] = "Servicio agregado exitosamente";

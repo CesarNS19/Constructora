@@ -189,8 +189,7 @@ require '../Administrador/superior_admin.php';
                 <th>Company Name</th>
                 <th>Customer Name</th>
                 <th>Customer Address</th>
-                <th>Start Date</th>
-                <th>Total Work</th>
+                <th>Date of Preparation</th>
                 <th>Observations</th>
                 <th>Actions</th>
             </tr>
@@ -215,7 +214,6 @@ require '../Administrador/superior_admin.php';
                     echo "<td>" . $nombre_cliente . "</td>";
                     echo "<td>" . htmlspecialchars($row['direccion_cliente']) . "</td>";
                     echo "<td>" . htmlspecialchars($row['fecha_elaboracion']) . "</td>";
-                    echo "<td>" . htmlspecialchars($row['total_obra']) . "</td>";
                     echo "<td>" . htmlspecialchars($row['observaciones']) . "</td>";
                     echo "<td>";
                     echo "<button class='btn btn-info btn-sm me-1' onclick='openEditModal(" . json_encode($row) . ")' title='Editar presupuesto'>

@@ -32,10 +32,15 @@ require '../Administrador/superior_admin.php';
             <form action="add_service.php" method="POST" enctype="multipart/form-data">
                 <div class="modal-body">
                     <div class="form-group mb-3">
+                        <label for="">Name of service</label>
                         <input type="text" name="nombre_servicio" class="form-control" placeholder="Name of service" required>
                     </div>
                     <div class="form-group mb-3">
                         <textarea name="descripcion_servicio" class="form-control" placeholder="Description of the service" required></textarea>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="">Total Service</label>
+                        <input type="number" name="total" class="form-control" placeholder="Total Service" required>
                     </div>
                     <div class="form-group mb-3">
                         <input type="file" name="imagen_servicio" class="form-control" placeholder="Service Image">
@@ -71,6 +76,11 @@ require '../Administrador/superior_admin.php';
                     </div>
 
                     <div class="form-group mb-3">
+                        <label for="edit_total">Total Service</label>
+                        <input type="number" name="total" id="edit_total" class="form-control" placeholder="Enter Total Service" required>
+                    </div>
+
+                    <div class="form-group mb-3">
                         <label>Current Image</label>
                         <div>
                             <img id="current_image" src="" width="100" alt="Service Image">
@@ -101,6 +111,7 @@ require '../Administrador/superior_admin.php';
                     <th>Service ID</th>
                     <th>Name of Service</th>
                     <th>Description of the Service</th>
+                    <th>Total Service</th>
                     <th>Service Image</th>
                     <th>Actions</th>
                 </tr>
@@ -116,6 +127,7 @@ require '../Administrador/superior_admin.php';
                         echo "<td>" . htmlspecialchars($row['id_servicio']) . "</td>";
                         echo "<td>" . htmlspecialchars($row['nombre_servicio']) . "</td>";
                         echo "<td>" . htmlspecialchars($row['descripcion_servicio']) . "</td>";
+                        echo "<td>" . htmlspecialchars($row['total']) . "</td>";
                         echo "<td><img src='../Img/" . htmlspecialchars($row['imagen_servicio']) . "' width='100px' height='60px' alt='Service Image'></td>";
                         echo "<td>";
                         echo "<button class='btn btn-info btn-sm me-1' onclick='openEditModal(" . json_encode($row) . ")' title='Editar servicio'>
@@ -141,6 +153,7 @@ require '../Administrador/superior_admin.php';
         $('#edit_id_servicio').val(serviceData.id_servicio);
         $('#edit_nombre_servicio').val(serviceData.nombre_servicio);
         $('#edit_descripcion_servicio').val(serviceData.descripcion_servicio);
+        $('#edit_total').val(serviceData.total);
         $('#current_image').attr('src', '../Img/' + serviceData.imagen_servicio);
         
         $('#editServicesModal').modal('show');
