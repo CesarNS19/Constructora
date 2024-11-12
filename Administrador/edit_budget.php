@@ -14,12 +14,11 @@ if (isset($_POST['folio_presupuesto'])) {
 
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $fecha = $_POST['fecha_elaboracion'];
-        $total = $_POST['total_obra'];
         $observaciones = $_POST['observaciones'];
     
-        $sql = "UPDATE presupuestos SET fecha_elaboracion = ?, total_obra = ?, observaciones = ? WHERE folio_presupuesto = ?";
+        $sql = "UPDATE presupuestos SET fecha_elaboracion = ?, observaciones = ? WHERE folio_presupuesto = ?";
         $stmt = $con->prepare($sql);
-        $stmt->bind_param("sssi", $fecha, $total, $observaciones, $id);
+        $stmt->bind_param("ssi", $fecha, $observaciones, $id);
     
         if ($stmt->execute()) {
             if ($stmt->affected_rows > 0) {

@@ -86,10 +86,6 @@ require '../Administrador/superior_admin.php';
                         <input type="date" step="0.01" name="fecha_elaboracion" class="form-control" placeholder="Start Date" required>
                     </div>
                     <div class="form-group mb-3">
-                        <label for="">Total Work</label>
-                        <input type="number" name="total_obra" class="form-control" placeholder="Total Work" required>
-                    </div>
-                    <div class="form-group mb-3">
                         <label for="">Observations</label>
                         <textarea name="observaciones" class="form-control" placeholder="Observations" required></textarea>
                     </div>
@@ -118,12 +114,7 @@ require '../Administrador/superior_admin.php';
                         <label for="edit_fecha_elaboracion">Start Date</label>
                         <input type="date" name="fecha_elaboracion" id="edit_fecha_elaboracion" class="form-control" required>
                     </div>
-                    
-                    <div class="form-group mb-3">
-                        <label for="edit_total_obra">Total Work</label>
-                        <input type="number" name="total_obra" id="edit_total_obra" class="form-control" placeholder="Ingresa el total de la obra" required>
-                    </div>
-                    
+                                        
                     <div class="form-group mb-3">
                         <label for="edit_observaciones">Observations</label>
                         <input type="text" name="observaciones" id="edit_observaciones" class="form-control" placeholder="Ingresa las observaciones" required>
@@ -222,6 +213,9 @@ require '../Administrador/superior_admin.php';
                         <a href='delete_budget.php?id=" . $row['folio_presupuesto'] . "' class='btn btn-danger btn-sm' onclick='return confirm(\"¿Estás seguro de que deseas eliminar este presupuesto?\")' title='Eliminar presupuesto'>
                             <i class='fas fa-trash'></i>
                         </a>
+                        <button class='btn btn-success btn-sm' onclick='openAddAddressModal(" . json_encode($row) . ")' title='Agregar Dirección'>
+                            <i class='fas fa-plus'></i>
+                        </button>
                     </td>";
                     echo "</tr>";
                 }

@@ -15,6 +15,7 @@ require '../Administrador/superior_admin.php';
     <title>Employee</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
@@ -51,9 +52,6 @@ require '../Administrador/superior_admin.php';
                     <div class="form-group mb-3">
                         <label for="hora_salida">Hora de Salida</label>
                         <input type="time" name="hora_salida" class="form-control" required>
-                    </div>
-                    <div class="form-group mb-3">
-                        <input type="number" step="0.01" name="salario" class="form-control" placeholder="Salario" required>
                     </div>
                     <div class="form-group mb-3">
                         <input type="text" name="telefono_personal" class="form-control" placeholder="Teléfono Personal" required>
@@ -129,11 +127,6 @@ require '../Administrador/superior_admin.php';
                     </div>
                     
                     <div class="form-group mb-3">
-                        <label for="edit_salario">Salario</label>
-                        <input type="number" step="0.01" name="salario" id="edit_salario" class="form-control" placeholder="Ingresa el salario" required>
-                    </div>
-                    
-                    <div class="form-group mb-3">
                         <label for="edit_telefono_personal">Teléfono Personal</label>
                         <input type="text" name="telefono_personal" id="edit_telefono_personal" class="form-control" placeholder="Ingresa el teléfono personal" required>
                     </div>
@@ -173,6 +166,25 @@ require '../Administrador/superior_admin.php';
     </div>
 </div>
 
+<!-- Modal para seleccionar días trabajados -->
+<div class="modal fade" id="calendarModal" tabindex="-1" aria-labelledby="calendarModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="calendarModalLabel">Seleccionar Días Trabajados</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div id="calendar"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary" onclick="saveWorkDays()">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- Tabla de Empleados -->
 <section class="employee-table"><br/>
     <table class="table">
@@ -184,7 +196,7 @@ require '../Administrador/superior_admin.php';
                 <th>Mother's Last Name</th>
                 <th>Entry Time</th>
                 <th>Exit Time</th>
-                <th>Salary</th>
+                <th>Days Worked</th>
                 <th>Phone</th>
                 <th>Email</th>
                 <th>Position</th>
@@ -208,7 +220,7 @@ require '../Administrador/superior_admin.php';
                     echo "<td>" . htmlspecialchars($row['apellido_materno']) . "</td>";
                     echo "<td>" . htmlspecialchars($row['hora_entrada']) . "</td>";
                     echo "<td>" . htmlspecialchars($row['hora_salida']) . "</td>";
-                    echo "<td>" . htmlspecialchars($row['salario']) . "</td>";
+                    echo "<td>" . htmlspecialchars($row['dias_trabajados']) . "</td>";
                     echo "<td>" . htmlspecialchars($row['telefono_personal']) . "</td>";
                     echo "<td>" . htmlspecialchars($row['correo_personal']) . "</td>";
                     echo "<td>" . htmlspecialchars($row['rol']) . "</td>";
@@ -233,6 +245,11 @@ require '../Administrador/superior_admin.php';
                         <a href='delete_employee.php?id=" . $row['id_empleado'] . "' class='btn btn-danger btn-sm' onclick='return confirm(\"¿Estás seguro de que deseas eliminar a este empleado?\")' title='Eliminar empleado'>
                             <i class='fas fa-trash'></i>
                         </a>
+                        <button class='btn btn-primary btn-sm me-1' 
+                                onclick='openCalendarModal(" . $row['id_empleado'] . ", " . json_encode(explode(",", $row['dias_trabajados'])) . ")' 
+                                title='Seleccionar días trabajados'>
+                            <i class='fas fa-calendar-alt'></i>
+                        </button>
                     </td>";
                     echo "</tr>";
                 }
@@ -253,7 +270,6 @@ require '../Administrador/superior_admin.php';
         $('#edit_apellido_materno').val(customerData.apellido_materno);
         $('#edit_hora_entrada').val(customerData.hora_entrada);
         $('#edit_hora_salida').val(customerData.hora_salida);
-        $('#edit_salario').val(customerData.salario);
         $('#edit_telefono_personal').val(customerData.telefono_personal);
         $('#edit_correo_personal').val(customerData.correo_personal);
         $('#edit_actividades').val(customerData.actividades);
@@ -324,6 +340,88 @@ require '../Administrador/superior_admin.php';
                 <?php unset($_SESSION['status_message'], $_SESSION['status_type']); ?>
             <?php endif; ?>
         });
+
+        function openCalendarModal(idEmpleado, diasTrabajados) {
+    // Si diasTrabajados no es un array, lo convertimos a un array (por seguridad)
+    if (!Array.isArray(diasTrabajados)) {
+        diasTrabajados = diasTrabajados.split(',').map(Number);
+    }
+
+    // Pasamos el idEmpleado al modal
+    $('#calendarModal').data('idEmpleado', idEmpleado);
+    
+    // Generamos el calendario y lo pasamos al modal
+    generateCalendar(diasTrabajados);
+    
+    // Mostramos el modal
+    $('#calendarModal').modal('show');
+}
+
+function generateCalendar(diasTrabajados) {
+    const calendar = document.getElementById('calendar');
+    calendar.innerHTML = ''; // Limpiamos el calendario antes de generarlo
+
+    const days = ['L', 'M', 'X', 'J', 'V', 'S', 'D']; // Días de la semana
+    const row1 = document.createElement('div');
+    const row2 = document.createElement('div');
+    row1.classList.add('d-flex', 'justify-content-center', 'mb-2');
+    row2.classList.add('d-flex', 'justify-content-center');
+
+    // Generamos los botones de los días (del 1 al 7, representando los días de la semana)
+    for (let i = 1; i <= 7; i++) {
+        const dayBtn = document.createElement('button');
+        dayBtn.className = 'day-btn btn btn-outline-primary m-1';
+        dayBtn.textContent = days[i - 1]; // Asignamos la letra del día
+        dayBtn.dataset.day = i; // Guardamos el número de día (1 a 7)
+
+        // Si el día está seleccionado, lo marcamos con 'active'
+        if (diasTrabajados.includes(i)) {
+            dayBtn.classList.add('active');
+        }
+
+        // Cambiamos el estado del botón (seleccionado/desmarcado)
+        dayBtn.onclick = () => {
+            dayBtn.classList.toggle('active');
+        };
+        
+        // Distribuimos los días en dos filas
+        if (i <= 4) {
+            row1.appendChild(dayBtn);
+        } else {
+            row2.appendChild(dayBtn);
+        }
+    }
+
+    // Añadimos las filas al calendario
+    calendar.appendChild(row1);
+    calendar.appendChild(row2);
+}
+
+
+        function saveWorkDays() {
+            const idEmpleado = $('#calendarModal').data('idEmpleado');
+            const selectedDays = Array.from(document.querySelectorAll('.day-btn.active')).map(btn => btn.dataset.day);
+
+            const totalDays = selectedDays.length;
+
+            $.ajax({
+                url: 'update_work_days.php',
+                type: 'POST',
+                data: { 
+                    id_empleado: idEmpleado, 
+                    dias_trabajados: totalDays
+                },
+                success: function(response) {
+                    mostrarToast('Éxito', 'Días trabajados actualizados correctamente', 'success');
+                    $('#calendarModal').modal('hide');
+                    location.reload();
+                },
+                error: function() {
+                    mostrarToast('Error', 'Hubo un problema al actualizar los días trabajados', 'error');
+                }
+            });
+        }
+
 </script>
 
 </body>
