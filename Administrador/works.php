@@ -25,6 +25,9 @@ require '../Administrador/superior_admin.php';
 <div id="Alert"></div>
 
 <section class="company-header">
+        <a href="../Administrador/works_address.php" class="btn btn-primary" style="float: right; margin: 10px;">
+            View Addresses
+        </a>
         <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addWorksModal" style="float: right; margin: 10px;">
             Add Works
         </button><br/>
@@ -150,6 +153,48 @@ require '../Administrador/superior_admin.php';
     </div>
 </div>
 
+<!-- Modal para añadir dirección de la obra -->
+<div class="modal fade" id="addWorkAddressModal" tabindex="-1" role="dialog" aria-labelledby="addWorkAddressModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addWorkAddressLabel">Add Customer Address</h5>
+            </div>
+            <form action="add_work_address.php" method="POST">
+                <div class="modal-body">
+                    <div class="form-group mb-3">
+                        <label for="id_obra_modal_display">Work ID</label>
+                        <input type="number" id="id_obra_modal_display" class="form-control" readonly>
+                    </div>
+                    <input type="hidden" name="folio_obra" id="folio_obra_hidden">
+                    <div class="form-group mb-3">
+                        <input type="number" name="num_ext" class="form-control" placeholder="Outside number" required>
+                    </div>
+                    <div class="form-group mb-3">
+                        <input type="number" name="num_int" class="form-control" placeholder="Inner number" required>
+                    </div>
+                    <div class="form-group mb-3">
+                        <input type="text" name="calle" class="form-control" placeholder="Street" required>
+                    </div>
+                    <div class="form-group mb-3">
+                        <input type="text" name="ciudad" class="form-control" placeholder="City" required>
+                    </div>
+                    <div class="form-group mb-3">
+                        <input type="text" name="estado" class="form-control" placeholder="State" required>
+                    </div>
+                    <div class="form-group mb-3">
+                        <input type="number" name="codigo_postal" class="form-control" placeholder="Postal code" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Add Customer Address</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
     <!-- Tabla de Obras -->
     <section class="works-table"><br/>
     <table class="table">
@@ -195,6 +240,9 @@ require '../Administrador/superior_admin.php';
                         <a href='delete_work.php?id=" . $row['folio_obra'] . "' class='btn btn-danger btn-sm' onclick='return confirm(\"¿Estás seguro de que deseas eliminar esta obra?\")' title='Eliminar obra'>
                             <i class='fas fa-trash'></i>
                         </a>
+                        <button class='btn btn-success btn-sm' onclick='openAddAddressModal(" . json_encode($row) . ")' title='Agregar Dirección'>
+                            <i class='fas fa-plus'></i>
+                        </button>
                     </td>";
                     echo "</tr>";
                 }
@@ -219,6 +267,13 @@ require '../Administrador/superior_admin.php';
         calcularTotal();
 
         $('#editWorksModal').modal('show');
+    }
+
+    function openAddAddressModal(obra) {
+        document.getElementById('id_obra_modal_display').value = obra.folio_obra;
+        document.getElementById('folio_obra_hidden').value = obra.folio_obra;
+
+        $('#addWorkAddressModal').modal('show');
     }
 
         function mostrarToast(titulo, mensaje, tipo) {
