@@ -62,13 +62,18 @@ require '../Administrador/superior_admin.php';
                     </div>
                     <div class="form-group mb-3">
                         <label for="id_cliente">Seleccione un cliente</label>
-                        <select name="id_cliente" class="form-control" required>
+                        <select name="id_cliente" id="select_cliente" class="form-control" required>
                             <option value="">Seleccione un cliente</option>
                             <?php
                             if ($result_clientes->num_rows > 0) {
                                 while ($clientes = $result_clientes->fetch_assoc()) {
                                     $nombre_completo = htmlspecialchars($clientes['nombre_cliente'] . ' ' . $clientes['apellido_paterno'] . ' ' . $clientes['apellido_materno']);
-                                    echo "<option value='" . htmlspecialchars($clientes['id_cliente']) . "'>" . $nombre_completo . "</option>";
+                                    
+                                    $direccion_sql = "SELECT id_direccion, ciudad FROM direcciones WHERE id_cliente = " . (int)$clientes['id_cliente'];
+                                    $direccion_result = $con->query($direccion_sql);
+                                    $direccion = $direccion_result->fetch_assoc();
+                                    
+                                    echo "<option value='" . htmlspecialchars($clientes['id_cliente']) . "' data-direccion='" . htmlspecialchars($direccion['ciudad']) . "' data-id-direccion='" . htmlspecialchars($direccion['id_direccion']) . "'>" . $nombre_completo . "</option>";
                                 }
                             } else {
                                 echo "<option value=''>No hay clientes disponibles</option>";
@@ -79,7 +84,7 @@ require '../Administrador/superior_admin.php';
                     <div class="form-group mb-3">
                         <label for="direccion_cliente">Dirección del cliente</label>
                         <input type="text" id="direccion_cliente" class="form-control" readonly>
-                        <input type="hidden" name="id_cliente" id="id_cliente">
+                        <input type="hidden" name="id_direccion" id="id_direccion">
                     </div>
                     <div class="form-group mb-3">
                         <label for="date">Start Date</label>
@@ -312,12 +317,12 @@ require '../Administrador/superior_admin.php';
                         success: function (data) {
                             var direccion = JSON.parse(data);
                             $('#direccion_cliente').val(direccion.ciudad);
-                            $('#id_direccion_cliente').val(direccion.id_direccion_cliente);
+                            $('#id_direccion').val(direccion.id_direccion);
                         }
                     });
                 } else {
                     $('#direccion_cliente').val('');
-                    $('#id_direccion_cliente').val('');
+                    $('#id_direccion').val('');
                 }
             });
         });

@@ -66,11 +66,11 @@ require '../Administrador/superior_admin.php';
                                 while ($clientes = $result_clientes->fetch_assoc()) {
                                     $nombre_completo = htmlspecialchars($clientes['nombre_cliente'] . ' ' . $clientes['apellido_paterno'] . ' ' . $clientes['apellido_materno']);
                                     
-                                    $direccion_sql = "SELECT ciudad FROM direcciones WHERE id_cliente = " . (int)$clientes['id_cliente'];
+                                    $direccion_sql = "SELECT id_direccion, ciudad FROM direcciones WHERE id_cliente = " . (int)$clientes['id_cliente'];
                                     $direccion_result = $con->query($direccion_sql);
                                     $direccion = $direccion_result->fetch_assoc();
                                     
-                                    echo "<option value='" . htmlspecialchars($clientes['id_cliente']) . "' data-direccion='" . htmlspecialchars($direccion['ciudad']) . "'>" . $nombre_completo . "</option>";
+                                    echo "<option value='" . htmlspecialchars($clientes['id_cliente']) . "' data-direccion='" . htmlspecialchars($direccion['ciudad']) . "' data-id-direccion='" . htmlspecialchars($direccion['id_direccion']) . "'>" . $nombre_completo . "</option>";
                                 }
                             } else {
                                 echo "<option value=''>No hay clientes disponibles</option>";
@@ -84,7 +84,7 @@ require '../Administrador/superior_admin.php';
                         <input type="hidden" name="id_direccion" id="id_direccion">
                     </div>
                     <div class="form-group mb-3">
-                        <input type="date" step="0.01" name="fecha_inicio" class="form-control" placeholder="Fecha de Inicio" required>
+                        <input type="date" name="fecha_inicio" class="form-control" placeholder="Fecha de Inicio" required>
                     </div>
                     <div class="form-group mb-3">
                         <input type="number" name="anticipo" id="anticipo" class="form-control" placeholder="Anticipo" required>
@@ -344,12 +344,12 @@ require '../Administrador/superior_admin.php';
                         success: function (data) {
                             var direccion = JSON.parse(data);
                             $('#direccion_cliente').val(direccion.ciudad);
-                            $('#id_direccion_cliente').val(direccion.id_direccion_cliente);
+                            $('#id_direccion').val(direccion.id_direccion);
                         }
                     });
                 } else {
                     $('#direccion_cliente').val('');
-                    $('#id_direccion_cliente').val('');
+                    $('#id_direccion').val('');
                 }
             });
         });
