@@ -21,7 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     if ($row['count'] > 0) {
         $_SESSION['status_message'] = "Ya existe una dirección para este presupuesto.";
-        $_SESSION['status_type'] = "danger";
+        $_SESSION['status_type'] = "error";
     } else {
         $sql_insert = "INSERT INTO direcciones(folio_presupuesto, num_ext, num_int, calle, ciudad, estado, codigo_postal)
                        VALUES (?, ?, ?, ?, ?, ?, ?)";
