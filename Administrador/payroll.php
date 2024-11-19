@@ -4,7 +4,7 @@ require '../Login/conexion.php';
 $sql_empleados = "SELECT id_empleado, nombre, apellido_paterno, apellido_materno FROM empleados";
 $result_empleados = $con->query($sql_empleados);
 
-$sql = "SELECT n.id_nomina, e.nombre, e.apellido_paterno, e.apellido_materno, n.fecha, n.sueldo_diario, n.dias_trabajados, n.total
+$sql = "SELECT n.id_nomina, e.nombre, e.apellido_paterno, e.apellido_materno, n.fecha, n.sueldo_diario, e.dias_trabajados, n.total
         FROM nomina n
         JOIN empleados e ON n.id_empleado = e.id_empleado";
 $result = $con->query($sql);
@@ -213,34 +213,38 @@ require '../Administrador/superior_admin.php';
 
         document.addEventListener('DOMContentLoaded', function() {
             <?php if (isset($_SESSION['status_message']) && isset($_SESSION['status_type'])): ?>
-                mostrarToast(
-                    '<?= $_SESSION["status_type"] === "warning" ? "Advertencia" : "Éxito" ?>',
-                    '<?= $_SESSION["status_message"] ?>',
-                    '<?= $_SESSION["status_type"] ?>'
-                );
+                <?php if ($_SESSION["status_type"] === "warning"): ?>
+                    mostrarToast("Advertencia", '<?= $_SESSION["status_message"] ?>', '<?= $_SESSION["status_type"] ?>');
+                <?php elseif ($_SESSION["status_type"] === "error"): ?>
+                    mostrarToast("Error", '<?= $_SESSION["status_message"] ?>', '<?= $_SESSION["status_type"] ?>');
+                <?php elseif ($_SESSION["status_type"] === "info"): ?>
+                    mostrarToast("Info", '<?= $_SESSION["status_message"] ?>', '<?= $_SESSION["status_type"] ?>');
+                <?php else: ?>
+                    mostrarToast("Éxito", '<?= $_SESSION["status_message"] ?>', '<?= $_SESSION["status_type"] ?>');
+                <?php endif; ?>
                 <?php unset($_SESSION['status_message'], $_SESSION['status_type']); ?>
             <?php endif; ?>
         });
 
-    document.getElementById('sueldo_diario').addEventListener('input', calcularTotal);
-    document.getElementById('dias_trabajados').addEventListener('input', calcularTotal);
+        document.getElementById('sueldo_diario').addEventListener('input', calcularTotal);
+        document.getElementById('dias_trabajados').addEventListener('input', calcularTotal);
 
-    function calcularTotal() {
-        const sueldoDiario = parseFloat(document.getElementById('sueldo_diario').value) || 0;
-        const diasTrabajados = parseFloat(document.getElementById('dias_trabajados').value) || 0;
-        const total = sueldoDiario * diasTrabajados;
-        document.getElementById('total').value = total.toFixed(2);
-    }
+        function calcularTotal() {
+            const sueldoDiario = parseFloat(document.getElementById('sueldo_diario').value) || 0;
+            const diasTrabajados = parseFloat(document.getElementById('dias_trabajados').value) || 0;
+            const total = sueldoDiario * diasTrabajados;
+            document.getElementById('total').value = total.toFixed(2);
+        }
 
-    document.getElementById('edit_sueldo_diario').addEventListener('input', calcularTotalEdit);
-    document.getElementById('edit_dias_trabajados').addEventListener('input', calcularTotalEdit);
+        document.getElementById('edit_sueldo_diario').addEventListener('input', calcularTotalEdit);
+        document.getElementById('edit_dias_trabajados').addEventListener('input', calcularTotalEdit);
 
-    function calcularTotalEdit() {
-        const sueldoDiario = parseFloat(document.getElementById('edit_sueldo_diario').value) || 0;
-        const diasTrabajados = parseFloat(document.getElementById('edit_dias_trabajados').value) || 0;
-        const total = sueldoDiario * diasTrabajados;
-        document.getElementById('edit_total').value = total.toFixed(2);
-    }
+        function calcularTotalEdit() {
+            const sueldoDiario = parseFloat(document.getElementById('edit_sueldo_diario').value) || 0;
+            const diasTrabajados = parseFloat(document.getElementById('edit_dias_trabajados').value) || 0;
+            const total = sueldoDiario * diasTrabajados;
+            document.getElementById('edit_total').value = total.toFixed(2);
+        }
 </script>
 </body>
 </html>

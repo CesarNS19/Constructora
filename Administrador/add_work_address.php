@@ -11,7 +11,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $estado = $_POST['estado'];
     $codigo_postal = $_POST['codigo_postal'];
 
-    $sql = "INSERT INTO direccion_obra (folio_obra, num_ext, num_int, calle, ciudad, estado, codigo_postal)
+    $sql = "INSERT INTO direcciones(folio_obra, num_ext, num_int, calle, ciudad, estado, codigo_postal)
             VALUES (?, ?, ?, ?, ?, ?, ?)";
     
     $stmt = $con->prepare($sql);

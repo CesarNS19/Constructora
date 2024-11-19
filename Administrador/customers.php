@@ -66,9 +66,6 @@ require '../Administrador/superior_admin.php';
                     <div class="form-group mb-3">
                         <input type="number" name="edad" class="form-control" placeholder="Edad" required>
                     </div>
-                    <div class="form-group mb-3">
-                        <input type="text" name="rol" class="form-control" placeholder="Rol" required>
-                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -124,12 +121,6 @@ require '../Administrador/superior_admin.php';
                         <label for="edit_edad">Edad</label>
                         <input type="number" name="edad" id="edit_edad" class="form-control" required>
                     </div>
-
-                    <div class="form-group mb-3">
-                        <label for="edit_rol">Rol</label>
-                        <input type="text" name="rol" id="edit_rol" class="form-control" required>
-                    </div>
-
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -261,7 +252,6 @@ require '../Administrador/superior_admin.php';
         $('#edit_correo_electronico').val(customerData.correo_electronico);
         $('#edit_contrasena').val(customerData.contrasena);
         $('#edit_edad').val(customerData.edad);
-        $('#edit_rol').val(customerData.rol);
 
         $('#editCustomerModal').modal('show');
     }
@@ -317,14 +307,19 @@ require '../Administrador/superior_admin.php';
 
         document.addEventListener('DOMContentLoaded', function() {
             <?php if (isset($_SESSION['status_message']) && isset($_SESSION['status_type'])): ?>
-                mostrarToast(
-                    '<?= $_SESSION["status_type"] === "warning" ? "Advertencia" : "Éxito" ?>',
-                    '<?= $_SESSION["status_message"] ?>',
-                    '<?= $_SESSION["status_type"] ?>'
-                );
+                <?php if ($_SESSION["status_type"] === "warning"): ?>
+                    mostrarToast("Advertencia", '<?= $_SESSION["status_message"] ?>', '<?= $_SESSION["status_type"] ?>');
+                <?php elseif ($_SESSION["status_type"] === "error"): ?>
+                    mostrarToast("Error", '<?= $_SESSION["status_message"] ?>', '<?= $_SESSION["status_type"] ?>');
+                <?php elseif ($_SESSION["status_type"] === "info"): ?>
+                    mostrarToast("Info", '<?= $_SESSION["status_message"] ?>', '<?= $_SESSION["status_type"] ?>');
+                <?php else: ?>
+                    mostrarToast("Éxito", '<?= $_SESSION["status_message"] ?>', '<?= $_SESSION["status_type"] ?>');
+                <?php endif; ?>
                 <?php unset($_SESSION['status_message'], $_SESSION['status_type']); ?>
             <?php endif; ?>
         });
+
     </script>
 </body>
 </html>

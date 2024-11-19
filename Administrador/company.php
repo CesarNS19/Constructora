@@ -245,11 +245,15 @@ function mostrarToast(titulo, mensaje, tipo) {
 
         document.addEventListener('DOMContentLoaded', function() {
             <?php if (isset($_SESSION['status_message']) && isset($_SESSION['status_type'])): ?>
-                mostrarToast(
-                    '<?= $_SESSION["status_type"] === "warning" ? "Advertencia" : "Éxito" ?>',
-                    '<?= $_SESSION["status_message"] ?>',
-                    '<?= $_SESSION["status_type"] ?>'
-                );
+                <?php if ($_SESSION["status_type"] === "warning"): ?>
+                    mostrarToast("Advertencia", '<?= $_SESSION["status_message"] ?>', '<?= $_SESSION["status_type"] ?>');
+                <?php elseif ($_SESSION["status_type"] === "error"): ?>
+                    mostrarToast("Error", '<?= $_SESSION["status_message"] ?>', '<?= $_SESSION["status_type"] ?>');
+                <?php elseif ($_SESSION["status_type"] === "info"): ?>
+                    mostrarToast("Info", '<?= $_SESSION["status_message"] ?>', '<?= $_SESSION["status_type"] ?>');
+                <?php else: ?>
+                    mostrarToast("Éxito", '<?= $_SESSION["status_message"] ?>', '<?= $_SESSION["status_type"] ?>');
+                <?php endif; ?>
                 <?php unset($_SESSION['status_message'], $_SESSION['status_type']); ?>
             <?php endif; ?>
         });

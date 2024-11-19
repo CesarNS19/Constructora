@@ -2,8 +2,8 @@
 require '../Login/conexion.php';
 session_start();
 
-if (isset($_POST['id_direccion_obra'])) {
-    $id = $_POST['id_direccion_obra'];
+if (isset($_POST['id_direccion'])) {
+    $id = $_POST['id_direccion'];
 
     $num_ext = $_POST['num_ext'];
     $num_int = $_POST['num_int'];
@@ -12,9 +12,9 @@ if (isset($_POST['id_direccion_obra'])) {
     $estado = $_POST['estado'];
     $codigo_postal = $_POST['codigo_postal'];
 
-    $sql = "UPDATE direccion_obra 
+    $sql = "UPDATE direcciones
             SET num_ext = ?, num_int = ?, calle = ?, ciudad = ?, estado = ?, codigo_postal = ? 
-            WHERE id_direccion_obra = ?";
+            WHERE id_direccion = ?";
     $stmt = $con->prepare($sql);
     $stmt->bind_param("ssssssi", $num_ext, $num_int, $calle, $ciudad, $estado, $codigo_postal, $id);
 

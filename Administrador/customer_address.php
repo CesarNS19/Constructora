@@ -1,22 +1,6 @@
 <?php
 require '../Login/conexion.php';
 require '../Administrador/superior_admin.php';
-
-$sql_clientes = "SELECT id_cliente, nombre_cliente, apellido_paterno, apellido_materno FROM clientes WHERE rol = 'usuario'";
-$result_clientes = $con->query($sql_clientes);
-
-if (!$result_clientes) {
-    die("Error al cargar clientes: " . $con->error);
-}
-
-$sql = "SELECT d.id_direccion_cliente, c.nombre_cliente, c.apellido_paterno, c.apellido_materno, d.num_ext, d.num_int, d.calle, d.ciudad, d.estado, d.codigo_postal
-        FROM direccion_cliente d
-        JOIN clientes c ON d.id_cliente = c.id_cliente";
-$result = $con->query($sql);
-
-if (!$result) {
-    die("Error en la consulta de direcciones: " . $con->error);
-}
 ?>
 
 <!DOCTYPE html>
@@ -37,6 +21,7 @@ if (!$result) {
     Back
 </a><br/>
 
+<!-- Modal para editar dirección del cliente -->
 <div class="modal fade" id="editCustomerAddressModal" tabindex="-1" role="dialog" aria-labelledby="editCustomerAddressModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -45,14 +30,14 @@ if (!$result) {
             </div>
             <form action="edit_customer_address.php" method="POST">
                 <div class="modal-body">
-                    <input type="hidden" name="id_direccion_cliente" id="edit_id_direccion_cliente">
+                <input type="hidden" name="id_direccion" id="edit_id_direccion">
 
-                    <div class="form-group mb-3">
-                        <label for="edit_id_cliente">Cliente</label>
+                <div class="form-group mb-3">
+                        <label for="edit_id_cliente">Customer</label>
                         <input type="text" name="edit_id_cliente" id="edit_id_cliente" class="form-control" readonly>
                         <input type="hidden" name="id_cliente" id="id_cliente">
                     </div>
-                    
+
                     <div class="form-group mb-3">
                         <label for="edit_num_ext">Outside Number</label>
                         <input type="number" name="num_ext" id="edit_num_ext" class="form-control" placeholder="Enter Outside Number" required>
@@ -98,7 +83,6 @@ if (!$result) {
         <thead class="thead-dark">
             <h2 class="text-center">Manage Customers Address</h2><br/>
             <tr>
-                <th>Address ID</th>
                 <th>Customer</th>
                 <th>Outside Number</th>
                 <th>Inner Number</th>
@@ -111,11 +95,15 @@ if (!$result) {
         </thead>
         <tbody>
         <?php
+            $sql = "SELECT d.id_direccion, d.id_cliente, c.nombre_cliente, c.apellido_paterno, c.apellido_materno, 
+            d.num_ext, d.num_int, d.calle, d.ciudad, d.estado, d.codigo_postal
+            FROM direcciones d
+            JOIN clientes c ON d.id_cliente = c.id_cliente";
+            $result = $con->query($sql);
             if ($result->num_rows > 0) {
                 while ($row = $result->fetch_assoc()) {
                     $nombre_completo = htmlspecialchars($row['nombre_cliente'] . ' ' . $row['apellido_paterno'] . ' ' . $row['apellido_materno']);
                     echo "<tr>";
-                    echo "<td>" . htmlspecialchars($row['id_direccion_cliente']) . "</td>";
                     echo "<td>" . $nombre_completo . "</td>";
                     echo "<td>" . htmlspecialchars($row['num_ext']) . "</td>";
                     echo "<td>" . htmlspecialchars($row['num_int']) . "</td>";
@@ -127,7 +115,7 @@ if (!$result) {
                             <button class='btn btn-info btn-sm me-1' onclick='openEditCustomerAddressModal(" . json_encode($row) . ")' title='Edit Customer Address'>
                                 <i class='fas fa-edit'></i>
                             </button>
-                            <a href='delete_customer_address.php?id=" . $row['id_direccion_cliente'] . "' class='btn btn-danger btn-sm' onclick='return confirm(\"¿Estás seguro de que deseas eliminar esta dirección de cliente?\")' title='Delete Customer Address'>
+                            <a href='delete_customer_address.php?id=" . $row['id_cliente'] . "' class='btn btn-danger btn-sm' onclick='return confirm(\"¿Estás seguro de que deseas eliminar esta dirección de cliente?\")' title='Delete Customer Address'>
                                 <i class='fas fa-trash'></i>
                             </a>
                           </td>";
@@ -144,10 +132,8 @@ if (!$result) {
 <script>
 
     function openEditCustomerAddressModal(customerData) {
-        $('#edit_id_direccion_cliente').val(customerData.id_direccion_cliente);
-        
-        var nombreCompleto = customerData.nombre_cliente + ' ' + customerData.apellido_paterno + ' ' + customerData.apellido_materno;
-        $('#edit_id_cliente').val(nombreCompleto);
+        $('#edit_id_direccion').val(customerData.id_direccion);
+        $('#edit_id_cliente').val(customerData.nombre_cliente + ' ' + customerData.apellido_paterno + ' ' + customerData.apellido_materno)
         $('#id_cliente').val(customerData.id_cliente);
         $('#edit_num_ext').val(customerData.num_ext);
         $('#edit_num_int').val(customerData.num_int);
@@ -202,11 +188,15 @@ if (!$result) {
 
         document.addEventListener('DOMContentLoaded', function() {
             <?php if (isset($_SESSION['status_message']) && isset($_SESSION['status_type'])): ?>
-                mostrarToast(
-                    '<?= $_SESSION["status_type"] === "warning" ? "Advertencia" : "Éxito" ?>',
-                    '<?= $_SESSION["status_message"] ?>',
-                    '<?= $_SESSION["status_type"] ?>'
-                );
+                <?php if ($_SESSION["status_type"] === "warning"): ?>
+                    mostrarToast("Advertencia", '<?= $_SESSION["status_message"] ?>', '<?= $_SESSION["status_type"] ?>');
+                <?php elseif ($_SESSION["status_type"] === "error"): ?>
+                    mostrarToast("Error", '<?= $_SESSION["status_message"] ?>', '<?= $_SESSION["status_type"] ?>');
+                <?php elseif ($_SESSION["status_type"] === "info"): ?>
+                    mostrarToast("Info", '<?= $_SESSION["status_message"] ?>', '<?= $_SESSION["status_type"] ?>');
+                <?php else: ?>
+                    mostrarToast("Éxito", '<?= $_SESSION["status_message"] ?>', '<?= $_SESSION["status_type"] ?>');
+                <?php endif; ?>
                 <?php unset($_SESSION['status_message'], $_SESSION['status_type']); ?>
             <?php endif; ?>
         });

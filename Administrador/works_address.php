@@ -30,11 +30,11 @@ require '../Administrador/superior_admin.php';
             </div>
             <form action="edit_work_address.php" method="POST">
                 <div class="modal-body">
-                <input type="hidden" name="id_direccion_obra" id="edit_id_direccion_obra">
+                <input type="hidden" name="id_direccion" id="edit_id_direccion">
 
                 <div class="form-group mb-3">
-                        <label for="edit_id_obra">Obra</label>
-                        <input type="text" name="edit_id_obra" id="edit_id_obra" class="form-control" readonly>
+                        <label for="edit_folio_obra">Work</label>
+                        <input type="text" name="edit_folio_obra" id="edit_folio_obra" class="form-control" readonly>
                         <input type="hidden" name="folio_obra" id="folio_obra">
                     </div>
 
@@ -83,7 +83,6 @@ require '../Administrador/superior_admin.php';
         <thead class="thead-dark">
         <h2 class="text-center">Manage Works Address</h2><br/>
             <tr>
-                <th>Address ID</th>
                 <th>Work ID</th>
                 <th>Outside Number</th>
                 <th>Inner Number</th>
@@ -96,8 +95,8 @@ require '../Administrador/superior_admin.php';
         </thead>
         <tbody>
             <?php
-            $sql = "SELECT d.id_direccion_obra, e.folio_obra, d.num_ext, d.num_int, d.calle, d.ciudad, d.estado, d.codigo_postal
-                    FROM direccion_obra d
+            $sql = "SELECT d.id_direccion, d.folio_obra, d.num_ext, d.num_int, d.calle, d.ciudad, d.estado, d.codigo_postal
+                    FROM direcciones d
                     JOIN obras e ON d.folio_obra = e.folio_obra";
             $result = $con->query($sql);
 
@@ -105,7 +104,6 @@ require '../Administrador/superior_admin.php';
                 while ($row = $result->fetch_assoc()) {
                     $id = htmlspecialchars($row['folio_obra']);
                     echo "<tr>";
-                    echo "<td>" . htmlspecialchars($row['id_direccion_obra']) . "</td>";
                     echo "<td>" . $id . "</td>";
                     echo "<td>" . htmlspecialchars($row['num_ext']) . "</td>";
                     echo "<td>" . htmlspecialchars($row['num_int']) . "</td>";
@@ -117,7 +115,7 @@ require '../Administrador/superior_admin.php';
                         echo "<button class='btn btn-info btn-sm me-1' onclick='openEditWorkAddressModal(" . json_encode($row) . ")' title='Edit Work Addres'>
                                 <i class='fas fa-edit'></i>
                             </button>
-                            <a href='delete_work_address.php?id=" . $row['id_direccion_obra'] . "' class='btn btn-danger btn-sm' onclick='return confirm(\"¿Estás seguro de que deseas eliminar esta direccion de la obra?\")' title='Delete Work Address'>
+                            <a href='delete_work_address.php?id=" . $row['folio_obra'] . "' class='btn btn-danger btn-sm' onclick='return confirm(\"¿Estás seguro de que deseas eliminar esta direccion de la obra?\")' title='Delete Work Address'>
                                 <i class='fas fa-trash'></i>
                             </a>
                         </td>";
@@ -135,8 +133,9 @@ require '../Administrador/superior_admin.php';
 function openEditWorkAddressModal(customerData) {
     var id = customerData.folio_obra;
 
-    $('#edit_id_direccion_obra').val(customerData.id_direccion_obra);
-    $('#edit_id_obra').val(id);
+    $('#edit_id_direccion').val(customerData.id_direccion);
+    $('#edit_folio_obra').val(id);
+    $('#folio_obra').val(customerData.folio_obra);
     $('#edit_num_ext').val(customerData.num_ext);
     $('#edit_num_int').val(customerData.num_int);
     $('#edit_calle').val(customerData.calle);
@@ -190,11 +189,15 @@ function mostrarToast(titulo, mensaje, tipo) {
 
         document.addEventListener('DOMContentLoaded', function() {
             <?php if (isset($_SESSION['status_message']) && isset($_SESSION['status_type'])): ?>
-                mostrarToast(
-                    '<?= $_SESSION["status_type"] === "warning" ? "Advertencia" : "Éxito" ?>',
-                    '<?= $_SESSION["status_message"] ?>',
-                    '<?= $_SESSION["status_type"] ?>'
-                );
+                <?php if ($_SESSION["status_type"] === "warning"): ?>
+                    mostrarToast("Advertencia", '<?= $_SESSION["status_message"] ?>', '<?= $_SESSION["status_type"] ?>');
+                <?php elseif ($_SESSION["status_type"] === "error"): ?>
+                    mostrarToast("Error", '<?= $_SESSION["status_message"] ?>', '<?= $_SESSION["status_type"] ?>');
+                <?php elseif ($_SESSION["status_type"] === "info"): ?>
+                    mostrarToast("Info", '<?= $_SESSION["status_message"] ?>', '<?= $_SESSION["status_type"] ?>');
+                <?php else: ?>
+                    mostrarToast("Éxito", '<?= $_SESSION["status_message"] ?>', '<?= $_SESSION["status_type"] ?>');
+                <?php endif; ?>
                 <?php unset($_SESSION['status_message'], $_SESSION['status_type']); ?>
             <?php endif; ?>
         });

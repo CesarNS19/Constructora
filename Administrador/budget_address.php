@@ -1,22 +1,6 @@
 <?php
 require '../Login/conexion.php';
 require '../Administrador/superior_admin.php';
-
-$sql_presupuesto = "SELECT folio_presupuesto FROM presupuestos";
-$result_presupuesto = $con->query($sql_presupuesto);
-
-if (!$result_presupuesto) {
-    die("Error al cargar los presupuestos: " . $con->error);
-}
-
-$sql = "SELECT d.id_direccion_presupuesto, d.num_ext, d.num_int, d.calle, d.ciudad, d.estado, d.codigo_postal, c.folio_presupuesto
-        FROM direccion_presupuesto d
-        JOIN presupuestos c ON d.folio_presupuesto = c.folio_presupuesto";
-$result = $con->query($sql);
-
-if (!$result) {
-    die("Error en la consulta de direcciones: " . $con->error);
-}
 ?>
 
 <!DOCTYPE html>
@@ -44,11 +28,12 @@ if (!$result) {
             </div>
             <form action="edit_budget_address.php" method="POST">
                 <div class="modal-body">
-                    <input type="hidden" name="id_direccion_presupuesto" id="edit_id_direccion_presupuesto">
+                    <input type="hidden" name="id_direccion" id="edit_id_direccion">
 
                     <div class="form-group mb-3">
                         <label for="edit_folio_presupuesto">Budget</label>
                         <input type="text" name="edit_folio_presupuesto" id="edit_folio_presupuesto" class="form-control" readonly>
+                        <input type="hidden" name="folio_presupuesto" id="folio_presupuesto">
                     </div>
 
                     <div class="form-group mb-3">
@@ -95,7 +80,6 @@ if (!$result) {
         <thead class="thead-dark">
             <h2 class="text-center">Manage Budget Address</h2><br/>
             <tr>
-                <th>Address ID</th>
                 <th>Budget</th>
                 <th>Outside Number</th>
                 <th>Inner Number</th>
@@ -108,10 +92,14 @@ if (!$result) {
         </thead>
         <tbody>
         <?php
+            $sql = "SELECT d.id_direccion, d.folio_presupuesto, c.observaciones, 
+            d.num_ext, d.num_int, d.calle, d.ciudad, d.estado, d.codigo_postal
+            FROM direcciones d
+            JOIN presupuestos c ON d.folio_presupuesto = c.folio_presupuesto";
+            $result = $con->query($sql);
             if ($result->num_rows > 0) {
                 while ($row = $result->fetch_assoc()) {
                     echo "<tr>";
-                    echo "<td>" . htmlspecialchars($row['id_direccion_presupuesto']) . "</td>";
                     echo "<td>" . htmlspecialchars($row['folio_presupuesto']) . "</td>";
                     echo "<td>" . htmlspecialchars($row['num_ext']) . "</td>";
                     echo "<td>" . htmlspecialchars($row['num_int']) . "</td>";
@@ -123,14 +111,14 @@ if (!$result) {
                             <button class='btn btn-info btn-sm me-1' onclick='openEditAddressModal(" . json_encode($row) . ")' title='Edit Budget Address'>
                                 <i class='fas fa-edit'></i>
                             </button>
-                            <a href='delete_budget_address.php?id=" . $row['id_direccion_presupuesto'] . "' class='btn btn-danger btn-sm' onclick='return confirm(\"¿Estás seguro de que deseas eliminar esta dirección del presupuesto?\")' title='Delete Budget Address'>
+                            <a href='delete_budget_address.php?id=" . $row['folio_presupuesto'] . "' class='btn btn-danger btn-sm' onclick='return confirm(\"¿Estás seguro de que deseas eliminar esta dirección del presupuesto?\")' title='Delete Budget Address'>
                                 <i class='fas fa-trash'></i>
                             </a>
                           </td>";
                     echo "</tr>";
                 }
             } else {
-                echo "<tr><td colspan='9'>No hay Presupuestos registrados.</td></tr>";
+                echo "<tr><td colspan='9'>No hay direcciones de presupuestos registradas.</td></tr>";
             }
         ?>
         </tbody>
@@ -138,15 +126,17 @@ if (!$result) {
 </section>
 
 <script>
-    function openEditAddressModal(budgetData) {
-        $('#edit_id_direccion_presupuesto').val(budgetData.id_direccion_presupuesto);
-        $('#edit_folio_presupuesto').val(budgetData.folio_presupuesto);
-        $('#edit_num_ext').val(budgetData.num_ext);
-        $('#edit_num_int').val(budgetData.num_int);
-        $('#edit_calle').val(budgetData.calle);
-        $('#edit_ciudad').val(budgetData.ciudad);
-        $('#edit_estado').val(budgetData.estado);
-        $('#edit_codigo_postal').val(budgetData.codigo_postal);
+
+    function openEditAddressModal(customerData) {
+        $('#edit_id_direccion').val(customerData.id_direccion);
+        $('#edit_folio_presupuesto').val(customerData.folio_presupuesto)
+        $('#folio_presupuesto').val(customerData.folio_presupuesto);
+        $('#edit_num_ext').val(customerData.num_ext);
+        $('#edit_num_int').val(customerData.num_int);
+        $('#edit_calle').val(customerData.calle);
+        $('#edit_ciudad').val(customerData.ciudad);
+        $('#edit_estado').val(customerData.estado);
+        $('#edit_codigo_postal').val(customerData.codigo_postal);
 
         $('#editBudgetAddressModal').modal('show');
     }
@@ -193,15 +183,19 @@ if (!$result) {
     }
 
     document.addEventListener('DOMContentLoaded', function() {
-        <?php if (isset($_SESSION['status_message']) && isset($_SESSION['status_type'])): ?>
-            mostrarToast(
-                '<?= $_SESSION["status_type"] === "warning" ? "Advertencia" : "Éxito" ?>',
-                '<?= $_SESSION["status_message"] ?>',
-                '<?= $_SESSION["status_type"] ?>'
-            );
-            <?php unset($_SESSION['status_message'], $_SESSION['status_type']); ?>
-        <?php endif; ?>
-    });
+            <?php if (isset($_SESSION['status_message']) && isset($_SESSION['status_type'])): ?>
+                <?php if ($_SESSION["status_type"] === "warning"): ?>
+                    mostrarToast("Advertencia", '<?= $_SESSION["status_message"] ?>', '<?= $_SESSION["status_type"] ?>');
+                <?php elseif ($_SESSION["status_type"] === "error"): ?>
+                    mostrarToast("Error", '<?= $_SESSION["status_message"] ?>', '<?= $_SESSION["status_type"] ?>');
+                <?php elseif ($_SESSION["status_type"] === "info"): ?>
+                    mostrarToast("Info", '<?= $_SESSION["status_message"] ?>', '<?= $_SESSION["status_type"] ?>');
+                <?php else: ?>
+                    mostrarToast("Éxito", '<?= $_SESSION["status_message"] ?>', '<?= $_SESSION["status_type"] ?>');
+                <?php endif; ?>
+                <?php unset($_SESSION['status_message'], $_SESSION['status_type']); ?>
+            <?php endif; ?>
+        });
 </script>
 
 </body>

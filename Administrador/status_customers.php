@@ -16,7 +16,7 @@ if (isset($_GET['id']) && isset($_GET['estatus'])) {
             $_SESSION['status_type'] = 'success';
         } else {
             $_SESSION['status_message'] = 'Error al actualizar el estado del cliente: ' . $stmt->error;
-            $_SESSION['status_type'] = 'danger';
+            $_SESSION['status_type'] = 'error';
         }
 
         $stmt->close();

@@ -29,7 +29,7 @@ require '../Administrador/superior_admin.php';?>
             </div>
             <form action="edit_company_address.php" method="POST">
                 <div class="modal-body">
-                <input type="hidden" name="id_direccion_empresa" id="edit_id_direccion_empresa">
+                <input type="hidden" name="id_direccion" id="edit_id_direccion">
 
                 <div class="form-group mb-3">
                         <label for="edit_id_empresa">Company</label>
@@ -82,7 +82,6 @@ require '../Administrador/superior_admin.php';?>
         <thead class="thead-dark">
         <h2 class="text-center">Manage Company Address</h2><br/>
             <tr>
-                <th>Address ID</th>
                 <th>Company</th>
                 <th>Outside Number</th>
                 <th>Inner Number</th>
@@ -95,8 +94,8 @@ require '../Administrador/superior_admin.php';?>
         </thead>
         <tbody>
             <?php
-            $sql = "SELECT d.id_direccion_empresa, e.nombre_empresa, d.num_ext, d.num_int, d.calle, d.ciudad, d.estado, d.codigo_postal
-                    FROM direccion_empresa d
+            $sql = "SELECT d.id_direccion, d.id_empresa, e.nombre_empresa, d.num_ext, d.num_int, d.calle, d.ciudad, d.estado, d.codigo_postal
+                    FROM direcciones d
                     JOIN empresa e ON d.id_empresa = e.id_empresa";
             $result = $con->query($sql);
 
@@ -104,7 +103,6 @@ require '../Administrador/superior_admin.php';?>
                 while ($row = $result->fetch_assoc()) {
                     $nombre_empresa = htmlspecialchars($row['nombre_empresa']);
                     echo "<tr>";
-                    echo "<td>" . htmlspecialchars($row['id_direccion_empresa']) . "</td>";
                     echo "<td>" . $nombre_empresa . "</td>";
                     echo "<td>" . htmlspecialchars($row['num_ext']) . "</td>";
                     echo "<td>" . htmlspecialchars($row['num_int']) . "</td>";
@@ -116,7 +114,7 @@ require '../Administrador/superior_admin.php';?>
                         echo "<button class='btn btn-info btn-sm me-1' onclick='openEditCompanyAddressModal(" . json_encode($row) . ")' title='Edit Company Addres'>
                                 <i class='fas fa-edit'></i>
                             </button>
-                            <a href='delete_company_address.php?id=" . $row['id_direccion_empresa'] . "' class='btn btn-danger btn-sm' onclick='return confirm(\"¿Estás seguro de que deseas eliminar esta direccion de la empresa?\")' title='Delete Customer Address'>
+                            <a href='delete_company_address.php?id=" . $row['id_empresa'] . "' class='btn btn-danger btn-sm' onclick='return confirm(\"¿Estás seguro de que deseas eliminar esta direccion de la empresa?\")' title='Delete Customer Address'>
                                 <i class='fas fa-trash'></i>
                             </a>
                         </td>";
@@ -132,20 +130,20 @@ require '../Administrador/superior_admin.php';?>
 
 <script>
 
-function openEditCompanyAddressModal(customerData) {
-    var empresa = customerData.nombre_empresa;
+    function openEditCompanyAddressModal(customerData) {
+        var empresa = customerData.nombre_empresa;
 
-    $('#edit_id_direccion_empresa').val(customerData.id_direccion_empresa);
-    $('#edit_id_empresa').val(empresa);
-    $('#edit_num_ext').val(customerData.num_ext);
-    $('#edit_num_int').val(customerData.num_int);
-    $('#edit_calle').val(customerData.calle);
-    $('#edit_ciudad').val(customerData.ciudad);
-    $('#edit_estado').val(customerData.estado);
-    $('#edit_codigo_postal').val(customerData.codigo_postal);
+        $('#edit_id_direccion').val(customerData.id_direccion);
+        $('#edit_id_empresa').val(empresa);
+        $('#edit_num_ext').val(customerData.num_ext);
+        $('#edit_num_int').val(customerData.num_int);
+        $('#edit_calle').val(customerData.calle);
+        $('#edit_ciudad').val(customerData.ciudad);
+        $('#edit_estado').val(customerData.estado);
+        $('#edit_codigo_postal').val(customerData.codigo_postal);
 
-    $('#editCompanyAddressModal').modal('show');
-}
+        $('#editCompanyAddressModal').modal('show');
+    }
 
 function mostrarToast(titulo, mensaje, tipo) {
             let icon = '';
@@ -190,11 +188,15 @@ function mostrarToast(titulo, mensaje, tipo) {
 
         document.addEventListener('DOMContentLoaded', function() {
             <?php if (isset($_SESSION['status_message']) && isset($_SESSION['status_type'])): ?>
-                mostrarToast(
-                    '<?= $_SESSION["status_type"] === "warning" ? "Advertencia" : "Éxito" ?>',
-                    '<?= $_SESSION["status_message"] ?>',
-                    '<?= $_SESSION["status_type"] ?>'
-                );
+                <?php if ($_SESSION["status_type"] === "warning"): ?>
+                    mostrarToast("Advertencia", '<?= $_SESSION["status_message"] ?>', '<?= $_SESSION["status_type"] ?>');
+                <?php elseif ($_SESSION["status_type"] === "error"): ?>
+                    mostrarToast("Error", '<?= $_SESSION["status_message"] ?>', '<?= $_SESSION["status_type"] ?>');
+                <?php elseif ($_SESSION["status_type"] === "info"): ?>
+                    mostrarToast("Info", '<?= $_SESSION["status_message"] ?>', '<?= $_SESSION["status_type"] ?>');
+                <?php else: ?>
+                    mostrarToast("Éxito", '<?= $_SESSION["status_message"] ?>', '<?= $_SESSION["status_type"] ?>');
+                <?php endif; ?>
                 <?php unset($_SESSION['status_message'], $_SESSION['status_type']); ?>
             <?php endif; ?>
         });

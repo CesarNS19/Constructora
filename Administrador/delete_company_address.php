@@ -5,7 +5,7 @@ session_start();
 if (isset($_GET['id'])) {
     $id = intval($_GET['id']);
 
-    $sql = "DELETE FROM direccion_empresa WHERE id_direccion_empresa = ?";
+    $sql = "DELETE FROM direcciones WHERE id_empresa = ?";
     $stmt = $con->prepare($sql);
     $stmt->bind_param("i", $id);
 

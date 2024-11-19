@@ -5,7 +5,7 @@ session_start();
 if (isset($_GET['id'])) {
     $id = intval($_GET['id']);
 
-    $sql = "DELETE FROM direccion_cliente WHERE id_direccion_cliente = ?";
+    $sql = "DELETE FROM direcciones WHERE id_cliente = ?";
     $stmt = $con->prepare($sql);
     $stmt->bind_param("i", $id);
 
@@ -23,7 +23,7 @@ if (isset($_GET['id'])) {
     $_SESSION['status_type'] = 'warning';
 }
 
-header('Location: customers.php');
+header('Location: customer_address.php');
 exit();
 
 $con->close();

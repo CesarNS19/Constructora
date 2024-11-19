@@ -10,7 +10,7 @@ if (isset($_POST['id_empleado'])) {
     $stmt->bind_param("i", $id);
     $stmt->execute();
     $result = $stmt->get_result();
-    $cliente = $result->fetch_assoc();
+    $empleado = $result->fetch_assoc();
 
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $nombre = $_POST['nombre'];
@@ -23,11 +23,25 @@ if (isset($_POST['id_empleado'])) {
         $email = $_POST['correo_personal'];
         $actividades = $_POST['actividades'];
         $id_empresa = $_POST['id_empresa'];
-    
+
+        $checkEmailSql = "SELECT id_empleado FROM empleados WHERE correo_personal = ? AND id_empleado != ?";
+        $checkEmailStmt = $con->prepare($checkEmailSql);
+        $checkEmailStmt->bind_param("si", $email, $id);
+        $checkEmailStmt->execute();
+        $checkEmailResult = $checkEmailStmt->get_result();
+
+        if ($checkEmailResult->num_rows > 0) {
+            $_SESSION['status_message'] = 'El correo electrónico ya está registrado en otro empleado.';
+            $_SESSION['status_type'] = 'error';
+            $checkEmailStmt->close();
+            header("Location: employee.php");
+            exit();
+        }
+
         $sql = "UPDATE empleados SET nombre = ?, apellido_paterno = ?, apellido_materno = ?, hora_entrada = ?, hora_salida = ?, dias_trabajados = ?, telefono_personal = ?, correo_personal = ?, actividades = ?, id_empresa = ? WHERE id_empleado = ?";
         $stmt = $con->prepare($sql);
         $stmt->bind_param("ssssssssssi", $nombre, $apellido_paterno, $apellido_materno, $hora_entrada, $hora_salida, $dias_trabajados, $telefono, $email, $actividades, $id_empresa, $id);
-    
+
         if ($stmt->execute()) {
             if ($stmt->affected_rows > 0) {
                 $_SESSION['status_message'] = 'Empleado actualizado exitosamente.';
@@ -38,7 +52,7 @@ if (isset($_POST['id_empleado'])) {
             }
         } else {
             $_SESSION['status_message'] = 'Error al actualizar los datos: ' . $stmt->error;
-            $_SESSION['status_type'] = 'danger';
+            $_SESSION['status_type'] = 'error';
         }
 
         $stmt->close();
@@ -46,4 +60,6 @@ if (isset($_POST['id_empleado'])) {
         exit();
     }
 }
+
+$con->close();
 ?>

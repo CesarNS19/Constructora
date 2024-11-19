@@ -66,7 +66,7 @@ require '../Administrador/superior_admin.php';
                                 while ($clientes = $result_clientes->fetch_assoc()) {
                                     $nombre_completo = htmlspecialchars($clientes['nombre_cliente'] . ' ' . $clientes['apellido_paterno'] . ' ' . $clientes['apellido_materno']);
                                     
-                                    $direccion_sql = "SELECT ciudad FROM direccion_cliente WHERE id_cliente = " . (int)$clientes['id_cliente'];
+                                    $direccion_sql = "SELECT ciudad FROM direcciones WHERE id_cliente = " . (int)$clientes['id_cliente'];
                                     $direccion_result = $con->query($direccion_sql);
                                     $direccion = $direccion_result->fetch_assoc();
                                     
@@ -81,7 +81,7 @@ require '../Administrador/superior_admin.php';
                     <div class="form-group mb-3">
                         <label for="direccion_cliente">Dirección del cliente</label>
                         <input type="text" id="direccion_cliente" class="form-control" readonly>
-                        <input type="hidden" name="id_direccion_cliente" id="id_direccion_cliente">
+                        <input type="hidden" name="id_direccion" id="id_direccion">
                     </div>
                     <div class="form-group mb-3">
                         <input type="date" step="0.01" name="fecha_inicio" class="form-control" placeholder="Fecha de Inicio" required>
@@ -218,7 +218,7 @@ require '../Administrador/superior_admin.php';
                     FROM obras o
                     LEFT JOIN empresa e ON o.id_empresa = e.id_empresa
                     LEFT JOIN clientes c ON o.id_cliente = c.id_cliente
-                    LEFT JOIN direccion_cliente d ON o.id_direccion_cliente = d.id_direccion_cliente";
+                    LEFT JOIN direcciones d ON o.id_direccion = d.id_direccion";
             $result = $con->query($sql);
 
             if ($result->num_rows > 0) {
@@ -319,11 +319,15 @@ require '../Administrador/superior_admin.php';
 
         document.addEventListener('DOMContentLoaded', function() {
             <?php if (isset($_SESSION['status_message']) && isset($_SESSION['status_type'])): ?>
-                mostrarToast(
-                    '<?= $_SESSION["status_type"] === "warning" ? "Advertencia" : "Éxito" ?>',
-                    '<?= $_SESSION["status_message"] ?>',
-                    '<?= $_SESSION["status_type"] ?>'
-                );
+                <?php if ($_SESSION["status_type"] === "warning"): ?>
+                    mostrarToast("Advertencia", '<?= $_SESSION["status_message"] ?>', '<?= $_SESSION["status_type"] ?>');
+                <?php elseif ($_SESSION["status_type"] === "error"): ?>
+                    mostrarToast("Error", '<?= $_SESSION["status_message"] ?>', '<?= $_SESSION["status_type"] ?>');
+                <?php elseif ($_SESSION["status_type"] === "info"): ?>
+                    mostrarToast("Info", '<?= $_SESSION["status_message"] ?>', '<?= $_SESSION["status_type"] ?>');
+                <?php else: ?>
+                    mostrarToast("Éxito", '<?= $_SESSION["status_message"] ?>', '<?= $_SESSION["status_type"] ?>');
+                <?php endif; ?>
                 <?php unset($_SESSION['status_message'], $_SESSION['status_type']); ?>
             <?php endif; ?>
         });

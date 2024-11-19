@@ -11,21 +11,34 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $estado = $_POST['estado'];
     $codigo_postal = $_POST['codigo_postal'];
 
-    $sql = "INSERT INTO direccion_cliente (id_cliente, num_ext, num_int, calle, ciudad, estado, codigo_postal)
-            VALUES (?, ?, ?, ?, ?, ?, ?)";
-    
-    $stmt = $con->prepare($sql);
-    $stmt->bind_param("issssss", $id_cliente, $num_ext, $num_int, $calle, $ciudad, $estado, $codigo_postal);
+    $sql_check = "SELECT COUNT(*) as count FROM direcciones WHERE id_cliente = ?";
+    $stmt_check = $con->prepare($sql_check);
+    $stmt_check->bind_param("i", $id_cliente);
+    $stmt_check->execute();
+    $result = $stmt_check->get_result();
+    $row = $result->fetch_assoc();
+    $stmt_check->close();
 
-    if ($stmt->execute()) {
-        $_SESSION['status_message'] = "Dirección del cliente agregada exitosamente.";
-        $_SESSION['status_type'] = "success";
+    if ($row['count'] > 0) {
+        $_SESSION['status_message'] = "Ya existe una dirección registrada para este cliente.";
+        $_SESSION['status_type'] = "error";
     } else {
-        $_SESSION['status_message'] = "Error al agregar la dirección del cliente: " . $stmt->error;
-        $_SESSION['status_type'] = "danger";
+        $sql_insert = "INSERT INTO direcciones (id_cliente, num_ext, num_int, calle, ciudad, estado, codigo_postal)
+                       VALUES (?, ?, ?, ?, ?, ?, ?)";
+        $stmt_insert = $con->prepare($sql_insert);
+        $stmt_insert->bind_param("issssss", $id_cliente, $num_ext, $num_int, $calle, $ciudad, $estado, $codigo_postal);
+
+        if ($stmt_insert->execute()) {
+            $_SESSION['status_message'] = "Dirección del cliente agregada exitosamente.";
+            $_SESSION['status_type'] = "success";
+        } else {
+            $_SESSION['status_message'] = "Error al agregar la dirección del cliente: " . $stmt_insert->error;
+            $_SESSION['status_type'] = "danger";
+        }
+
+        $stmt_insert->close();
     }
 
-    $stmt->close();
     header("Location: customers.php");
     exit();
 }

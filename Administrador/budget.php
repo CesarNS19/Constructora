@@ -7,7 +7,7 @@ $result_empresas = $con->query($sql_empresas);
 $sql_clientes = "SELECT id_cliente, nombre_cliente, apellido_paterno, apellido_materno FROM clientes WHERE rol = 'usuario'";
 $result_clientes = $con->query($sql_clientes);
 
-$sql_direccion_clientes = "SELECT id_direccion_cliente, ciudad FROM direccion_cliente";
+$sql_direccion_clientes = "SELECT id_cliente, ciudad FROM direcciones";
 $result_direccion_clientes = $con->query($sql_direccion_clientes);
 
 require '../Administrador/superior_admin.php';
@@ -79,7 +79,7 @@ require '../Administrador/superior_admin.php';
                     <div class="form-group mb-3">
                         <label for="direccion_cliente">Dirección del cliente</label>
                         <input type="text" id="direccion_cliente" class="form-control" readonly>
-                        <input type="hidden" name="id_direccion_cliente" id="id_direccion_cliente">
+                        <input type="hidden" name="id_cliente" id="id_cliente">
                     </div>
                     <div class="form-group mb-3">
                         <label for="date">Start Date</label>
@@ -193,7 +193,7 @@ require '../Administrador/superior_admin.php';
                     FROM presupuestos p
                     LEFT JOIN empresa e ON p.id_empresa = e.id_empresa
                     LEFT JOIN clientes c ON p.id_cliente = c.id_cliente
-                    LEFT JOIN direccion_cliente d ON p.id_direccion_cliente = d.id_direccion_cliente";
+                    LEFT JOIN direcciones d ON p.id_cliente = d.id_cliente";
                     
             $result = $con->query($sql);
 
@@ -287,11 +287,15 @@ require '../Administrador/superior_admin.php';
 
         document.addEventListener('DOMContentLoaded', function() {
             <?php if (isset($_SESSION['status_message']) && isset($_SESSION['status_type'])): ?>
-                mostrarToast(
-                    '<?= $_SESSION["status_type"] === "warning" ? "Advertencia" : "Éxito" ?>',
-                    '<?= $_SESSION["status_message"] ?>',
-                    '<?= $_SESSION["status_type"] ?>'
-                );
+                <?php if ($_SESSION["status_type"] === "warning"): ?>
+                    mostrarToast("Advertencia", '<?= $_SESSION["status_message"] ?>', '<?= $_SESSION["status_type"] ?>');
+                <?php elseif ($_SESSION["status_type"] === "error"): ?>
+                    mostrarToast("Error", '<?= $_SESSION["status_message"] ?>', '<?= $_SESSION["status_type"] ?>');
+                <?php elseif ($_SESSION["status_type"] === "info"): ?>
+                    mostrarToast("Info", '<?= $_SESSION["status_message"] ?>', '<?= $_SESSION["status_type"] ?>');
+                <?php else: ?>
+                    mostrarToast("Éxito", '<?= $_SESSION["status_message"] ?>', '<?= $_SESSION["status_type"] ?>');
+                <?php endif; ?>
                 <?php unset($_SESSION['status_message'], $_SESSION['status_type']); ?>
             <?php endif; ?>
         });
