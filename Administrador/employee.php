@@ -166,20 +166,81 @@ require '../Administrador/superior_admin.php';
     </div>
 </div>
 
-<!-- Modal para seleccionar días trabajados -->
-<div class="modal fade" id="calendarModal" tabindex="-1" aria-labelledby="calendarModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
+<div id="calendarModal" class="modal fade" tabindex="-1" aria-labelledby="calendarModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="calendarModalLabel">Seleccionar Días Trabajados</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <div id="calendar"></div>
+                <input type="hidden" id="modal_id_empleado" name="id_empleado">
+
+                <div id="workDaysRow1" class="d-flex justify-content-between mb-3">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="day1" value="Lunes">
+                        <label class="form-check-label" for="day1">Lunes</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="day2" value="Martes">
+                        <label class="form-check-label" for="day2">Martes</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="day3" value="Miércoles">
+                        <label class="form-check-label" for="day3">Miércoles</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="day4" value="Jueves">
+                        <label class="form-check-label" for="day4">Jueves</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="day5" value="Viernes">
+                        <label class="form-check-label" for="day5">Viernes</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="day6" value="Sábado">
+                        <label class="form-check-label" for="day6">Sábado</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="day7" value="Domingo">
+                        <label class="form-check-label" for="day7">Domingo</label>
+                    </div>
+                </div>
+
+                <div id="workDaysRow2" class="d-flex justify-content-between">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="day8" value="Lunes">
+                        <label class="form-check-label" for="day8">Lunes</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="day9" value="Martes">
+                        <label class="form-check-label" for="day9">Martes</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="day10" value="Miércoles">
+                        <label class="form-check-label" for="day10">Miércoles</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="day11" value="Jueves">
+                        <label class="form-check-label" for="day11">Jueves</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="day12" value="Viernes">
+                        <label class="form-check-label" for="day12">Viernes</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="day13" value="Sábado">
+                        <label class="form-check-label" for="day13">Sábado</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="day14" value="Domingo">
+                        <label class="form-check-label" for="day14">Domingo</label>
+                    </div>
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                <button type="button" class="btn btn-primary" onclick="saveWorkDays()">Guardar</button>
+                <button type="button" class="btn btn-primary" id="saveWorkDays">Guardar</button>
             </div>
         </div>
     </div>
@@ -346,87 +407,41 @@ require '../Administrador/superior_admin.php';
         });
 
         function openCalendarModal(idEmpleado, diasTrabajados) {
-            // Si diasTrabajados no es un array, lo convertimos a un array (por seguridad)
-            if (!Array.isArray(diasTrabajados)) {
-                diasTrabajados = diasTrabajados.split(',').map(Number);
+            $('#modal_id_empleado').val(idEmpleado);
+            if (diasTrabajados) {
+                diasTrabajados.forEach(dia => {
+                    $('#workDaysForm .form-check-input[value="' + dia + '"]').prop('checked', true);
+                });
             }
 
-            // Pasamos el idEmpleado al modal
-            $('#calendarModal').data('idEmpleado', idEmpleado);
-            
-            // Generamos el calendario y lo pasamos al modal
-            generateCalendar(diasTrabajados);
-            
-            // Mostramos el modal
             $('#calendarModal').modal('show');
         }
 
-function generateCalendar(diasTrabajados) {
-    const calendar = document.getElementById('calendar');
-    calendar.innerHTML = ''; // Limpiamos el calendario antes de generarlo
-
-    const days = ['L', 'M', 'X', 'J', 'V', 'S', 'D']; // Días de la semana
-    const row1 = document.createElement('div');
-    const row2 = document.createElement('div');
-    row1.classList.add('d-flex', 'justify-content-center', 'mb-2');
-    row2.classList.add('d-flex', 'justify-content-center');
-
-    // Generamos los botones de los días (del 1 al 7, representando los días de la semana)
-    for (let i = 1; i <= 7; i++) {
-        const dayBtn = document.createElement('button');
-        dayBtn.className = 'day-btn btn btn-outline-primary m-1';
-        dayBtn.textContent = days[i - 1]; // Asignamos la letra del día
-        dayBtn.dataset.day = i; // Guardamos el número de día (1 a 7)
-
-        // Si el día está seleccionado, lo marcamos con 'active'
-        if (diasTrabajados.includes(i)) {
-            dayBtn.classList.add('active');
-        }
-
-        // Cambiamos el estado del botón (seleccionado/desmarcado)
-        dayBtn.onclick = () => {
-            dayBtn.classList.toggle('active');
-        };
-        
-        // Distribuimos los días en dos filas
-        if (i <= 4) {
-            row1.appendChild(dayBtn);
-        } else {
-            row2.appendChild(dayBtn);
-        }
-    }
-
-    // Añadimos las filas al calendario
-    calendar.appendChild(row1);
-    calendar.appendChild(row2);
-}
-
-
-        function saveWorkDays() {
-            const idEmpleado = $('#calendarModal').data('idEmpleado');
-            const selectedDays = Array.from(document.querySelectorAll('.day-btn.active')).map(btn => btn.dataset.day);
-
-            const totalDays = selectedDays.length;
+        $('#saveWorkDays').on('click', function() {
+            const idEmpleado = $('#modal_id_empleado').val();
+            const diasSeleccionadosArriba = $('#workDaysRow1 .form-check-input:checked').length;
+            const diasSeleccionadosAbajo = $('#workDaysRow2 .form-check-input:checked').length;
+            const diasSeleccionados = diasSeleccionadosArriba + diasSeleccionadosAbajo;
 
             $.ajax({
-                url: 'update_work_days.php',
+                url: 'save_work_days.php',
                 type: 'POST',
-                data: { 
-                    id_empleado: idEmpleado, 
-                    dias_trabajados: totalDays
-                },
+                data: { id_empleado: idEmpleado, dias_trabajados: diasSeleccionados },
                 success: function(response) {
-                    mostrarToast('Éxito', 'Días trabajados actualizados correctamente', 'success');
-                    $('#calendarModal').modal('hide');
-                    location.reload();
+                    const res = JSON.parse(response);
+                    if (res.status === 'success') {
+                        mostrarToast("Éxito", res.message, "success");
+                        $('#calendarModal').modal('hide');
+                        location.reload();
+                    } else {
+                        mostrarToast("Error", res.message, "error");
+                    }
                 },
                 error: function() {
-                    mostrarToast('Error', 'Hubo un problema al actualizar los días trabajados', 'error');
+                    mostrarToast("Error", "Error al guardar los datos.", "error");
                 }
             });
-        }
-
+        });
 </script>
-
 </body>
 </html>

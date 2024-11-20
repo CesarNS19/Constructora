@@ -4,7 +4,7 @@ require '../Login/conexion.php';
 $sql_empleados = "SELECT id_empleado, nombre, apellido_paterno, apellido_materno FROM empleados";
 $result_empleados = $con->query($sql_empleados);
 
-$sql = "SELECT n.id_nomina, e.nombre, e.apellido_paterno, e.apellido_materno, n.fecha, n.sueldo_diario, n.dias_trabajados, n.total
+$sql = "SELECT n.id_nomina, e.nombre, e.apellido_paterno, e.apellido_materno, n.fecha, n.sueldo_diario, e.dias_trabajados, n.total
         FROM nomina n
         JOIN empleados e ON n.id_empleado = e.id_empleado";
 $result = $con->query($sql);
