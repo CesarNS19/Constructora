@@ -4,7 +4,7 @@ require '../Administrador/superior_admin.php';
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -78,10 +78,11 @@ require '../Administrador/superior_admin.php';
     </div>
 </div>
 
-<section>
+<section  class="services-table container my-4"><br/>
+<div class="table-responsive">
     <table class="table table-bordered table-hover text-center">
         <thead class="thead-dark">
-            <h2 class="text-center">Manage Customers Address</h2><br/>
+            <h2 class="text-center">Manage Customers Addresses</h2><br/>
             <tr>
                 <th>Customer</th>
                 <th>Outside Number</th>
@@ -127,6 +128,7 @@ require '../Administrador/superior_admin.php';
         ?>
         </tbody>
     </table>
+</div>
 </section>
 
 <script>

@@ -14,7 +14,7 @@ require '../Administrador/superior_admin.php';
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -41,14 +41,14 @@ require '../Administrador/superior_admin.php';
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="addBudgetModalLabel">Agregar Nuevo Presupuesto</h5>
+                <h5 class="modal-title" id="addBudgetModalLabel">Add New Budget</h5>
             </div>
             <form action="add_budget.php" method="POST">
                 <div class="modal-body">
                 <div class="form-group mb-3">
-                        <label for="id_empresa">Selecciona la Empresa</label>
+                        <label for="id_empresa">Selected a Company</label>
                         <select name="id_empresa" class="form-control" required>
-                            <option value="">Seleccione una empresa</option>
+                            <option value="">Selected a Company</option>
                             <?php
                             if ($result_empresas->num_rows > 0) {
                                 while ($empresa = $result_empresas->fetch_assoc()) {
@@ -61,9 +61,9 @@ require '../Administrador/superior_admin.php';
                         </select>
                     </div>
                     <div class="form-group mb-3">
-                        <label for="id_cliente">Seleccione un cliente</label>
+                        <label for="id_cliente">Selected a Customer</label>
                         <select name="id_cliente" id="select_cliente" class="form-control" required>
-                            <option value="">Seleccione un cliente</option>
+                            <option value="">Selected a Customer</option>
                             <?php
                             if ($result_clientes->num_rows > 0) {
                                 while ($clientes = $result_clientes->fetch_assoc()) {
@@ -82,22 +82,22 @@ require '../Administrador/superior_admin.php';
                         </select>
                     </div>
                     <div class="form-group mb-3">
-                        <label for="direccion_cliente">Dirección del cliente</label>
+                        <label for="direccion_cliente">Customer Address</label>
                         <input type="text" id="direccion_cliente" class="form-control" readonly>
                         <input type="hidden" name="id_direccion" id="id_direccion">
                     </div>
                     <div class="form-group mb-3">
-                        <label for="date">Start Date</label>
-                        <input type="date" step="0.01" name="fecha_elaboracion" class="form-control" placeholder="Start Date" required>
+                        <label for="date">Date of Preparation</label>
+                        <input type="date" step="0.01" name="fecha_elaboracion" class="form-control" required>
                     </div>
                     <div class="form-group mb-3">
                         <label for="">Observations</label>
-                        <textarea name="observaciones" class="form-control" placeholder="Observations" required></textarea>
+                        <textarea name="observaciones" class="form-control" required></textarea>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                    <button type="submit" class="btn btn-primary">Agregar Presupuesto</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Add New Budget</button>
                 </div>
             </form>
         </div>
@@ -109,25 +109,25 @@ require '../Administrador/superior_admin.php';
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="editBudgetLabel">Editar Presupuesto</h5>
+                <h5 class="modal-title" id="editBudgetLabel">Edit Budget</h5>
             </div>
             <form action="edit_budget.php" method="POST">
                 <div class="modal-body">
                     <input type="hidden" name="folio_presupuesto" id="edit_folio_presupuesto">
                     
                     <div class="form-group mb-3">
-                        <label for="edit_fecha_elaboracion">Start Date</label>
+                        <label for="edit_fecha_elaboracion">Date of Preparation</label>
                         <input type="date" name="fecha_elaboracion" id="edit_fecha_elaboracion" class="form-control" required>
                     </div>
                                         
                     <div class="form-group mb-3">
                         <label for="edit_observaciones">Observations</label>
-                        <input type="text" name="observaciones" id="edit_observaciones" class="form-control" placeholder="Ingresa las observaciones" required>
+                        <input type="text" name="observaciones" id="edit_observaciones" class="form-control" required>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                    <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
                 </div>
             </form>
         </div>
@@ -139,32 +139,38 @@ require '../Administrador/superior_admin.php';
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="addBudgetAddressLabel">Add Company Address</h5>
+                <h5 class="modal-title" id="addBudgetAddressLabel">Add Budget Address</h5>
             </div>
             <form action="add_budget_address.php" method="POST">
                 <div class="modal-body">
                     <input type="hidden" name="folio_presupuesto" id="folio_presupuesto_modal">
                     <div class="form-group mb-3">
-                        <label>Presupuesto seleccionado</label>
+                        <label>Selected Budget</label>
                         <input type="text" id="presupuesto_modal" class="form-control" readonly>
                     </div>
                     <div class="form-group mb-3">
-                        <input type="number" name="num_ext" class="form-control" placeholder="Outside number" required>
+                        <label for="num_ext">Outside Number</label>
+                        <input type="number" name="num_ext" class="form-control" required>
                     </div>
                     <div class="form-group mb-3">
-                        <input type="number" name="num_int" class="form-control" placeholder="Inner number" required>
+                        <label for="num_int">Inner Number</label>
+                        <input type="number" name="num_int" class="form-control" required>
                     </div>
                     <div class="form-group mb-3">
-                        <input type="text" name="calle" class="form-control" placeholder="Street" required>
+                        <label for="calle">Street</label>
+                        <input type="text" name="calle" class="form-control" required>
                     </div>
                     <div class="form-group mb-3">
-                        <input type="text" name="ciudad" class="form-control" placeholder="City" required>
+                        <label for="ciudad">City</label>
+                        <input type="text" name="ciudad" class="form-control" required>
                     </div>
                     <div class="form-group mb-3">
-                        <input type="text" name="estado" class="form-control" placeholder="State" required>
+                        <label for="estado">State</label>
+                        <input type="text" name="estado" class="form-control" required>
                     </div>
                     <div class="form-group mb-3">
-                        <input type="number" name="codigo_postal" class="form-control" placeholder="Postal code" required>
+                        <label for="codigo_postal">Postal Code</label>
+                        <input type="number" name="codigo_postal" class="form-control" required>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -177,7 +183,8 @@ require '../Administrador/superior_admin.php';
 </div>
 
     <!-- Tabla de Presupuestos -->
-<section class="works-table"><br/>
+<section class="services-table container my-2"><br/>
+<div class="table-responsive">
     <table class="table table-bordered table-hover text-center">
         <thead class="thead-dark">
             <tr>
@@ -230,6 +237,7 @@ require '../Administrador/superior_admin.php';
             ?>
         </tbody>
     </table>
+</div>
 </section>
 
     <script>

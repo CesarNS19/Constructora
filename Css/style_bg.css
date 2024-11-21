@@ -1,5 +1,5 @@
         body.dark-mode {
-            background-color: #121212;
+            background-color: #2b2b2b;
             color: white;
         }
 
@@ -34,9 +34,7 @@
         }
 
         body.dark-mode .alert {
-            background-color: #333;
-            color: white;
-            border-color: #444;
+            border-color: white;
         }
 
         body.dark-mode .fas {

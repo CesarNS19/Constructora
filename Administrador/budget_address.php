@@ -4,7 +4,7 @@ require '../Administrador/superior_admin.php';
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -75,10 +75,11 @@ require '../Administrador/superior_admin.php';
     </div>
 </div>
 
-<section>
+<section class="services-table container my-2"><br/>
+<div class="table-responsive">
     <table class="table table-bordered table-hover text-center">
         <thead class="thead-dark">
-            <h2 class="text-center">Manage Budget Address</h2><br/>
+            <h2 class="text-center">Manage Budget Addresses</h2><br/>
             <tr>
                 <th>Budget</th>
                 <th>Outside Number</th>
@@ -123,6 +124,7 @@ require '../Administrador/superior_admin.php';
         ?>
         </tbody>
     </table>
+</div>
 </section>
 
 <script>

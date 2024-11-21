@@ -8,7 +8,7 @@ require '../Administrador/superior_admin.php';
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -32,18 +32,21 @@ require '../Administrador/superior_admin.php';
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="addEmployeeModalLabel">Agregar Nuevo Empleado</h5>
+                <h5 class="modal-title" id="addEmployeeModalLabel">Add New Employee</h5>
             </div>
             <form action="add_employee.php" method="POST">
                 <div class="modal-body">
                     <div class="form-group mb-3">
-                        <input type="text" name="nombre" class="form-control" placeholder="Nombre" required>
+                        <label>Employee Name</label>
+                        <input type="text" name="nombre" class="form-control" required>
                     </div>
                     <div class="form-group mb-3">
-                        <input type="text" name="apellido_paterno" class="form-control" placeholder="Apellido Paterno" required>
+                        <label>Paternal Surname</label>
+                        <input type="text" name="apellido_paterno" class="form-control" required>
                     </div>
                     <div class="form-group mb-3">
-                        <input type="text" name="apellido_materno" class="form-control" placeholder="Apellido Materno" required>
+                        <label>Maternal Surname</label>
+                        <input type="text" name="apellido_materno" class="form-control" required>
                     </div>
                     <div class="form-group mb-3">
                         <label for="hora_entrada">Hora de Entrada</label>
@@ -54,22 +57,26 @@ require '../Administrador/superior_admin.php';
                         <input type="time" name="hora_salida" class="form-control" required>
                     </div>
                     <div class="form-group mb-3">
-                        <input type="text" name="telefono_personal" class="form-control" placeholder="Teléfono Personal" required>
+                        <label>Phone</label>
+                        <input type="text" name="telefono_personal" class="form-control" required>
                     </div>
                     <div class="form-group mb-3">
-                        <input type="email" name="correo_personal" class="form-control" placeholder="Correo Personal" required>
+                        <label>Email</label>
+                        <input type="email" name="correo_personal" class="form-control" required>
                     </div>
                     <div class="form-group mb-3">
-                        <input type="password" name="contrasena" class="form-control" placeholder="Password" required>
+                        <label>Password</label>
+                        <input type="password" name="contrasena" class="form-control" required>
                     </div>
                     <div class="form-group mb-3">
-                        <textarea name="actividades" class="form-control" placeholder="Actividades" required></textarea>
+                        <label>Activities</label>
+                        <textarea name="actividades" class="form-control" required></textarea>
                     </div>
                     
                     <div class="form-group mb-3">
-                        <label for="id_empresa">Selecciona la Empresa</label>
+                        <label for="id_empresa">Selected a Company</label>
                         <select name="id_empresa" class="form-control" required>
-                            <option value="">Seleccione una empresa</option>
+                            <option value="">Selected a Company</option>
                             <?php
                             if ($result_empresas->num_rows > 0) {
                                 while ($empresa = $result_empresas->fetch_assoc()) {
@@ -84,7 +91,7 @@ require '../Administrador/superior_admin.php';
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                    <button type="submit" class="btn btn-primary">Agregar Empleado</button>
+                    <button type="submit" class="btn btn-primary">Add Employee</button>
                 </div>
             </form>
         </div>
@@ -95,56 +102,56 @@ require '../Administrador/superior_admin.php';
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="editEmployeeLabel">Editar Empleado</h5>
+                <h5 class="modal-title" id="editEmployeeLabel">Edit Employee</h5>
             </div>
             <form action="edit_employee.php" method="POST">
                 <div class="modal-body">
                     <input type="hidden" name="id_empleado" id="edit_id_empleado">
                     
                     <div class="form-group mb-3">
-                        <label for="edit_nombre">Nombre</label>
-                        <input type="text" name="nombre" id="edit_nombre" class="form-control" placeholder="Ingresa el nombre" required>
+                        <label for="edit_nombre">Employee Name</label>
+                        <input type="text" name="nombre" id="edit_nombre" class="form-control" required>
                     </div>
                     
                     <div class="form-group mb-3">
-                        <label for="edit_apellido_paterno">Apellido Paterno</label>
-                        <input type="text" name="apellido_paterno" id="edit_apellido_paterno" class="form-control" placeholder="Ingresa el apellido paterno" required>
+                        <label for="edit_apellido_paterno">Paternal Surname</label>
+                        <input type="text" name="apellido_paterno" id="edit_apellido_paterno" class="form-control" required>
                     </div>
                     
                     <div class="form-group mb-3">
-                        <label for="edit_apellido_materno">Apellido Materno</label>
-                        <input type="text" name="apellido_materno" id="edit_apellido_materno" class="form-control" placeholder="Ingresa el apellido materno" required>
+                        <label for="edit_apellido_materno">Maternal Surname</label>
+                        <input type="text" name="apellido_materno" id="edit_apellido_materno" class="form-control" required>
                     </div>
                     
                     <div class="form-group mb-3">
-                        <label for="edit_hora_entrada">Hora de Entrada</label>
+                        <label for="edit_hora_entrada">Entry Time</label>
                         <input type="time" name="hora_entrada" id="edit_hora_entrada" class="form-control" required>
                     </div>
 
                     <div class="form-group mb-3">
-                        <label for="edit_hora_salida">Hora de Salida</label>
+                        <label for="edit_hora_salida">Exit Time</label>
                         <input type="time" name="hora_salida" id="edit_hora_salida" class="form-control" required>
                     </div>
                     
                     <div class="form-group mb-3">
-                        <label for="edit_telefono_personal">Teléfono Personal</label>
-                        <input type="text" name="telefono_personal" id="edit_telefono_personal" class="form-control" placeholder="Ingresa el teléfono personal" required>
+                        <label for="edit_telefono_personal">Phone</label>
+                        <input type="text" name="telefono_personal" id="edit_telefono_personal" class="form-control" required>
                     </div>
                     
                     <div class="form-group mb-3">
-                        <label for="edit_correo_personal">Correo Personal</label>
-                        <input type="email" name="correo_personal" id="edit_correo_personal" class="form-control" placeholder="Ingresa el correo personal" required>
+                        <label for="edit_correo_personal">Email</label>
+                        <input type="email" name="correo_personal" id="edit_correo_personal" class="form-control" required>
                     </div>
                     
                     <div class="form-group mb-3">
-                        <label for="edit_actividades">Actividades</label>
-                        <input type="text" name="actividades" id="edit_actividades" class="form-control" placeholder="Ingresa las actividades" required>
+                        <label for="edit_actividades">Activities</label>
+                        <input type="text" name="actividades" id="edit_actividades" class="form-control" required>
                     </div>
 
                     <div class="form-group mb-3">
-                        <label for="edit_id_empresa">Selecciona la Empresa</label>
+                        <label for="edit_id_empresa">Selected a Company</label>
                         <select name="id_empresa" id="edit_id_empresa" class="form-control" required>
-                            <option value="">Seleccione una empresa</option>
+                            <option value="">Selected a Company</option>
                             <?php
                             if ($result_empresas->num_rows > 0) {
                                 while ($empresa = $result_empresas->fetch_assoc()) {
@@ -158,8 +165,8 @@ require '../Administrador/superior_admin.php';
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                    <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
                 </div>
             </form>
         </div>
@@ -170,7 +177,7 @@ require '../Administrador/superior_admin.php';
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="calendarModalLabel">Seleccionar Días Trabajados</h5>
+                <h5 class="modal-title" id="calendarModalLabel">Selected Days Worked</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -179,80 +186,81 @@ require '../Administrador/superior_admin.php';
                 <div id="workDaysRow1" class="d-flex justify-content-between mb-3">
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" id="day1" value="Lunes">
-                        <label class="form-check-label" for="day1">Lunes</label>
+                        <label class="form-check-label" for="day1">Monday</label>
                     </div>
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" id="day2" value="Martes">
-                        <label class="form-check-label" for="day2">Martes</label>
+                        <label class="form-check-label" for="day2">Tuesday</label>
                     </div>
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" id="day3" value="Miércoles">
-                        <label class="form-check-label" for="day3">Miércoles</label>
+                        <label class="form-check-label" for="day3">Wednesday</label>
                     </div>
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" id="day4" value="Jueves">
-                        <label class="form-check-label" for="day4">Jueves</label>
+                        <label class="form-check-label" for="day4">Thursday</label>
                     </div>
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" id="day5" value="Viernes">
-                        <label class="form-check-label" for="day5">Viernes</label>
+                        <label class="form-check-label" for="day5">Friday</label>
                     </div>
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" id="day6" value="Sábado">
-                        <label class="form-check-label" for="day6">Sábado</label>
+                        <label class="form-check-label" for="day6">Saturday</label>
                     </div>
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" id="day7" value="Domingo">
-                        <label class="form-check-label" for="day7">Domingo</label>
+                        <label class="form-check-label" for="day7">Sunday</label>
                     </div>
                 </div>
 
                 <div id="workDaysRow2" class="d-flex justify-content-between">
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" id="day8" value="Lunes">
-                        <label class="form-check-label" for="day8">Lunes</label>
+                        <label class="form-check-label" for="day8">Monday</label>
                     </div>
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" id="day9" value="Martes">
-                        <label class="form-check-label" for="day9">Martes</label>
+                        <label class="form-check-label" for="day9">Tuesday</label>
                     </div>
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" id="day10" value="Miércoles">
-                        <label class="form-check-label" for="day10">Miércoles</label>
+                        <label class="form-check-label" for="day10">Wednesday</label>
                     </div>
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" id="day11" value="Jueves">
-                        <label class="form-check-label" for="day11">Jueves</label>
+                        <label class="form-check-label" for="day11">Thursday</label>
                     </div>
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" id="day12" value="Viernes">
-                        <label class="form-check-label" for="day12">Viernes</label>
+                        <label class="form-check-label" for="day12">Friday</label>
                     </div>
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" id="day13" value="Sábado">
-                        <label class="form-check-label" for="day13">Sábado</label>
+                        <label class="form-check-label" for="day13">Saturday</label>
                     </div>
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" id="day14" value="Domingo">
-                        <label class="form-check-label" for="day14">Domingo</label>
+                        <label class="form-check-label" for="day14">Sunday</label>
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                <button type="button" class="btn btn-primary" id="saveWorkDays">Guardar</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="saveWorkDays">Save Changes</button>
             </div>
         </div>
     </div>
 </div>
 
 <!-- Tabla de Empleados -->
-<section class="employee-table"><br/>
+<section class="my-4"><br/>
+<div class="table-responsive">
     <table class="table table-bordered table-hover text-center">
         <thead class="thead-dark">
             <tr>
                 <h2 class="text-center">Manage Employee</h2><br/>
-                <th>Employee´s Name</th>
+                <th>Employee Name</th>
                 <th>Entry Time</th>
                 <th>Exit Time</th>
                 <th>Days Worked</th>
@@ -317,6 +325,7 @@ require '../Administrador/superior_admin.php';
             ?>
         </tbody>
     </table>
+</div>
 </section>
 
 <script>

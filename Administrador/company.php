@@ -4,7 +4,7 @@ require '../Administrador/superior_admin.php';
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -35,16 +35,20 @@ require '../Administrador/superior_admin.php';
             <form action="add_company.php" method="POST">
                 <div class="modal-body">
                     <div class="form-group mb-3">
-                        <input type="text" name="nombre_empresa" class="form-control" placeholder="Nombre de la empresa" required>
+                        <label>Company Name</label>
+                        <input type="text" name="nombre_empresa" class="form-control" required>
                     </div>
                     <div class="form-group mb-3">
-                        <input type="text" name="telefono" class="form-control" placeholder="Teléfono" required>
+                        <label>Phone</label>
+                        <input type="text" name="telefono" class="form-control" required>
                     </div>
                     <div class="form-group mb-3">
-                        <input type="text" name="pagina_web" class="form-control" placeholder="Página web" required>
+                        <label>Web Page</label>
+                        <input type="text" name="pagina_web" class="form-control" required>
                     </div>
                     <div class="form-group mb-3">
-                        <input type="email" name="correo_empresa" class="form-control" placeholder="Correo de la empresa" required>
+                        <label>Email</label>
+                        <input type="email" name="correo_empresa" class="form-control" required>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -67,7 +71,7 @@ require '../Administrador/superior_admin.php';
                     <input type="hidden" name="id_empresa" id="edit_id_empresa">
                     
                     <div class="form-group mb-3">
-                        <label for="edit_nombre_empresa">First Name</label>
+                        <label for="edit_nombre_empresa">Company Name</label>
                         <input type="text" name="nombre_empresa" id="edit_nombre_empresa" class="form-control" placeholder="Name of Company" required>
                     </div>
                     
@@ -77,7 +81,7 @@ require '../Administrador/superior_admin.php';
                     </div>
 
                     <div class="form-group mb-3">
-                        <label for="edit_pagina_web">Page web</label>
+                        <label for="edit_pagina_web">Web Page</label>
                         <input type="text" name="pagina_web" id="edit_pagina_web" class="form-control" placeholder="Web page" required>
                     </div>
                     
@@ -107,26 +111,32 @@ require '../Administrador/superior_admin.php';
                 <div class="modal-body">
                     <input type="hidden" name="id_empresa" id="id_empresa_modal">
                     <div class="form-group mb-3">
-                        <label>Empresa seleccionada</label>
+                        <label>Selected Company</label>
                         <input type="text" id="nombre_empresa_modal" class="form-control" readonly>
                     </div>
                     <div class="form-group mb-3">
-                        <input type="number" name="num_ext" class="form-control" placeholder="Outside number" required>
+                        <label for="num_ext">Outside Number</label>
+                        <input type="number" name="num_ext" class="form-control" required>
                     </div>
                     <div class="form-group mb-3">
-                        <input type="number" name="num_int" class="form-control" placeholder="Inner number" required>
+                        <label for="num_int">Inner Number</label>
+                        <input type="number" name="num_int" class="form-control" required>
                     </div>
                     <div class="form-group mb-3">
-                        <input type="text" name="calle" class="form-control" placeholder="Street" required>
+                        <label for="calle">Street</label>
+                        <input type="text" name="calle" class="form-control" required>
                     </div>
                     <div class="form-group mb-3">
-                        <input type="text" name="ciudad" class="form-control" placeholder="City" required>
+                        <label for="ciudad">City</label>
+                        <input type="text" name="ciudad" class="form-control" required>
                     </div>
                     <div class="form-group mb-3">
-                        <input type="text" name="estado" class="form-control" placeholder="State" required>
+                        <label for="estado">State</label>
+                        <input type="text" name="estado" class="form-control" required>
                     </div>
                     <div class="form-group mb-3">
-                        <input type="number" name="codigo_postal" class="form-control" placeholder="Postal code" required>
+                        <label for="codigo_postal">Postal Code</label>
+                        <input type="number" name="codigo_postal" class="form-control" required>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -138,12 +148,13 @@ require '../Administrador/superior_admin.php';
     </div>
 </div>
 
-<section><br/>
+<section class="services-table container my-2"><br/>
+<div class="table-responsive">
     <table class="table table-bordered table-hover text-center">
         <thead class="thead-dark">
             <h2 class="text-center">Manage Company</h2><br/>
             <tr>
-                <th>Name of company</th>
+                <th>Company Name</th>
                 <th>Phone</th>
                 <th>Web Page</th>
                 <th>Email</th>
@@ -181,6 +192,7 @@ require '../Administrador/superior_admin.php';
             ?>
         </tbody>
     </table>
+</div>
 </section>
 
 <script>

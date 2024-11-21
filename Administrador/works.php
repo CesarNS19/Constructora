@@ -11,7 +11,7 @@ require '../Administrador/superior_admin.php';
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -29,7 +29,7 @@ require '../Administrador/superior_admin.php';
             View Addresses
         </a>
         <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addWorksModal" style="float: right; margin: 10px;">
-            Add Works
+            Add Work
         </button><br/>
     </section><br/>
 
@@ -38,14 +38,14 @@ require '../Administrador/superior_admin.php';
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="addWorksModalLabel">Agregar Nueva Obra</h5>
+                <h5 class="modal-title" id="addWorksModalLabel">Add New Work</h5>
             </div>
             <form action="add_work.php" method="POST">
                 <div class="modal-body">
                     <div class="form-group mb-3">
-                        <label for="id_empresa">Selecciona la Empresa</label>
+                        <label for="id_empresa">Selected a Company</label>
                         <select name="id_empresa" class="form-control" required>
-                            <option value="">Seleccione una empresa</option>
+                            <option value="">Selected a Company</option>
                             <?php
                             if ($result_empresas->num_rows > 0) {
                                 while ($empresa = $result_empresas->fetch_assoc()) {
@@ -58,9 +58,9 @@ require '../Administrador/superior_admin.php';
                         </select>
                     </div>
                     <div class="form-group mb-3">
-                        <label for="id_cliente">Seleccione un cliente</label>
+                        <label for="id_cliente">Selected a Customer</label>
                         <select name="id_cliente" id="select_cliente" class="form-control" required>
-                            <option value="">Seleccione un cliente</option>
+                            <option value="">Selected a Customer</option>
                             <?php
                             if ($result_clientes->num_rows > 0) {
                                 while ($clientes = $result_clientes->fetch_assoc()) {
@@ -79,29 +79,34 @@ require '../Administrador/superior_admin.php';
                         </select>
                     </div>
                     <div class="form-group mb-3">
-                        <label for="direccion_cliente">Dirección del cliente</label>
+                        <label for="direccion_cliente">Customer Address</label>
                         <input type="text" id="direccion_cliente" class="form-control" readonly>
                         <input type="hidden" name="id_direccion" id="id_direccion">
                     </div>
                     <div class="form-group mb-3">
-                        <input type="date" name="fecha_inicio" class="form-control" placeholder="Fecha de Inicio" required>
+                        <label >Start Date</label>
+                        <input type="date" name="fecha_inicio" class="form-control" required>
                     </div>
                     <div class="form-group mb-3">
-                        <input type="number" name="anticipo" id="anticipo" class="form-control" placeholder="Anticipo" required>
+                        <label >Advance Payment</label>
+                        <input type="number" name="anticipo" id="anticipo" class="form-control" required>
                     </div>
                     <div class="form-group mb-3">
-                        <input type="number" name="adeudo" id="adeudo" class="form-control" placeholder="Adeudo" required>
+                        <label >Debit</label>
+                        <input type="number" name="adeudo" id="adeudo" class="form-control" required>
                     </div>
                     <div class="form-group mb-3">
-                        <input type="number" name="total_obra" id="total_obra" class="form-control" placeholder="Total de la Obra" readonly>
+                        <label >Total Work</label>
+                        <input type="number" name="total_obra" id="total_obra" class="form-control" readonly>
                     </div>
                     <div class="form-group mb-3">
-                        <textarea name="observaciones" class="form-control" placeholder="Observaciones" required></textarea>
+                        <label >Observations</label>
+                        <textarea name="observaciones" class="form-control"></textarea>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                    <button type="submit" class="btn btn-primary">Agregar Obra</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Add New Work</button>
                 </div>
             </form>
         </div>
@@ -113,40 +118,40 @@ require '../Administrador/superior_admin.php';
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="editWorksLabel">Editar Obras</h5>
+                <h5 class="modal-title" id="editWorksLabel">Edit Work</h5>
             </div>
             <form action="edit_works.php" method="POST">
                 <div class="modal-body">
                     <input type="hidden" name="folio_obra" id="edit_folio_obra">
                     
                     <div class="form-group mb-3">
-                        <label for="edit_fecha_inicio">Fecha de Inicio</label>
+                        <label for="edit_fecha_inicio">Start Date</label>
                         <input type="date" name="fecha_inicio" id="edit_fecha_inicio" class="form-control" required>
                     </div>
 
                     <div class="form-group mb-3">
-                        <label for="edit_anticipo">Anticipo</label>
-                        <input type="number" name="anticipo" id="edit_anticipo" class="form-control" placeholder="Ingresa el anticipo" required>
+                        <label for="edit_anticipo">Advance Payment</label>
+                        <input type="number" name="anticipo" id="edit_anticipo" class="form-control" required>
                     </div>
                     
                     <div class="form-group mb-3">
-                        <label for="edit_adeudo">Adeudo</label>
-                        <input type="number" name="adeudo" id="edit_adeudo" class="form-control" placeholder="Ingresa el adeudo" required>
+                        <label for="edit_adeudo">Debit</label>
+                        <input type="number" name="adeudo" id="edit_adeudo" class="form-control" required>
                     </div>
                     
                     <div class="form-group mb-3">
-                        <label for="edit_total_obra">Total de la Obra</label>
+                        <label for="edit_total_obra">Total Work</label>
                         <input type="number" name="total_obra" id="edit_total_obra" class="form-control" readonly>
                     </div>
                     
                     <div class="form-group mb-3">
-                        <label for="edit_observaciones">Observaciones</label>
-                        <input type="text" name="observaciones" id="edit_observaciones" class="form-control" placeholder="Ingresa las observaciones" required>
+                        <label for="edit_observaciones">Observations</label>
+                        <input type="text" name="observaciones" id="edit_observaciones" class="form-control" required>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                    <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
                 </div>
             </form>
         </div>
@@ -158,7 +163,7 @@ require '../Administrador/superior_admin.php';
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="addWorkAddressLabel">Add Customer Address</h5>
+                <h5 class="modal-title" id="addWorkAddressLabel">Add Work Address</h5>
             </div>
             <form action="add_work_address.php" method="POST">
                 <div class="modal-body">
@@ -168,27 +173,33 @@ require '../Administrador/superior_admin.php';
                     </div>
                     <input type="hidden" name="folio_obra" id="folio_obra_hidden">
                     <div class="form-group mb-3">
-                        <input type="number" name="num_ext" class="form-control" placeholder="Outside number" required>
+                        <label for="num_ext">Outside Number</label>
+                        <input type="number" name="num_ext" class="form-control" required>
                     </div>
                     <div class="form-group mb-3">
-                        <input type="number" name="num_int" class="form-control" placeholder="Inner number" required>
+                        <label for="num_int">Inner Number</label>
+                        <input type="number" name="num_int" class="form-control" required>
                     </div>
                     <div class="form-group mb-3">
-                        <input type="text" name="calle" class="form-control" placeholder="Street" required>
+                        <label for="calle">Street</label>
+                        <input type="text" name="calle" class="form-control" required>
                     </div>
                     <div class="form-group mb-3">
-                        <input type="text" name="ciudad" class="form-control" placeholder="City" required>
+                        <label for="ciudad">City</label>
+                        <input type="text" name="ciudad" class="form-control" required>
                     </div>
                     <div class="form-group mb-3">
-                        <input type="text" name="estado" class="form-control" placeholder="State" required>
+                        <label for="estado">State</label>
+                        <input type="text" name="estado" class="form-control" required>
                     </div>
                     <div class="form-group mb-3">
-                        <input type="number" name="codigo_postal" class="form-control" placeholder="Postal code" required>
+                        <label for="codigo_postal">Postal Code</label>
+                        <input type="number" name="codigo_postal" class="form-control" required>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Add Customer Address</button>
+                    <button type="submit" class="btn btn-primary">Add Work Address</button>
                 </div>
             </form>
         </div>
@@ -196,7 +207,8 @@ require '../Administrador/superior_admin.php';
 </div>
 
     <!-- Tabla de Obras -->
-<section class="works-table"><br/>
+<section class="services-table container my-2"><br/>
+<div class="table-responsive">
     <table class="table table-bordered table-hover text-center">
         <thead class="thead-dark">
             <tr>
@@ -252,6 +264,7 @@ require '../Administrador/superior_admin.php';
             ?>
         </tbody>
     </table>
+</div>
 </section>
 
     <script>

@@ -4,7 +4,7 @@ require '../Administrador/superior_admin.php';
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -23,32 +23,33 @@ require '../Administrador/superior_admin.php';
         </button><br/>
     </section><br/>
 
-    <div class="modal fade" id="addServicesModal" tabindex="-1" role="dialog" aria-labelledby="addServicesModalLabel" aria-hidden="true">
+<div class="modal fade" id="addServicesModal" tabindex="-1" role="dialog" aria-labelledby="addServicesModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="addServicesModalLabel">Agregar Nuevo Servicio</h5>
+                <h5 class="modal-title" id="addServicesModalLabel">Add New Service</h5>
             </div>
             <form action="add_service.php" method="POST" enctype="multipart/form-data">
                 <div class="modal-body">
                     <div class="form-group mb-3">
-                        <label for="">Name of service</label>
-                        <input type="text" name="nombre_servicio" class="form-control" placeholder="Name of service" required>
+                        <label for="">Name of Service</label>
+                        <input type="text" name="nombre_servicio" class="form-control" required>
                     </div>
                     <div class="form-group mb-3">
-                        <textarea name="descripcion_servicio" class="form-control" placeholder="Description of the service" required></textarea>
+                        <label for="">Description of the Service</label>
+                        <textarea name="descripcion_servicio" class="form-control" required></textarea>
                     </div>
                     <div class="form-group mb-3">
                         <label for="">Total Service</label>
-                        <input type="number" name="total" class="form-control" placeholder="Total Service" required>
+                        <input type="number" name="total" class="form-control" required>
                     </div>
                     <div class="form-group mb-3">
                         <input type="file" name="imagen_servicio" class="form-control" placeholder="Service Image">
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                    <button type="submit" class="btn btn-primary">Agregar Servicio</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Add Service</button>
                 </div>
             </form>
         </div>

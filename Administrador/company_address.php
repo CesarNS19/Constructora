@@ -3,7 +3,7 @@ require '../Login/conexion.php';
 require '../Administrador/superior_admin.php';?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -80,7 +80,7 @@ require '../Administrador/superior_admin.php';?>
 <section><br/>
     <table class="table table-bordered table-hover text-center">
         <thead class="thead-dark">
-        <h2 class="text-center">Manage Company Address</h2><br/>
+        <h2 class="text-center">Manage Company Addresses</h2><br/>
             <tr>
                 <th>Company</th>
                 <th>Outside Number</th>

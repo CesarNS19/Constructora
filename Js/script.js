@@ -20,29 +20,4 @@ document.addEventListener('DOMContentLoaded', function() {
             button.style.boxShadow = '0 4px 6px rgba(0, 0, 0, 0.2)';
         });
     });
-
-    // Alternar modo oscuro
-    const themeToggle = document.getElementById('themeToggle');
-    themeToggle.addEventListener('click', () => {
-        document.body.classList.toggle('dark-mode');
-    });
-
-    // Alternar idioma
-    const languageButton = document.getElementById("languageButton");
-    let currentLang = "en";  // Idioma predeterminado
-
-    languageButton.addEventListener("click", function() {
-        currentLang = currentLang === "en" ? "es" : "en";
-        
-        document.querySelectorAll("[data-lang='en']").forEach(element => {
-            element.style.display = currentLang === "en" ? "block" : "none";
-        });
-        document.querySelectorAll("[data-lang='es']").forEach(element => {
-            element.style.display = currentLang === "es" ? "block" : "none";
-        });
-    });
-
-    document.getElementById("signUp").addEventListener("click", function() {
-        document.querySelector(".container").classList.add("right-panel-active");
-    });
 });

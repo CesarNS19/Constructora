@@ -13,7 +13,7 @@ require '../Administrador/superior_admin.php';
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -34,14 +34,14 @@ require '../Administrador/superior_admin.php';
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="addPayrollModalLabel">Agregar Nueva Nómina</h5>
+                <h5 class="modal-title" id="addPayrollModalLabel">Add New Payroll</h5>
             </div>
             <form action="add_payroll.php" method="POST">
                 <div class="modal-body">
                 <div class="form-group mb-3">
-                        <label for="id_empleado">Seleccione un empleado</label>
+                        <label for="id_empleado">Selected a Employee</label>
                         <select name="id_empleado" id="id_empleado" class="form-control" required>
-                            <option value="">Seleccione un empleado</option>
+                            <option value="">Selected a Employee</option>
                             <?php
                             if ($result_empleados->num_rows > 0) {
                                 while ($empleados = $result_empleados->fetch_assoc()) {
@@ -55,21 +55,21 @@ require '../Administrador/superior_admin.php';
                         </select>
                     </div>
                     <div class="form-group mb-3">
-                        <label for="dias_trabajados">Días Trabajados</label>
-                        <input type="number" id="dias_trabajados" name="dias_trabajados" class="form-control" placeholder="Días trabajados" readonly>
+                        <label for="dias_trabajados">Days Worked</label>
+                        <input type="number" id="dias_trabajados" name="dias_trabajados" class="form-control" readonly>
                     </div>
                     <div class="form-group mb-3">
-                        <label for="sueldo_diario">Sueldo Diario</label>
-                        <input type="number" id="sueldo_diario" name="sueldo_diario" class="form-control" placeholder="Sueldo diario" required>
+                        <label for="sueldo_diario">Daily Salary</label>
+                        <input type="number" id="sueldo_diario" name="sueldo_diario" class="form-control" required>
                     </div>
                     <div class="form-group mb-3">
                         <label for="total">Total</label>
-                        <input type="text" id="total" name="total" class="form-control" placeholder="Total" readonly>
+                        <input type="text" id="total" name="total" class="form-control" readonly>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Add Payroll</button>
+                    <button type="submit" class="btn btn-primary">Add New Payroll</button>
                 </div>
             </form>
         </div>
@@ -87,24 +87,24 @@ require '../Administrador/superior_admin.php';
                 <div class="modal-body">
                     <input type="hidden" name="id_nomina" id="edit_id_nomina">
                     <div class="form-group mb-3">
-                        <label for="edit_id_empleado">Empleado</label>
+                        <label for="edit_id_empleado">Employee Name</label>
                         <input type="text" name="edit_id_empleado" id="edit_id_empleado" class="form-control" readonly>
                         <input type="hidden" name="id_empleado" id="id_empleado">
                     </div>
 
                     <div class="form-group mb-3">
-                        <label for="edit_dias_trabajados">Días trabajados</label>
-                        <input type="number" id="edit_dias_trabajados" name="dias_trabajados" class="form-control" placeholder="Enter Días trabajados" readonly>
+                        <label for="edit_dias_trabajados">Days Worked</label>
+                        <input type="number" id="edit_dias_trabajados" name="dias_trabajados" class="form-control" readonly>
                     </div>
 
                     <div class="form-group mb-3">
-                        <label for="edit_sueldo_diario">Sueldo diario</label>
-                        <input type="number" id="edit_sueldo_diario" name="sueldo_diario" class="form-control" placeholder="Enter sueldo diario" required>
+                        <label for="edit_sueldo_diario">Daily Salary</label>
+                        <input type="number" id="edit_sueldo_diario" name="sueldo_diario" class="form-control" required>
                     </div>
 
                     <div class="form-group mb-3">
                         <label for="edit_total">Total</label>
-                        <input type="number" id="edit_total" name="total" class="form-control" placeholder="Enter Total" readonly>
+                        <input type="number" id="edit_total" name="total" class="form-control" readonly>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -116,15 +116,16 @@ require '../Administrador/superior_admin.php';
     </div>
 </div>
 
-<section>
+<section class="services-table container my-2"><br/>
+<div class="table-responsive">
     <table class="table table-bordered table-hover text-center">
         <thead class="thead-dark">
-            <h2 class="text-center">Manage Payroll</h2><br/>
+            <h2 class="text-center">Manage Payrolls</h2><br/>
             <tr>
-                <th>Employee´s Name</th>
+                <th>Employee Name</th>
                 <th>Date</th>
-                <th>Sueldo diario</th>
-                <th>Días trabajados</th>
+                <th>Daily Salary</th>
+                <th>Days Worked</th>
                 <th>Total</th>
                 <th>Actions</th>
             </tr>
@@ -153,6 +154,7 @@ require '../Administrador/superior_admin.php';
             ?>
         </tbody>
     </table>
+</div>
 </section>
 
 <script>

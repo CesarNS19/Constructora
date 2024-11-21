@@ -9,14 +9,15 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../Js/language.js"></script>
 </head>
 <body>
     <header>
         <nav>
             <ul class="nav-links">
-            <button class="language-toggle" id="languageButton" aria-label="Change Language" title="Cambiar idioma">
-                <i class="fas fa-globe"></i>
-            </button>
+                <button class="language-toggle" id="languageButton" aria-label="Change Language" title="Cambiar idioma">
+                    <i class="fas fa-globe"></i>
+                </button>
                 <li><a href="index_admin.php" title="Home"><i class="fas fa-home"></i></a></li>
                 <li><a href="perfil.php" title="Profile"><i class="fas fa-user"></i></a></li>
                 <li><a href="servicios.php" title="Services"><i class="fas fa-concierge-bell"></i></a></li>
@@ -71,20 +72,18 @@
         document.cookie = "timezone=" + Intl.DateTimeFormat().resolvedOptions().timeZone;
 
         if (localStorage.getItem('theme') === 'dark') {
-        document.body.classList.add('dark-mode');
-    }
-
-    // Función para alternar el modo oscuro
-    document.getElementById('themeToggle').addEventListener('click', function() {
-        document.body.classList.toggle('dark-mode');
-        
-        // Guardar la preferencia de tema en localStorage
-        if (document.body.classList.contains('dark-mode')) {
-            localStorage.setItem('theme', 'dark');
-        } else {
-            localStorage.setItem('theme', 'light');
+            document.body.classList.add('dark-mode');
         }
-    })
+
+        document.getElementById('themeToggle').addEventListener('click', function() {
+            document.body.classList.toggle('dark-mode');
+            
+            if (document.body.classList.contains('dark-mode')) {
+                localStorage.setItem('theme', 'dark');
+            } else {
+                localStorage.setItem('theme', 'light');
+            }
+        })
     </script>
 </body>
 </html>

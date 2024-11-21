@@ -67,7 +67,6 @@ body.dark-mode .nav-links li a:hover {
     color: #ff00ff;
 }
 
-/* Estilos adicionales para el menú */
 
 .nav-item a.nav-link {
     color: white;
@@ -109,39 +108,6 @@ body.dark-mode .nav-item a.nav-link:hover {
     color: #ff00ff;
 }
 
-/* Botón de idioma */
-.language-toggle {
-    background: none;
-    border: none;
-    color: black;
-    font-size: 24px;
-    cursor: pointer;
-    transition: color 0.3s;
-}
-
-.language-toggle:hover {
-    color: #00ffcc;
-}
-
-/* Botón de modo oscuro */
-#themeToggle {
-    background: none;
-    border: none;
-    color: black;
-    font-size: 24px;
-    cursor: pointer;
-    transition: color 0.3s, transform 0.3s;
-}
-
-#themeToggle:hover {
-    transform: rotate(20deg);
-}
-
-body.dark-mode #themeToggle {
-    color: #ecf0f1;
-}
-
-/* Estilos para la sección de héroe */
 .hero {
     background-color: white;
     color: black;
