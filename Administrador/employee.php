@@ -32,7 +32,7 @@ require '../Administrador/superior_admin.php';
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="addEmployeeModalLabel">Add New Employee</h5>
+                <h5 class="modal-title" id="addEmployeeModalLabel">Add Employee</h5>
             </div>
             <form action="add_employee.php" method="POST">
                 <div class="modal-body">
@@ -49,11 +49,11 @@ require '../Administrador/superior_admin.php';
                         <input type="text" name="apellido_materno" class="form-control" required>
                     </div>
                     <div class="form-group mb-3">
-                        <label for="hora_entrada">Hora de Entrada</label>
+                        <label for="hora_entrada">Entry Time</label>
                         <input type="time" name="hora_entrada" class="form-control" required>
                     </div>
                     <div class="form-group mb-3">
-                        <label for="hora_salida">Hora de Salida</label>
+                        <label for="hora_salida">Exit Time</label>
                         <input type="time" name="hora_salida" class="form-control" required>
                     </div>
                     <div class="form-group mb-3">

@@ -23,7 +23,9 @@ const translations = {
     "Budget": "Presupuesto",
     "Employee Payroll": "Nómina de Empleados",
     "Actions" : "Acciones",
-    "Good night" : "Buenas noches",
+    "Good Morning": "Buenos días",
+    "Good Afternoon": "Buenas tardes",
+    "Good Night": "Buenas noches",
     "Home" : "Inicio",
     "Manage Customers": "Administrar Clientes",
     "Add Customer": "Agregar Cliente",
@@ -61,7 +63,6 @@ const translations = {
     "Current Image" : "Imágen Actual",
     "Update Service Image" : "Actualizar imágen del Servicio",
     "Manage Employee": "Administrar Empleados",
-    "Add Employee": "Agregar Empleado",
     "Position": "Cargo",
     "Activities": "Actividades",
     "Days Worked": "Días Trabajados",
@@ -119,6 +120,7 @@ const translations = {
     "Edit Payroll": "Editar Nómina",
 
 };
+
 
 let isSpanish = localStorage.getItem("language") === "es";
 
