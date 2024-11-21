@@ -78,7 +78,7 @@ require '../Administrador/superior_admin.php';?>
 </div>
 
 <section><br/>
-    <table class="table">
+    <table class="table table-bordered table-hover text-center">
         <thead class="thead-dark">
         <h2 class="text-center">Manage Company Address</h2><br/>
             <tr>

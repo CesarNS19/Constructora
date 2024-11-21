@@ -1,0 +1,44 @@
+        body.dark-mode {
+            background-color: #121212;
+            color: white;
+        }
+
+        body.dark-mode .table, 
+        body.dark-mode .modal-content {
+            background-color: #2d2d2d;
+            color: white;
+        }
+
+        body.dark-mode .table th {
+            background-color: #555;
+            color: white;
+        }
+
+        body.dark-mode .table tbody tr:nth-child(even) {
+            background-color: #444;
+        }
+
+        body.dark-mode .btn-primary {
+            background-color: #0062cc;
+            border-color: #0062cc;
+        }
+
+        body.dark-mode .btn-light {
+            background-color: #444;
+            color: white;
+        }
+
+        body.dark-mode .modal-header {
+            background-color: #3a3a3a;
+            border-bottom: 1px solid #444;
+        }
+
+        body.dark-mode .alert {
+            background-color: #333;
+            color: white;
+            border-color: #444;
+        }
+
+        body.dark-mode .fas {
+            color: white;
+        }

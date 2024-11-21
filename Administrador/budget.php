@@ -177,8 +177,8 @@ require '../Administrador/superior_admin.php';
 </div>
 
     <!-- Tabla de Presupuestos -->
-    <section class="works-table"><br/>
-    <table class="table">
+<section class="works-table"><br/>
+    <table class="table table-bordered table-hover text-center">
         <thead class="thead-dark">
             <tr>
                 <h2 class="text-center">Manage Budgets</h2><br/>

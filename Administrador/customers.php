@@ -174,14 +174,11 @@ require '../Administrador/superior_admin.php';
 </div>
 
 <section><br/>
-    <table class="table">
+    <table class="table table-bordered table-hover text-center">
         <thead class="thead-dark">
         <h2 class="text-center">Manage Customers</h2><br/>
             <tr>
-                <th>Customer ID</th>
-                <th>Name</th>
-                <th>Last Name</th>
-                <th>Mother's Last Name</th>
+                <th>Customers Name</th>
                 <th>Gender</th>
                 <th>Phone</th>
                 <th>Email</th>
@@ -198,11 +195,9 @@ require '../Administrador/superior_admin.php';
 
             if ($result->num_rows > 0) {
                 while ($row = $result->fetch_assoc()) {
+                    $nombre_completo = htmlspecialchars($row['nombre_cliente'] . ' ' . $row['apellido_paterno'] . ' ' . $row['apellido_materno']);
                     echo "<tr>";
-                    echo "<td>" . htmlspecialchars($row['id_cliente']) . "</td>";
-                    echo "<td>" . htmlspecialchars($row['nombre_cliente']) . "</td>";
-                    echo "<td>" . htmlspecialchars($row['apellido_paterno']) . "</td>";
-                    echo "<td>" . htmlspecialchars($row['apellido_materno']) . "</td>";
+                    echo "<td>" . $nombre_completo . "</td>";
                     echo "<td>" . htmlspecialchars($row['genero_cliente']) . "</td>";
                     echo "<td>" . htmlspecialchars($row['telefono_personal']) . "</td>";
                     echo "<td>" . htmlspecialchars($row['correo_electronico']) . "</td>";

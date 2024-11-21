@@ -139,11 +139,10 @@ require '../Administrador/superior_admin.php';
 </div>
 
 <section><br/>
-    <table class="table">
+    <table class="table table-bordered table-hover text-center">
         <thead class="thead-dark">
             <h2 class="text-center">Manage Company</h2><br/>
             <tr>
-                <th>Company ID</th>
                 <th>Name of company</th>
                 <th>Phone</th>
                 <th>Web Page</th>
@@ -159,7 +158,6 @@ require '../Administrador/superior_admin.php';
             if ($result->num_rows > 0) {
                 while ($row = $result->fetch_assoc()) {
                     echo "<tr>";
-                    echo "<td>" . htmlspecialchars($row['id_empresa']) . "</td>";
                     echo "<td>" . htmlspecialchars($row['nombre_empresa']) . "</td>";
                     echo "<td>" . htmlspecialchars($row['telefono']) . "</td>";
                     echo "<td>" . htmlspecialchars($row['pagina_web']) . "</td>";

@@ -248,13 +248,11 @@ require '../Administrador/superior_admin.php';
 
 <!-- Tabla de Empleados -->
 <section class="employee-table"><br/>
-    <table class="table">
+    <table class="table table-bordered table-hover text-center">
         <thead class="thead-dark">
             <tr>
-                <h2 class="text-center">Manage Employees</h2><br/>
-                <th>Name</th>
-                <th>Last Name</th>
-                <th>Mother's Last Name</th>
+                <h2 class="text-center">Manage Employee</h2><br/>
+                <th>Employee´s Name</th>
                 <th>Entry Time</th>
                 <th>Exit Time</th>
                 <th>Days Worked</th>
@@ -275,10 +273,9 @@ require '../Administrador/superior_admin.php';
 
             if ($result->num_rows > 0) {
                 while ($row = $result->fetch_assoc()) {
+                    $nombre_completo = htmlspecialchars($row['nombre'] . ' ' . $row['apellido_paterno'] . ' ' . $row['apellido_materno']);
                     echo "<tr>";
-                    echo "<td>" . htmlspecialchars($row['nombre']) . "</td>";
-                    echo "<td>" . htmlspecialchars($row['apellido_paterno']) . "</td>";
-                    echo "<td>" . htmlspecialchars($row['apellido_materno']) . "</td>";
+                    echo "<td>" . $nombre_completo . "</td>";
                     echo "<td>" . htmlspecialchars($row['hora_entrada']) . "</td>";
                     echo "<td>" . htmlspecialchars($row['hora_salida']) . "</td>";
                     echo "<td>" . htmlspecialchars($row['dias_trabajados']) . "</td>";

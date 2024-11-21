@@ -196,8 +196,8 @@ require '../Administrador/superior_admin.php';
 </div>
 
     <!-- Tabla de Obras -->
-    <section class="works-table"><br/>
-    <table class="table">
+<section class="works-table"><br/>
+    <table class="table table-bordered table-hover text-center">
         <thead class="thead-dark">
             <tr>
                 <h2 class="text-center">Manage Works</h2><br/>

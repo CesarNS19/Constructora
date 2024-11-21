@@ -102,13 +102,13 @@ require '../Administrador/superior_admin.php';
     </div>
 </div>
 
-    <!-- Tabla de Servicios -->
-    <section class="services-table"><br/>
-        <table class="table">
+  <!-- Tabla de Servicios -->
+<section class="services-table container my-4">
+    <h2 class="text-center mb-4">Manage Services</h2>
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover text-center">
             <thead class="thead-dark">
                 <tr>
-                    <h2 class="text-center">Manage Services</h2><br/>
-                    <th>Service ID</th>
                     <th>Name of Service</th>
                     <th>Description of the Service</th>
                     <th>Total Service</th>
@@ -124,7 +124,6 @@ require '../Administrador/superior_admin.php';
                 if ($result->num_rows > 0) {
                     while ($row = $result->fetch_assoc()) {
                         echo "<tr>";
-                        echo "<td>" . htmlspecialchars($row['id_servicio']) . "</td>";
                         echo "<td>" . htmlspecialchars($row['nombre_servicio']) . "</td>";
                         echo "<td>" . htmlspecialchars($row['descripcion_servicio']) . "</td>";
                         echo "<td>" . htmlspecialchars($row['total']) . "</td>";
@@ -132,20 +131,21 @@ require '../Administrador/superior_admin.php';
                         echo "<td>";
                         echo "<button class='btn btn-info btn-sm me-1' onclick='openEditModal(" . json_encode($row) . ")' title='Editar servicio'>
                                 <i class='fas fa-edit'></i>
-                            </button>
-                            <a href='delete_service.php?id=" . $row['id_servicio'] . "' class='btn btn-danger btn-sm' onclick='return confirm(\"¿Estás seguro de que deseas eliminar este servicio?\")' title='Eliminar Servicio'>
-                                <i class='fas fa-trash'></i>
-                            </a>";
+                              </button>
+                              <a href='delete_service.php?id=" . $row['id_servicio'] . "' class='btn btn-danger btn-sm' onclick='return confirm(\"¿Estás seguro de que deseas eliminar este servicio?\")' title='Eliminar Servicio'>
+                                  <i class='fas fa-trash'></i>
+                              </a>";
                         echo "</td>";
                         echo "</tr>";
                     }
                 } else {
-                    echo "<tr><td colspan='4'>No hay servicios registrados.</td></tr>";
+                    echo "<tr><td colspan='5'>No hay servicios registrados.</td></tr>";
                 }
                 ?>
             </tbody>
         </table>
-    </section>
+    </div>
+</section>
 
     <script>
 

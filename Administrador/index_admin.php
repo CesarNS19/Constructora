@@ -30,6 +30,5 @@
         <p>© Family Drywall. Todos los derechos reservados.</p>
     </footer>  
 
-    <script src="../Js/script.js"></script>
 </body>
 </html>

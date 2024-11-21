@@ -28,12 +28,10 @@ if (!$user) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Perfil de Administrador</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" href="../Css/style.css">
 </head>
-<body style="background-color: #ffffff;">
 
 <header>
     <nav>
@@ -64,7 +62,7 @@ if (!$user) {
             <p><strong>Apellidos:</strong> <?php echo htmlspecialchars(($user['apellido_paterno'] ?? '') . ' ' . ($user['apellido_materno'] ?? '')); ?></p>
             <p><strong>Correo:</strong> <?php echo htmlspecialchars($user['correo_electronico'] ?? 'No disponible'); ?></p>
             <p><strong>Teléfono:</strong> <?php echo htmlspecialchars($user['telefono_personal'] ?? 'No disponible'); ?></p>
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editModal">Editar Datos</button>
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editModal">Editar Datos</button>
         </div>
     </div>
 </div>
@@ -75,7 +73,7 @@ if (!$user) {
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="editModalLabel">Editar Datos</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <button type="button" class="close" data-bs-dismiss="modal" aria-bs-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
@@ -169,7 +167,5 @@ function mostrarToast(titulo, mensaje, tipo) {
 </script>
 
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>

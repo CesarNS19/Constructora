@@ -4,7 +4,7 @@ require '../Login/conexion.php';
 $sql_empleados = "SELECT id_empleado, nombre, apellido_paterno, apellido_materno FROM empleados";
 $result_empleados = $con->query($sql_empleados);
 
-$sql = "SELECT n.id_nomina, e.nombre, e.apellido_paterno, e.apellido_materno, n.fecha, n.sueldo_diario, e.dias_trabajados, n.total
+$sql = "SELECT n.id_nomina, e.nombre, e.apellido_paterno, e.apellido_materno, n.fecha, n.sueldo_diario, n.dias_trabajados, n.total
         FROM nomina n
         JOIN empleados e ON n.id_empleado = e.id_empleado";
 $result = $con->query($sql);
@@ -38,9 +38,9 @@ require '../Administrador/superior_admin.php';
             </div>
             <form action="add_payroll.php" method="POST">
                 <div class="modal-body">
-                    <div class="form-group mb-3">
+                <div class="form-group mb-3">
                         <label for="id_empleado">Seleccione un empleado</label>
-                        <select name="id_empleado" class="form-control" required>
+                        <select name="id_empleado" id="id_empleado" class="form-control" required>
                             <option value="">Seleccione un empleado</option>
                             <?php
                             if ($result_empleados->num_rows > 0) {
@@ -55,12 +55,12 @@ require '../Administrador/superior_admin.php';
                         </select>
                     </div>
                     <div class="form-group mb-3">
-                        <label for="sueldo_diario">Sueldo Diario</label>
-                        <input type="number" id="sueldo_diario" name="sueldo_diario" class="form-control" placeholder="Sueldo diario" required>
+                        <label for="dias_trabajados">Días Trabajados</label>
+                        <input type="number" id="dias_trabajados" name="dias_trabajados" class="form-control" placeholder="Días trabajados" readonly>
                     </div>
                     <div class="form-group mb-3">
-                        <label for="dias_trabajados">Días Trabajados</label>
-                        <input type="number" id="dias_trabajados" name="dias_trabajados" class="form-control" placeholder="Dias trabajados" required>
+                        <label for="sueldo_diario">Sueldo Diario</label>
+                        <input type="number" id="sueldo_diario" name="sueldo_diario" class="form-control" placeholder="Sueldo diario" required>
                     </div>
                     <div class="form-group mb-3">
                         <label for="total">Total</label>
@@ -91,14 +91,15 @@ require '../Administrador/superior_admin.php';
                         <input type="text" name="edit_id_empleado" id="edit_id_empleado" class="form-control" readonly>
                         <input type="hidden" name="id_empleado" id="id_empleado">
                     </div>
-                    <div class="form-group mb-3">
-                        <label for="edit_sueldo_diario">Sueldo diario</label>
-                        <input type="number" id="edit_sueldo_diario" name="sueldo_diario" class="form-control" placeholder="Enter sueldo diario" required>
-                    </div>
 
                     <div class="form-group mb-3">
                         <label for="edit_dias_trabajados">Días trabajados</label>
-                        <input type="number" id="edit_dias_trabajados" name="dias_trabajados" class="form-control" placeholder="Enter Días trabajados" required>
+                        <input type="number" id="edit_dias_trabajados" name="dias_trabajados" class="form-control" placeholder="Enter Días trabajados" readonly>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="edit_sueldo_diario">Sueldo diario</label>
+                        <input type="number" id="edit_sueldo_diario" name="sueldo_diario" class="form-control" placeholder="Enter sueldo diario" required>
                     </div>
 
                     <div class="form-group mb-3">
@@ -116,12 +117,11 @@ require '../Administrador/superior_admin.php';
 </div>
 
 <section>
-    <table class="table"><br/>
+    <table class="table table-bordered table-hover text-center">
         <thead class="thead-dark">
             <h2 class="text-center">Manage Payroll</h2><br/>
             <tr>
-                <th>Payroll ID</th>
-                <th>Employee</th>
+                <th>Employee´s Name</th>
                 <th>Date</th>
                 <th>Sueldo diario</th>
                 <th>Días trabajados</th>
@@ -135,7 +135,6 @@ require '../Administrador/superior_admin.php';
                 while ($row = $result->fetch_assoc()) {
                     $nombre_completo = htmlspecialchars($row['nombre'] . ' ' . $row['apellido_paterno'] . ' ' . $row['apellido_materno']);
                     echo "<tr>";
-                    echo "<td>" . htmlspecialchars($row['id_nomina']) . "</td>";
                     echo "<td>" . $nombre_completo . "</td>";
                     echo "<td>" . htmlspecialchars($row['fecha']) . "</td>";
                     echo "<td>" . htmlspecialchars($row['sueldo_diario']) . "</td>";
@@ -245,6 +244,26 @@ require '../Administrador/superior_admin.php';
             const total = sueldoDiario * diasTrabajados;
             document.getElementById('edit_total').value = total.toFixed(2);
         }
+
+        document.getElementById('id_empleado').addEventListener('change', function () {
+            const idEmpleado = this.value;
+
+            if (idEmpleado) {
+                fetch(`get_work_days.php?id_empleado=${idEmpleado}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.dias_trabajados !== undefined) {
+                            document.getElementById('dias_trabajados').value = data.dias_trabajados;
+                        } else {
+                            document.getElementById('dias_trabajados').value = '';
+                        }
+                    })
+                    .catch(error => console.error('Error al obtener días trabajados:', error));
+            } else {
+                document.getElementById('dias_trabajados').value = '';
+            }
+        });
+
 </script>
 </body>
 </html>
