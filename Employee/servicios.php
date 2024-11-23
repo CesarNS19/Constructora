@@ -1,10 +1,10 @@
 <?php
-require '../Login/conexion.php';?>
+require '../Login/conexion.php';
+require '../Employee/superior_employee.php';
+?>
 
-<?php
-require '../Employee/superior_employee.php';?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -18,38 +18,43 @@ require '../Employee/superior_employee.php';?>
 <div id="Alert"></div>
 
 <section class="company-header">
-        <button class="btn btn-success" data-toggle="modal" data-target="#addServicesModal" style="float: right; margin: 10px;">
+        <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addServicesModal" style="float: right; margin: 10px;">
             Add Service
         </button><br/>
     </section><br/>
 
-    <div class="modal fade" id="addServicesModal" tabindex="-1" role="dialog" aria-labelledby="addServicesModalLabel" aria-hidden="true">
+<div class="modal fade" id="addServicesModal" tabindex="-1" role="dialog" aria-labelledby="addServicesModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="addServicesModalLabel">Agregar Nuevo Servicio</h5>
+                <h5 class="modal-title" id="addServicesModalLabel">Add New Service</h5>
             </div>
             <form action="add_service.php" method="POST" enctype="multipart/form-data">
                 <div class="modal-body">
                     <div class="form-group mb-3">
-                        <input type="text" name="nombre_servicio" class="form-control" placeholder="Name of service" required>
+                        <label for="">Name of Service</label>
+                        <input type="text" name="nombre_servicio" class="form-control" required>
                     </div>
                     <div class="form-group mb-3">
-                        <textarea name="descripcion_servicio" class="form-control" placeholder="Description of the service" required></textarea>
+                        <label for="">Description of the Service</label>
+                        <textarea name="descripcion_servicio" class="form-control" required></textarea>
                     </div>
                     <div class="form-group mb-3">
-                        <input type="file" name="imagen_servicio" class="form-control" placeholder="Service Image" required>
+                        <label for="">Total Service</label>
+                        <input type="number" name="total" class="form-control" required>
+                    </div>
+                    <div class="form-group mb-3">
+                        <input type="file" name="imagen_servicio" class="form-control" placeholder="Service Image">
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                    <button type="submit" class="btn btn-primary">Agregar Servicio</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Add Service</button>
                 </div>
             </form>
         </div>
     </div>
 </div>
-
 
 <div class="modal fade" id="editServicesModal" tabindex="-1" role="dialog" aria-labelledby="editServicesLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -72,6 +77,11 @@ require '../Employee/superior_employee.php';?>
                     </div>
 
                     <div class="form-group mb-3">
+                        <label for="edit_total">Total Service</label>
+                        <input type="number" name="total" id="edit_total" class="form-control" placeholder="Enter Total Service" required>
+                    </div>
+
+                    <div class="form-group mb-3">
                         <label>Current Image</label>
                         <div>
                             <img id="current_image" src="" width="100" alt="Service Image">
@@ -85,7 +95,7 @@ require '../Employee/superior_employee.php';?>
                 </div>
 
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     <button type="submit" class="btn btn-primary">Save Changes</button>
                 </div>
             </form>
@@ -93,16 +103,16 @@ require '../Employee/superior_employee.php';?>
     </div>
 </div>
 
-
-    <!-- Tabla de Servicios -->
-    <section class="services-table"><br/>
-        <table class="table">
+  <!-- Tabla de Servicios -->
+<section class="services-table container my-4">
+    <h2 class="text-center mb-4">Manage Services</h2>
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover text-center">
             <thead class="thead-dark">
                 <tr>
-                    <h2 class="text-center">Manage Services</h2><br/>
-                    <th>Service ID</th>
                     <th>Name of Service</th>
                     <th>Description of the Service</th>
+                    <th>Total Service</th>
                     <th>Service Image</th>
                     <th>Actions</th>
                 </tr>
@@ -115,30 +125,28 @@ require '../Employee/superior_employee.php';?>
                 if ($result->num_rows > 0) {
                     while ($row = $result->fetch_assoc()) {
                         echo "<tr>";
-                        echo "<td>" . htmlspecialchars($row['id_servicio']) . "</td>";
                         echo "<td>" . htmlspecialchars($row['nombre_servicio']) . "</td>";
                         echo "<td>" . htmlspecialchars($row['descripcion_servicio']) . "</td>";
+                        echo "<td>" . htmlspecialchars($row['total']) . "</td>";
                         echo "<td><img src='../Img/" . htmlspecialchars($row['imagen_servicio']) . "' width='100px' height='60px' alt='Service Image'></td>";
                         echo "<td>";
                         echo "<button class='btn btn-info btn-sm me-1' onclick='openEditModal(" . json_encode($row) . ")' title='Editar servicio'>
                                 <i class='fas fa-edit'></i>
-                            </button>
-                            <a href='delete_service.php?id=" . $row['id_servicio'] . "' class='btn btn-danger btn-sm' onclick='return confirm(\"¿Estás seguro de que deseas eliminar este servicio?\")' title='Eliminar Servicio'>
-                                <i class='fas fa-trash'></i>
-                            </a>";
+                              </button>
+                              <a href='delete_service.php?id=" . $row['id_servicio'] . "' class='btn btn-danger btn-sm' onclick='return confirm(\"¿Estás seguro de que deseas eliminar este servicio?\")' title='Eliminar Servicio'>
+                                  <i class='fas fa-trash'></i>
+                              </a>";
                         echo "</td>";
                         echo "</tr>";
                     }
                 } else {
-                    echo "<tr><td colspan='4'>No hay servicios registrados.</td></tr>";
+                    echo "<tr><td colspan='5'>No hay servicios registrados.</td></tr>";
                 }
                 ?>
             </tbody>
         </table>
-    </section>
-
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    </div>
+</section>
 
     <script>
 
@@ -146,6 +154,7 @@ require '../Employee/superior_employee.php';?>
         $('#edit_id_servicio').val(serviceData.id_servicio);
         $('#edit_nombre_servicio').val(serviceData.nombre_servicio);
         $('#edit_descripcion_servicio').val(serviceData.descripcion_servicio);
+        $('#edit_total').val(serviceData.total);
         $('#current_image').attr('src', '../Img/' + serviceData.imagen_servicio);
         
         $('#editServicesModal').modal('show');
@@ -195,17 +204,19 @@ require '../Employee/superior_employee.php';?>
 
         document.addEventListener('DOMContentLoaded', function() {
             <?php if (isset($_SESSION['status_message']) && isset($_SESSION['status_type'])): ?>
-                mostrarToast(
-                    '<?= $_SESSION["status_type"] === "warning" ? "Advertencia" : "Éxito" ?>',
-                    '<?= $_SESSION["status_message"] ?>',
-                    '<?= $_SESSION["status_type"] ?>'
-                );
+                <?php if ($_SESSION["status_type"] === "warning"): ?>
+                    mostrarToast("Advertencia", '<?= $_SESSION["status_message"] ?>', '<?= $_SESSION["status_type"] ?>');
+                <?php elseif ($_SESSION["status_type"] === "error"): ?>
+                    mostrarToast("Error", '<?= $_SESSION["status_message"] ?>', '<?= $_SESSION["status_type"] ?>');
+                <?php elseif ($_SESSION["status_type"] === "info"): ?>
+                    mostrarToast("Info", '<?= $_SESSION["status_message"] ?>', '<?= $_SESSION["status_type"] ?>');
+                <?php else: ?>
+                    mostrarToast("Éxito", '<?= $_SESSION["status_message"] ?>', '<?= $_SESSION["status_type"] ?>');
+                <?php endif; ?>
                 <?php unset($_SESSION['status_message'], $_SESSION['status_type']); ?>
             <?php endif; ?>
         });
     </script>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
 </html>

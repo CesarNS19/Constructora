@@ -14,9 +14,9 @@
     <header>
         <nav>
             <ul class="nav-links">
-                <button class="language-toggle" id="languageButton" aria-label="Change Language" title="Cambiar idioma">
+               <li class="bg-dark text-dark"><button class="language-toggle" id="languageButton" aria-label="Change Language" title="Cambiar idioma">
                     <i class="fas fa-globe"></i>
-                </button>
+                </button></li> 
                 <li><a href="index_admin.php" title="Home"><i class="fas fa-home"></i></a></li>
                 <li><a href="perfil.php" title="Profile"><i class="fas fa-user"></i></a></li>
                 <li><a href="servicios.php" title="Services"><i class="fas fa-concierge-bell"></i></a></li>

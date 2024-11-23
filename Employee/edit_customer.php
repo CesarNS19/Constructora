@@ -20,7 +20,21 @@ if (isset($_POST['id_cliente'])) {
         $telefono = $_POST['telefono_personal'];
         $email = $_POST['correo_electronico'];
         $edad = $_POST['edad'];
-        $rol = $_POST['rol'];
+        $rol = 'usuario';
+
+        $checkEmailSql = "SELECT id_cliente FROM clientes WHERE correo_electronico = ? AND id_cliente != ?";
+        $checkEmailStmt = $con->prepare($checkEmailSql);
+        $checkEmailStmt->bind_param("si", $email, $id);
+        $checkEmailStmt->execute();
+        $checkEmailResult = $checkEmailStmt->get_result();
+
+        if ($checkEmailResult->num_rows > 0) {
+            $_SESSION['status_message'] = 'El correo electrónico ya está registrado en otro cliente.';
+            $_SESSION['status_type'] = 'error';
+            $checkEmailStmt->close();
+            header("Location: customers.php");
+            exit();
+        }
 
         $sql = "UPDATE clientes SET nombre_cliente = ?, apellido_paterno = ?, apellido_materno = ?, genero_cliente = ?, telefono_personal = ?, correo_electronico = ?, edad = ?, rol = ? WHERE id_cliente = ?";
         $stmt = $con->prepare($sql);
@@ -44,4 +58,6 @@ if (isset($_POST['id_cliente'])) {
         exit();
     }
 }
+
+$con->close();
 ?>

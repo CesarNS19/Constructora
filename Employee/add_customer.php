@@ -12,29 +12,46 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $contrasena = $_POST['contrasena'];
     $confirmar_contrasena = $_POST['confirmar_contrasena'];
     $edad = $_POST['edad'];
-    $rol = $_POST['rol'];
+    $rol = 'usuario';
     $estatus = 'activo';
 
     if ($contrasena !== $confirmar_contrasena) {
         die("Las contraseñas no coinciden.");
     }
-    
-    $hashed_password = password_hash($contrasena, PASSWORD_DEFAULT);
 
-    $sql = "INSERT INTO clientes (nombre_cliente, apellido_paterno, apellido_materno, genero_cliente, telefono_personal, correo_electronico, contrasena, edad, rol, estatus)
-        VALUES ('$nombre', '$apellido_paterno', '$apellido_materno', '$genero', '$telefono_personal', '$correo', '$hashed_password', '$edad', '$rol', '$estatus')";
+    $checkEmailSql = "SELECT id_cliente FROM clientes WHERE correo_electronico = ?";
+    $checkEmailStmt = $con->prepare($checkEmailSql);
+    $checkEmailStmt->bind_param("s", $correo);
+    $checkEmailStmt->execute();
+    $checkEmailResult = $checkEmailStmt->get_result();
 
-    if ($con->query($sql) === TRUE) {
-        $_SESSION['status_message'] = "Cliente agregado exitosamente.";
-        $_SESSION['status_type'] = "success";
+    if ($checkEmailResult->num_rows > 0) {
+        $_SESSION['status_message'] = "El correo electrónico ya está registrado.";
+        $_SESSION['status_type'] = "error";
     } else {
-        $_SESSION['status_message'] = "Error al agregar el cliente: " . $con->error;
-        $_SESSION['status_type'] = "danger";
+        $hashed_password = password_hash($contrasena, PASSWORD_DEFAULT);
+
+        $sql = "INSERT INTO clientes (nombre_cliente, apellido_paterno, apellido_materno, genero_cliente, telefono_personal, correo_electronico, contrasena, edad, rol, estatus)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        
+        $stmt = $con->prepare($sql);
+        $stmt->bind_param("ssssssssss", $nombre, $apellido_paterno, $apellido_materno, $genero, $telefono_personal, $correo, $hashed_password, $edad, $rol, $estatus);
+
+        if ($stmt->execute()) {
+            $_SESSION['status_message'] = "Cliente agregado exitosamente.";
+            $_SESSION['status_type'] = "success";
+        } else {
+            $_SESSION['status_message'] = "Error al agregar el cliente: " . $stmt->error;
+            $_SESSION['status_type'] = "error";
+        }
+
+        $stmt->close();
     }
+
+    $checkEmailStmt->close();
+    $con->close();
 
     header("Location: customers.php");
     exit();
-    }
-
-$con->close();
+}
 ?>

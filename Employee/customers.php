@@ -8,7 +8,7 @@ require '../Employee/superior_employee.php';
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -23,7 +23,7 @@ require '../Employee/superior_employee.php';
 
 <section>
         <a href="../Employee/customer_address.php" class="btn btn-primary" style="float: right; margin: 10px;">
-            View Address
+            View Addresses
         </a>
     <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addCustomerModal" style="float: right; margin: 10px;">
         Add Customer
@@ -40,34 +40,40 @@ require '../Employee/superior_employee.php';
             <form action="add_customer.php" method="POST">
                 <div class="modal-body">
                     <div class="form-group mb-3">
-                        <input type="text" name="nombre_cliente" class="form-control" placeholder="Nombre" required>
+                        <label>Customer Name</label>
+                        <input type="text" name="nombre_cliente" class="form-control" required>
                     </div>
                     <div class="form-group mb-3">
-                        <input type="text" name="apellido_paterno" class="form-control" placeholder="Apellido Paterno" required>
+                        <label>Paternal Surname</label>
+                        <input type="text" name="apellido_paterno" class="form-control" required>
                     </div>
                     <div class="form-group mb-3">
-                        <input type="text" name="apellido_materno" class="form-control" placeholder="Apellido Materno" required>
+                        <label>Maternal Surname</label>
+                        <input type="text" name="apellido_materno" class="form-control" required>
                     </div>
                     <div class="form-group mb-3">
-                        <input type="text" name="genero_cliente" class="form-control" placeholder="Género" required>
+                        <label>Gender</label>
+                        <input type="text" name="genero_cliente" class="form-control" required>
                     </div>
                     <div class="form-group mb-3">
-                        <input type="text" name="telefono_personal" class="form-control" placeholder="Teléfono Personal" required>
+                        <label>Phone</label>
+                        <input type="text" name="telefono_personal" class="form-control" required>
                     </div>
                     <div class="form-group mb-3">
-                        <input type="email" name="correo_electronico" class="form-control" placeholder="Correo Electrónico" required>
+                        <label>Email</label>
+                        <input type="email" name="correo_electronico" class="form-control" required>
                     </div>
                     <div class="form-group mb-3">
-                        <input type="password" name="contrasena" class="form-control" placeholder="Contraseña" required>
+                        <label>Password</label>
+                        <input type="password" name="contrasena" class="form-control" required>
                     </div>
                     <div class="form-group mb-3">
-                        <input type="password" name="confirmar_contrasena" class="form-control" placeholder="Confirmar Contraseña" required>
+                        <label>Confirm Password</label>
+                        <input type="password" name="confirmar_contrasena" class="form-control" required>
                     </div>
                     <div class="form-group mb-3">
-                        <input type="number" name="edad" class="form-control" placeholder="Edad" required>
-                    </div>
-                    <div class="form-group mb-3">
-                        <input type="text" name="rol" class="form-control" placeholder="Rol" required>
+                        <label>Age</label>
+                        <input type="number" name="edad" class="form-control" required>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -91,45 +97,39 @@ require '../Employee/superior_employee.php';
                     <input type="hidden" name="id_cliente" id="edit_id_cliente">
                     
                     <div class="form-group mb-3">
-                        <label for="edit_nombre_cliente">Nombre</label>
+                        <label for="edit_nombre_cliente">Customer Name</label>
                         <input type="text" name="nombre_cliente" id="edit_nombre_cliente" class="form-control" required>
                     </div>
 
                     <div class="form-group mb-3">
-                        <label for="edit_apellido_paterno">Apellido Paterno</label>
+                        <label for="edit_apellido_paterno">Paternal Surname</label>
                         <input type="text" name="apellido_paterno" id="edit_apellido_paterno" class="form-control" required>
                     </div>
 
                     <div class="form-group mb-3">
-                        <label for="edit_apellido_materno">Apellido Materno</label>
+                        <label for="edit_apellido_materno">Maternal Surname</label>
                         <input type="text" name="apellido_materno" id="edit_apellido_materno" class="form-control" required>
                     </div>
 
                     <div class="form-group mb-3">
-                        <label for="edit_genero_cliente">Género</label>
+                        <label for="edit_genero_cliente">Gender</label>
                         <input type="text" name="genero_cliente" id="edit_genero_cliente" class="form-control" required>
                     </div>
 
                     <div class="form-group mb-3">
-                        <label for="edit_telefono_personal">Teléfono</label>
+                        <label for="edit_telefono_personal">Phone</label>
                         <input type="text" name="telefono_personal" id="edit_telefono_personal" class="form-control" required>
                     </div>
 
                     <div class="form-group mb-3">
-                        <label for="edit_correo_electronico">Correo Electrónico</label>
+                        <label for="edit_correo_electronico">Email</label>
                         <input type="email" name="correo_electronico" id="edit_correo_electronico" class="form-control" required>
                     </div>
 
                     <div class="form-group mb-3">
-                        <label for="edit_edad">Edad</label>
+                        <label for="edit_edad">Age</label>
                         <input type="number" name="edad" id="edit_edad" class="form-control" required>
                     </div>
-
-                    <div class="form-group mb-3">
-                        <label for="edit_rol">Rol</label>
-                        <input type="text" name="rol" id="edit_rol" class="form-control" required>
-                    </div>
-
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -150,27 +150,33 @@ require '../Employee/superior_employee.php';
             <form action="add_customer_address.php" method="POST">
                 <div class="modal-body">
                     <div class="form-group mb-3">
-                        <label for="nombre_cliente_modal">Nombre del Cliente</label>
+                        <label for="nombre_cliente_modal">Customer Name</label>
                         <input type="text" id="nombre_cliente_modal" class="form-control" readonly>
                     </div>
                     <input type="hidden" name="id_cliente" id="id_cliente_modal">
                     <div class="form-group mb-3">
-                        <input type="number" name="num_ext" class="form-control" placeholder="Outside number" required>
+                        <label for="num_ext">Outside Number</label>
+                        <input type="number" name="num_ext" class="form-control" required>
                     </div>
                     <div class="form-group mb-3">
-                        <input type="number" name="num_int" class="form-control" placeholder="Inner number" required>
+                        <label for="num_int">Inner Number</label>
+                        <input type="number" name="num_int" class="form-control"  required>
                     </div>
                     <div class="form-group mb-3">
-                        <input type="text" name="calle" class="form-control" placeholder="Street" required>
+                        <label for="calle">Street</label>
+                        <input type="text" name="calle" class="form-control"  required>
                     </div>
                     <div class="form-group mb-3">
-                        <input type="text" name="ciudad" class="form-control" placeholder="City" required>
+                        <label for="ciudad">City</label>
+                        <input type="text" name="ciudad" class="form-control" required>
                     </div>
                     <div class="form-group mb-3">
-                        <input type="text" name="estado" class="form-control" placeholder="State" required>
+                        <label for="estado">State</label>
+                        <input type="text" name="estado" class="form-control" required>
                     </div>
                     <div class="form-group mb-3">
-                        <input type="number" name="codigo_postal" class="form-control" placeholder="Postal code" required>
+                        <label for="codigo_postal">Postal Code</label>
+                        <input type="number" name="codigo_postal" class="form-control" required>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -182,15 +188,13 @@ require '../Employee/superior_employee.php';
     </div>
 </div>
 
-<section>
-    <table class="table"><br/>
+<section class="services-table container my-2"><br/>
+<div class="table-responsive">
+    <table class="table table-bordered table-hover text-center">
         <thead class="thead-dark">
         <h2 class="text-center">Manage Customers</h2><br/>
             <tr>
-                <th>Customer ID</th>
-                <th>Name</th>
-                <th>Last Name</th>
-                <th>Mother's Last Name</th>
+                <th>Customer Name</th>
                 <th>Gender</th>
                 <th>Phone</th>
                 <th>Email</th>
@@ -207,11 +211,9 @@ require '../Employee/superior_employee.php';
 
             if ($result->num_rows > 0) {
                 while ($row = $result->fetch_assoc()) {
+                    $nombre_completo = htmlspecialchars($row['nombre_cliente'] . ' ' . $row['apellido_paterno'] . ' ' . $row['apellido_materno']);
                     echo "<tr>";
-                    echo "<td>" . htmlspecialchars($row['id_cliente']) . "</td>";
-                    echo "<td>" . htmlspecialchars($row['nombre_cliente']) . "</td>";
-                    echo "<td>" . htmlspecialchars($row['apellido_paterno']) . "</td>";
-                    echo "<td>" . htmlspecialchars($row['apellido_materno']) . "</td>";
+                    echo "<td>" . $nombre_completo . "</td>";
                     echo "<td>" . htmlspecialchars($row['genero_cliente']) . "</td>";
                     echo "<td>" . htmlspecialchars($row['telefono_personal']) . "</td>";
                     echo "<td>" . htmlspecialchars($row['correo_electronico']) . "</td>";
@@ -220,22 +222,22 @@ require '../Employee/superior_employee.php';
                     echo "<td>" . htmlspecialchars($row['estatus']) . "</td>";
                     echo "<td>";
                     
-                        if ($row['estatus'] === 'activo') {
-                            echo "<a href='status_customers.php?id=" . $row['id_cliente'] . "&estatus=inactivo' class='btn btn-warning btn-sm me-2' title='Desactivar cliente'>
-                                    <i class='fas fa-ban'></i>
-                                </a>";
-                        } else {
-                            echo "<a href='status_customers.php?id=" . $row['id_cliente'] . "&estatus=activo' class='btn btn-success btn-sm me-2' title='Activar cliente'>
-                                    <i class='fas fa-check-circle'></i>
-                                </a>";
-                        }
-                        echo "<button class='btn btn-info btn-sm me-1' onclick='openEditModal(" . json_encode($row) . ")' title='Editar cliente'>
-                                <i class='fas fa-edit'></i>
-                            </button>
-                            <a href='delete_customer.php?id=" . $row['id_cliente'] . "' class='btn btn-danger btn-sm' onclick='return confirm(\"¿Estás seguro de que deseas eliminar a este cliente?\")' title='Eliminar cliente'>
-                                <i class='fas fa-trash'></i>
-                            </a>
-                            <button class='btn btn-success btn-sm' onclick='openAddAddressModal(" . json_encode($row) . ")' title='Agregar Dirección'>
+                    if ($row['estatus'] === 'activo') {
+                        echo "<a href='status_customers.php?id=" . $row['id_cliente'] . "&estatus=inactivo' class='btn btn-warning btn-sm me-2' title='Deactivate Customer'>
+                                <i class='fas fa-ban'></i>
+                            </a>";
+                    } else {
+                        echo "<a href='status_customers.php?id=" . $row['id_cliente'] . "&estatus=activo' class='btn btn-success btn-sm me-2' title='Activate Customer'>
+                                <i class='fas fa-check-circle'></i>
+                            </a>";
+                    }
+                    echo "<button class='btn btn-info btn-sm me-1' onclick='openEditModal(" . json_encode($row) . ")' title='Edit Customer'>
+                            <i class='fas fa-edit'></i>
+                        </button>
+                        <a href='delete_customer.php?id=" . $row['id_cliente'] . "' class='btn btn-danger btn-sm' onclick='return confirm(\"Are you sure you want to delete this customer?\")' title='Delete Customer'>
+                            <i class='fas fa-trash'></i>
+                        </a>
+                        <button class='btn btn-success btn-sm' onclick='openAddAddressModal(" . json_encode($row) . ")' title='Add Address'>
                             <i class='fas fa-plus'></i>
                         </button>
                         </td>";
@@ -247,6 +249,7 @@ require '../Employee/superior_employee.php';
             ?>
         </tbody>
     </table>
+</div>
 </section>
 
 <script>
@@ -261,7 +264,6 @@ require '../Employee/superior_employee.php';
         $('#edit_correo_electronico').val(customerData.correo_electronico);
         $('#edit_contrasena').val(customerData.contrasena);
         $('#edit_edad').val(customerData.edad);
-        $('#edit_rol').val(customerData.rol);
 
         $('#editCustomerModal').modal('show');
     }
@@ -317,14 +319,19 @@ require '../Employee/superior_employee.php';
 
         document.addEventListener('DOMContentLoaded', function() {
             <?php if (isset($_SESSION['status_message']) && isset($_SESSION['status_type'])): ?>
-                mostrarToast(
-                    '<?= $_SESSION["status_type"] === "warning" ? "Advertencia" : "Éxito" ?>',
-                    '<?= $_SESSION["status_message"] ?>',
-                    '<?= $_SESSION["status_type"] ?>'
-                );
+                <?php if ($_SESSION["status_type"] === "warning"): ?>
+                    mostrarToast("Advertencia", '<?= $_SESSION["status_message"] ?>', '<?= $_SESSION["status_type"] ?>');
+                <?php elseif ($_SESSION["status_type"] === "error"): ?>
+                    mostrarToast("Error", '<?= $_SESSION["status_message"] ?>', '<?= $_SESSION["status_type"] ?>');
+                <?php elseif ($_SESSION["status_type"] === "info"): ?>
+                    mostrarToast("Info", '<?= $_SESSION["status_message"] ?>', '<?= $_SESSION["status_type"] ?>');
+                <?php else: ?>
+                    mostrarToast("Éxito", '<?= $_SESSION["status_message"] ?>', '<?= $_SESSION["status_type"] ?>');
+                <?php endif; ?>
                 <?php unset($_SESSION['status_message'], $_SESSION['status_type']); ?>
             <?php endif; ?>
         });
+
     </script>
 </body>
 </html>

@@ -1,4 +1,3 @@
-// Diccionario de traducciones al español
 const translations = {
     "Add Service": "Agregar Servicio",
     "Add New Service": "Agregar Nuevo Servicio",
@@ -118,6 +117,8 @@ const translations = {
     "Add New Payroll": "Agregar Nueva Nómina",
     "Selected a Employee" : "Selecciona un Empleado",
     "Edit Payroll": "Editar Nómina",
+    "Welcome Admin" : "Bienvenido Administrador",
+    "Learn More" : "Leer más",
 
 };
 
