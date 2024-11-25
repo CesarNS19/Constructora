@@ -89,10 +89,7 @@
   }
 
   function resetForm() {
-    // Restablece el formulario a su estado inicial
-    document.getElementById('email').value = ''; // Limpia el campo de email
-
-    // Eliminar la alerta del DOM para que el formulario regrese a su tamaño original
+    document.getElementById('email').value = '';
     var successAlert = document.querySelector('#alert-success');
     var errorAlert = document.querySelector('#alert-error');
 

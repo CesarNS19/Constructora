@@ -8,13 +8,13 @@
     <section class="hero">
         <div class="hero-content fade-in">
             <h1>Welcome Admin</h1>
-            <p>Discover our services and offerings.</p>
+            <p>Discover our services and offerings</p>
             <button id="learnMoreButton" class="button-3d">Learn More</button>
         </div>
     </section>
    
     <footer>
-        <p>© Family Drywall. All rights reserved.</p>
+        <p>© Family Drywall. All rights reserved</p>
     </footer>
 </body>
 </html>

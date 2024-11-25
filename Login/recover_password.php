@@ -4,29 +4,23 @@ use PHPMailer\PHPMailer\Exception;
 
 require __DIR__ . '../../vendor/autoload.php';
 
-// Verifica si se recibió una solicitud POST
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Obtener la dirección de correo electrónico del formulario
     $email = $_POST['email'];
 
-    // Realizar la conexión a la base de datos
     $conn = new mysqli("localhost", "root", "", "constructora");
 
-    // Verificar la conexión
     if ($conn->connect_error) {
         die("Connection failed: " . $conn->connect_error);
     }
 
-    // Configurar codificación UTF-8 para la conexión
     $conn->set_charset('utf8');
 
-    // Consultar la contraseña del usuario en las tablas clientes y empleados
     $sql = "
-        SELECT contrasena, 'cliente' AS tipo_usuario 
+        SELECT id_cliente, correo_electronico 
         FROM clientes 
-        WHERE correo_electronico = ?
-        UNION
-        SELECT contrasena, 'empleado' AS tipo_usuario 
+        WHERE correo_electronico = ? 
+        UNION 
+        SELECT id_empleado, correo_personal 
         FROM empleados 
         WHERE correo_personal = ?
     ";
@@ -37,37 +31,43 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $result = $stmt->get_result();
 
     if ($result && $result->num_rows > 0) {
-        // Obtener la contraseña del resultado de la consulta
-        $row = $result->fetch_assoc();
-        $userPassword = $row['contrasena'];
+        $verification_code = bin2hex(random_bytes(16));
 
-        // Configura PHPMailer para enviar correo a través de Gmail
+        $user = $result->fetch_assoc();
+        $user_id = $user['id_cliente'] ?? $user['id_empleado'];
+        
+        if (isset($user['id_cliente'])) {
+            $sql = "UPDATE clientes SET codigo_recuperacion = ? WHERE id_cliente = ?";
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param("si", $verification_code, $user_id);
+            $stmt->execute();
+        } else {
+            $sql = "UPDATE empleados SET codigo_recuperacion = ? WHERE id_empleado = ?";
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param("si", $verification_code, $user_id);
+            $stmt->execute();
+        }
+
         $mail = new PHPMailer(true);
 
         try {
-            // Configuración del servidor SMTP
             $mail->isSMTP();
             $mail->Host = 'smtp.gmail.com';
             $mail->SMTPAuth = true;
-            $mail->Username = 'cesarneri803@gmail.com'; // Tu dirección de correo de Gmail
-            $mail->Password = 'kyoi thod ximj mipk'; // Tu contraseña de Gmail o clave de aplicación
+            $mail->Username = 'cesarneri803@gmail.com';
+            $mail->Password = 'kyoi thod ximj mipk';
             $mail->SMTPSecure = 'tls';
             $mail->Port = 587;
 
-            // Configurar remitente y destinatario
             $mail->setFrom('cesarneri803@gmail.com', 'Family Drywall');
             $mail->addAddress($email);
 
-            // Contenido del correo
             $mail->isHTML(true);
             $mail->Subject = 'Recuperación de Contraseña';
-            $mail->Body = 'Hola, has solicitado recuperar tu contraseña. Haz clic en el siguiente enlace para restablecerla: ' .
-                '<a href="http://localhost/Constructora/Login/reset_your_password.php">Restablecer Contraseña</a>';
-            
-            // Enviar correo
+            $mail->Body = 'Hola, has solicitado recuperar tu contraseña. Usa el siguiente código para restablecerla: <strong>' . $verification_code . '</strong><br>Además, puedes hacer clic en el siguiente enlace para restablecer tu contraseña: <a href="http://localhost/Constructora/Login/reset_your_password.php?code=' . $verification_code . '">Restablecer Contraseña</a>';
+
             $mail->send();
 
-            // Redirigir a forgot_password.php con éxito
             header("Location: forgot_password.php?success=1");
             exit();
         } catch (Exception $e) {
@@ -75,12 +75,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             exit();
         }
     } else {
-        // Redirigir a forgot_password.php con un mensaje de error
         header("Location: forgot_password.php?error=No se encontró ningún usuario con ese correo electrónico.");
         exit();
     }
 
-    // Cerrar conexión a la base de datos
     $conn->close();
 }
 ?>

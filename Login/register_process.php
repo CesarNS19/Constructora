@@ -12,20 +12,27 @@ $contrasena = $_POST['contrasena'];
 $confirmar_contrasena = $_POST['confirmar_contrasena'];
 $estatus = 'activo';
 
-// Verificar que las contraseñas coincidan
 if ($contrasena !== $confirmar_contrasena) {
     die("Las contraseñas no coinciden.");
 }
 
-// Hashear la contraseña
+$sql_check_email = "SELECT id_cliente FROM clientes WHERE correo_electronico = ?";
+$stmt_check_email = $con->prepare($sql_check_email);
+$stmt_check_email->bind_param("s", $correo_electronico);
+$stmt_check_email->execute();
+$stmt_check_email->store_result();
+
+if ($stmt_check_email->num_rows > 0) {
+    die("El correo electrónico ya está registrado. Por favor, elija otro.");
+}
+
 $hashed_password = password_hash($contrasena, PASSWORD_DEFAULT);
 
-// Procede a guardar en la base de datos
 $sql = "INSERT INTO clientes (nombre_cliente, apellido_paterno, apellido_materno, genero_cliente, telefono_personal, correo_electronico, contrasena, edad, rol, estatus) 
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-$stmt = $con->prepare($sql); // Prepara la declaración
-$rol = 'usuario'; // Valor por defecto para el rol
+$stmt = $con->prepare($sql); 
+$rol = 'usuario';
 $stmt->bind_param("ssssssssss", $nombre_cliente, $apellido_paterno, $apellido_materno, $genero, $telefono_personal, $correo_electronico, $hashed_password, $edad, $rol, $estatus); // Vincula parámetros
 
 if ($stmt->execute()) {

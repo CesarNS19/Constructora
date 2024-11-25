@@ -119,7 +119,8 @@ const translations = {
     "Edit Payroll": "Editar Nómina",
     "Welcome Admin" : "Bienvenido Administrador",
     "Learn More" : "Leer más",
-
+    "© Family Drywall. All rights reserved" : "© Family Drywall. Todos los Derechos reservados",
+    "Discover our services and offerings" : "Descubra nuestros servicios y ofertas",
 };
 
 

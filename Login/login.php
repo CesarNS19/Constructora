@@ -15,78 +15,68 @@
     <div class="row full-height justify-content-center">
       <div class="col-12 text-center align-self-center py-5">
         <div class="section pb-5 pt-5 pt-sm-2 text-center">
-          <h6 class="mb-0 pb-3"><span>Log In</span><span>Sign Up</span></h6>
-          <input class="checkbox" type="checkbox" id="reg-log" name="reg-log"/>
-          <label for="reg-log"></label>
-          <div class="card-3d-wrap mx-auto">
-            <div class="card-3d-wrapper">
-              <!-- Login Form -->
-              <div class="card-front">
-                <div class="center-wrap">
-                  <div class="section text-center">
-                    <h4 class="mb-4 pb-3">Log In</h4>
-                    <form action="login_process.php" method="POST">
-                      <div class="form-group">
-                        <input type="email" name="email" class="form-style" placeholder="Email" required>
-                        <i class="input-icon uil uil-at"></i>
-                      </div>  
-                      <div class="form-group mt-2">
-                        <input type="password" name="password" class="form-style" placeholder="Password" required>
-                        <i class="input-icon uil uil-lock-alt"></i>
-                      </div>
-                      <button type="submit" class="btn mt-4 login-btn">Login</button>
-                      <p class="mb-0 mt-4 text-center"><a href="forgot_password.php" class="link">Forgot your password?</a></p>
-                    </form>
-                  </div>
+          <div id="login-form" class="card" style="width: 100%; max-width: 400px; margin: 0 auto;">
+            <div class="card-body">
+              <h4 class="mb-4 pb-3 text-center">Log In</h4>
+              <form action="login_process.php" method="POST">
+                <div class="form-group">
+                  <input type="email" name="email" class="form-style form-control" placeholder="Email" required>
+                  <i class="input-icon uil uil-at"></i>
+                </div>  
+                <div class="form-group mt-2">
+                  <input type="password" name="password" class="form-style form-control" placeholder="Password" required>
+                  <i class="input-icon uil uil-lock-alt"></i>
                 </div>
-              </div>
-              <!-- Register Form -->
-              <div class="card-back">
-                <div class="center-wrap">
-                  <div class="section text-center">
-                    <h4 class="mb-3 pb-3">Sign Up</h4>
-                    <form action="register_process.php" method="POST">
-                      <div class="form-group">
-                        <input type="text" name="nombre_cliente" class="form-style" placeholder="Nombre" required>
-                        <i class="input-icon uil uil-user"></i>
-                      </div>  
-                      <div class="form-group mt-2">
-                        <input type="text" name="apellido_paterno" class="form-style" placeholder="Apellido Paterno" required>
-                        <i class="input-icon uil uil-user"></i>
-                      </div>  
-                      <div class="form-group mt-2">
-                        <input type="text" name="apellido_materno" class="form-style" placeholder="Apellido Materno (opcional)">
-                        <i class="input-icon uil uil-user"></i>
-                      </div>  
-                      <div class="form-group mt-2">
-                        <input type="text" name="genero_cliente" class="form-style" placeholder="Genero">
-                        <i class="input-icon uil uil-user"></i>
-                      </div> 
-                      <div class="form-group mt-2">
-                        <input type="tel" name="telefono_personal" class="form-style" placeholder="Teléfono Personal" required>
-                        <i class="input-icon uil uil-phone"></i>
-                      </div>  
-                      <div class="form-group mt-2">
-                        <input type="email" name="correo_electronico" class="form-style" placeholder="Correo Electrónico" required>
-                        <i class="input-icon uil uil-at"></i>
-                      </div>
-                      <div class="form-group mt-2">
-                        <input type="number" name="edad" class="form-style" placeholder="Edad">
-                        <i class="input-icon uil uil-user"></i>
-                      </div> 
-                      <div class="form-group mt-2">
-                        <input type="password" name="contrasena" class="form-style" placeholder="Contraseña" required>
-                        <i class="input-icon uil uil-lock-alt"></i>
-                      </div>
-                      <div class="form-group mt-2">
-                        <input type="password" name="confirmar_contrasena" class="form-style" placeholder="Confirmar Contraseña" required>
-                        <i class="input-icon uil uil-lock-alt"></i>
-                      </div>
-                      <button type="submit" class="btn mt-4 register-btn">Register</button>
-                    </form>
-                  </div>
+                <button type="submit" class="btn-login btn-primary mt-4 w-100 d-flex justify-content-center">Login</button>
+                <p class="mb-0 mt-4 text-center"><a href="forgot_password.php" class="link">Forgot your password?</a></p>
+                <p class="mb-0 mt-4 text-center"><a href="javascript:void(0);" id="go-to-register" class="link">No tienes una cuenta? Crea una</a></p>
+              </form>
+            </div>
+          </div>
+
+          <div id="register-form" class="card" style="width: 100%; max-width: 400px; margin: 0 auto; display: none;">
+            <div class="card-body">
+              <h4 class="mb-3 pb-3 text-center">Sign Up</h4>
+              <form action="register_process.php" method="POST">
+                <div class="form-group">
+                  <input type="text" name="nombre_cliente" class="form-style form-control" placeholder="Nombre" required>
+                  <i class="input-icon uil uil-user"></i>
+                </div>  
+                <div class="form-group mt-2">
+                  <input type="text" name="apellido_paterno" class="form-style form-control" placeholder="Apellido Paterno" required>
+                  <i class="input-icon uil uil-user"></i>
+                </div>  
+                <div class="form-group mt-2">
+                  <input type="text" name="apellido_materno" class="form-style form-control" placeholder="Apellido Materno (opcional)">
+                  <i class="input-icon uil uil-user"></i>
+                </div>  
+                <div class="form-group mt-2">
+                  <input type="text" name="genero_cliente" class="form-style form-control" placeholder="Genero">
+                  <i class="input-icon uil uil-user"></i>
+                </div> 
+                <div class="form-group mt-2">
+                  <input type="tel" name="telefono_personal" class="form-style form-control" placeholder="Teléfono Personal" required>
+                  <i class="input-icon uil uil-phone"></i>
+                </div>  
+                <div class="form-group mt-2">
+                  <input type="email" name="correo_electronico" class="form-style form-control" placeholder="Correo Electrónico" required>
+                  <i class="input-icon uil uil-at"></i>
                 </div>
-              </div>
+                <div class="form-group mt-2">
+                  <input type="number" name="edad" class="form-style form-control" placeholder="Edad">
+                  <i class="input-icon uil uil-user"></i>
+                </div> 
+                <div class="form-group mt-2">
+                  <input type="password" name="contrasena" class="form-style form-control" placeholder="Contraseña" required>
+                  <i class="input-icon uil uil-lock-alt"></i>
+                </div>
+                <div class="form-group mt-2">
+                  <input type="password" name="confirmar_contrasena" class="form-style form-control" placeholder="Confirmar Contraseña" required>
+                  <i class="input-icon uil uil-lock-alt"></i>
+                </div>
+                <button type="submit" class="btn-sign btn-primary mt-4 register-btn w-100 d-flex justify-content-center">Register</button>
+                <p class="mb-0 mt-4 text-center"><a href="javascript:void(0);" id="go-to-login" class="link">Ya tienes una cuenta? Inicia sesión</a></p>
+              </form>
             </div>
           </div>
         </div>
@@ -96,25 +86,66 @@
 </div>
 
 <style>
-  /* Include your CSS styles here */
+  /* Incluye los estilos necesarios aquí */
   @import url('https://fonts.googleapis.com/css?family=Poppins:400,500,600,700,800,900');
-  body { /* your existing body styles */ }
-  .link { color: #ffeba7; }
-  .link:hover { color: #c4c3ca; }
-  .section, .full-height, .checkbox, .card-3d-wrap, .card-3d-wrapper, .card-front, .card-back, .center-wrap, .form-group, .form-style, .input-icon, .btn {
-    /* all existing styles here */
+  .link {
+    color: #007bff;
   }
+  .link:hover {
+    color: #0056b3;
+  }
+  .section, .full-height, .form-group, .form-style, .input-icon, .btn {
+    /* tus estilos existentes */
+  }
+  .card-body{
+    background: #2b2e38;
+  }
+  .btn-login{  
+  border-radius: 4px;
+  height: 44px;
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  -webkit-transition : all 200ms linear;
+  transition: all 200ms linear;
+  padding: 0 30px;
+  letter-spacing: 1px;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  align-items: center;
+  color: #000000;
+}
 
-  /* Hide the login button when register form is visible and vice versa */
-  .login-btn { display: none; }
-  .checkbox:not(:checked) ~ .card-3d-wrap .card-front .login-btn {
-    display: inline-block;
-  }
-  .register-btn { display: none; }
-  .checkbox:checked ~ .card-3d-wrap .card-back .register-btn {
-    display: inline-block;
-  }
+.btn-sign{  
+  border-radius: 4px;
+  height: 44px;
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  -webkit-transition : all 200ms linear;
+  transition: all 200ms linear;
+  padding: 0 30px;
+  letter-spacing: 1px;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  align-items: center;
+  color: #000000;
+}
 </style>
+
+<script>
+  document.getElementById('go-to-register').addEventListener('click', function() {
+    document.getElementById('login-form').style.display = 'none';
+    document.getElementById('register-form').style.display = 'block';
+  });
+
+  document.getElementById('go-to-login').addEventListener('click', function() {
+    document.getElementById('register-form').style.display = 'none';
+    document.getElementById('login-form').style.display = 'block';
+  });
+</script>
 
 </body>
 </html>
