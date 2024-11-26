@@ -131,6 +131,8 @@ const translations = {
     "Welcome Employee": { es: "Bienvenido Empleado", en: "Welcome Employee" },
     "Welcome to Our Website": { es: "Bienvenido a nuestro sitio web", en: "Welcome to Our Website" },
     "Our Services": { es: "Nuestros Servicios", en: "Our Services" },
+    "Generate PDF": { es: "Generar PDF", en: "Generate PDF" },
+    "Delete Work": { es: "Eliminar Obra", en: "Delete Work" },
 };
 
 

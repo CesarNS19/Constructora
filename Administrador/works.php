@@ -246,15 +246,18 @@ require '../Administrador/superior_admin.php';
                     echo "<td>" . htmlspecialchars($row['total_obra']) . "</td>";
                     echo "<td>" . htmlspecialchars($row['observaciones']) . "</td>";
                     echo "<td>";
-                    echo "<button class='btn btn-info btn-sm me-1' onclick='openEditModal(" . json_encode($row) . ")' title='Editar obra'>
+                    echo "<button class='btn btn-info btn-sm me-1' onclick='openEditModal(" . json_encode($row) . ")' title='Edit Work'>
                             <i class='fas fa-edit'></i>
                         </button>
-                        <a href='delete_work.php?id=" . $row['folio_obra'] . "' class='btn btn-danger btn-sm' onclick='return confirm(\"¿Estás seguro de que deseas eliminar esta obra?\")' title='Eliminar obra'>
+                        <a href='delete_work.php?id=" . $row['folio_obra'] . "' class='btn btn-danger btn-sm' onclick='return confirm(\"¿Estás seguro de que deseas eliminar esta obra?\")' title='Delete Work'>
                             <i class='fas fa-trash'></i>
                         </a>
-                        <button class='btn btn-success btn-sm' onclick='openAddAddressModal(" . json_encode($row) . ")' title='Agregar Dirección'>
+                        <button class='btn btn-success btn-sm' onclick='openAddAddressModal(" . json_encode($row) . ")' title='Add Address'>
                             <i class='fas fa-plus'></i>
                         </button>
+                        <a href='generate_pdf.php?folio=" . $row['folio_obra'] . "' class='btn btn-danger btn-sm' title='Generate PDF'>
+                            <i class='fas fa-file-pdf'></i>
+                        </a>
                     </td>";
                     echo "</tr>";
                 }
