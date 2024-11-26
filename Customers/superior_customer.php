@@ -17,10 +17,10 @@
                 <li><button class="language-toggle btn btn-primary" id="languageButton" aria-label="Change Language" title="Cambiar idioma">
                     <i class="fas fa-globe"></i>
                 </button></li> 
-                <li><a href="index.php" title="Iniico"><i class="fas fa-home"></i></a></li>
-                <li><a href="perfil.php" title="Perfil"><i class="fas fa-user"></i></a></li>
-                <li><a href="services.php" title="Servicios"><i class="fas fa-concierge-bell"></i></a></li>
-                <li><a href="#contact" title="Contacto"><i class="fas fa-envelope"></i></a></li>
+                <li><a href="index.php" title="Home"><i class="fas fa-home"></i></a></li>
+                <li><a href="perfil.php" title="Profile"><i class="fas fa-user"></i></a></li>
+                <li><a href="services.php" title="Services"><i class="fas fa-concierge-bell"></i></a></li>
+                <li><a href="#contact" title="Contact"><i class="fas fa-envelope"></i></a></li>
             </ul>
             <div class="user-controls" style="display: flex; align-items: center; margin-left: auto;">
             <?php

@@ -29,13 +29,13 @@ $totalPages = ceil($totalServices / $limit);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nuestros Servicios</title>
+    <title>Our Services</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 <body>
 <div class="container mt-5">
-    <h2>Nuestros Servicios</h2>
+    <h2>Our Services</h2>
     <div class="row">
         <?php if ($result->num_rows > 0): ?>
             <?php while ($row = $result->fetch_assoc()): ?>
@@ -45,7 +45,7 @@ $totalPages = ceil($totalServices / $limit);
                         <div class="card-body">
                             <h5 class="card-title"><?php echo htmlspecialchars($row['nombre_servicio']); ?></h5>
                             <p class="card-text"><?php echo htmlspecialchars($row['descripcion_servicio']); ?></p>
-                            <a href="https://www.example.com" target="_blank" class="btn btn-primary">Saber Más</a>
+                            <a href="https://www.example.com" target="_blank" class="btn btn-primary">Learn More</a>
                         </div>
                     </div>
                 </div>

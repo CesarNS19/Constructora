@@ -14,7 +14,7 @@
     <header>
         <nav>
             <ul class="nav-links">
-               <li><button class="language-toggle btn btn-primary" id="languageButton" aria-label="Change Language" title="Cambiar idioma">
+               <li><button class="language-toggle btn btn-primary" id="languageButton" aria-label="Change Language" title="Change Language">
                     <i class="fas fa-globe"></i>
                 </button></li> 
                 <li><a href="index_admin.php" title="Home"><i class="fas fa-home"></i></a></li>

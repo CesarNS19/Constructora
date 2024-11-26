@@ -58,7 +58,7 @@ if ($result->num_rows > 0) {
     </section>
 
     <section class="plans" data-lang="es" style="display:none;">
-        <h2 class="text-center my-4">Servicios</h2>
+        <h2 class="text-center my-4">Services</h2>
         <div class="container">
             <div class="row">
                 <?php if (!empty($servicios)): ?>
@@ -85,12 +85,8 @@ if ($result->num_rows > 0) {
     </section>
 
     <footer data-lang="en">
-        <p>© Family Drywall. All rights reserved.</p>
+        <p>© Family Drywall. All rights reserved</p>
     </footer>
-
-    <footer data-lang="es" style="display:none;">
-        <p>© Family Drywall. Todos los derechos reservados.</p>
-    </footer>    
 
     <script src="../Js/script.js"></script>
 </body>
