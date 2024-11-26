@@ -1,10 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Family Drywall</title>
     <link rel="stylesheet" href="../Css/style.css">
+    <link rel="stylesheet" href="../Css/style_bg.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
@@ -13,9 +14,9 @@
     <header>
         <nav>
             <ul class="nav-links">
-            <button class="language-toggle" id="languageButton" aria-label="Change Language" title="Cambiar Idioma">
-                <i class="fas fa-globe"></i>
-            </button>
+                <li><button class="language-toggle btn btn-primary" id="languageButton" aria-label="Change Language" title="Cambiar idioma">
+                    <i class="fas fa-globe"></i>
+                </button></li> 
                 <li><a href="index.php" title="Iniico"><i class="fas fa-home"></i></a></li>
                 <li><a href="perfil.php" title="Perfil"><i class="fas fa-user"></i></a></li>
                 <li><a href="services.php" title="Servicios"><i class="fas fa-concierge-bell"></i></a></li>
@@ -61,9 +62,24 @@
 
     </header>
     <script>
-    document.cookie = "timezone=" + Intl.DateTimeFormat().resolvedOptions().timeZone;
-</script>
+        document.cookie = "timezone=" + Intl.DateTimeFormat().resolvedOptions().timeZone;
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+        if (localStorage.getItem('theme') === 'dark') {
+            document.body.classList.add('dark-mode');
+        }
+
+        document.getElementById('themeToggle').addEventListener('click', function() {
+            document.body.classList.toggle('dark-mode');
+            
+            if (document.body.classList.contains('dark-mode')) {
+                localStorage.setItem('theme', 'dark');
+            } else {
+                localStorage.setItem('theme', 'light');
+            }
+        })
+    </script>
+    
+        <script src="../Js/language.js"></script>
+
 </body>
 </html>

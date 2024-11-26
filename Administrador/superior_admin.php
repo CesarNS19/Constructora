@@ -14,7 +14,7 @@
     <header>
         <nav>
             <ul class="nav-links">
-               <li class="bg-dark text-dark"><button class="language-toggle" id="languageButton" aria-label="Change Language" title="Cambiar idioma">
+               <li><button class="language-toggle btn btn-primary" id="languageButton" aria-label="Change Language" title="Cambiar idioma">
                     <i class="fas fa-globe"></i>
                 </button></li> 
                 <li><a href="index_admin.php" title="Home"><i class="fas fa-home"></i></a></li>
@@ -55,7 +55,7 @@
                         $greeting $fullName
                     </a>
                     <div class='vr' style='height: 24px; width: 1px; background-color: black; margin: 0 10px;'></div>
-                    <button id='themeToggle' style='background: none; border: none; color: black; font-size: 20px; cursor: pointer;'>
+                    <button title='Canbiar tema' id='themeToggle' style='background: none; border: none; color: black; font-size: 20px; cursor: pointer;'>
                         <i class='fas fa-adjust'></i>
                     </button>
                 </div>";

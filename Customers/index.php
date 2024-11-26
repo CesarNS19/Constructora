@@ -14,7 +14,7 @@ if ($result->num_rows > 0) {
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <title>Our Services</title>
     <link rel="stylesheet" href="../path/to/fontawesome/css/all.min.css">
@@ -25,16 +25,8 @@ if ($result->num_rows > 0) {
     <section class="hero" data-lang="en">
         <div class="hero-content fade-in">
             <h1>Welcome to Our Website</h1>
-            <p>Discover our services and offerings.</p>
+            <p>Discover our services and offerings</p>
             <button id="learnMoreButton" class="button-3d">Learn More</button>
-        </div>
-    </section>
-
-    <section class="hero" data-lang="es" style="display:none;">
-        <div class="hero-content fade-in">
-            <h1>Bienvenido a Nuestro Sitio Web</h1>
-            <p>Descubre nuestros servicios y ofertas.</p>
-            <button id="learnMoreButton" class="button-3d">Aprender Más</button>
         </div>
     </section>
 
