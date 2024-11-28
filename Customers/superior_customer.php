@@ -1,3 +1,15 @@
+<?php
+session_start();
+
+// Verifica si el cliente está logueado
+if (!isset($_SESSION['id_cliente'])) {
+    echo "Error: No se ha definido el ID del cliente en la sesión.";
+    exit;
+}
+
+// Establecer el ID del cliente desde la sesión
+$id_cliente = $_SESSION['id_cliente'];
+?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -24,8 +36,6 @@
             </ul>
             <div class="user-controls" style="display: flex; align-items: center; margin-left: auto;">
             <?php
-            session_start();
-
             if (isset($_SESSION['nombre'], $_SESSION['apellido_paterno'], $_SESSION['apellido_materno'])) {
                 $fullName = $_SESSION['nombre'] . ' ' . $_SESSION['apellido_paterno'] . ' ' . $_SESSION['apellido_materno'];
                 
@@ -59,7 +69,6 @@
             ?>
         </div>
         </nav>
-
     </header>
     <script>
         document.cookie = "timezone=" + Intl.DateTimeFormat().resolvedOptions().timeZone;
@@ -78,8 +87,6 @@
             }
         })
     </script>
-    
-        <script src="../Js/language.js"></script>
-
+    <script src="../Js/language.js"></script>
 </body>
 </html>

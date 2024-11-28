@@ -9,6 +9,7 @@ if (!isset($_SESSION['id_cliente'])) {
 
 $user_id = $_SESSION['id_cliente'];
 
+// Obtener los datos del cliente
 $query = "SELECT * FROM clientes WHERE id_cliente = ?";
 $stmt = $con->prepare($query);
 $stmt->bind_param("i", $user_id);
@@ -19,6 +20,18 @@ $user = $result->fetch_assoc();
 if (!$user) {
     echo "No se encontraron datos para este usuario.";
     exit;
+}
+
+// Obtener la dirección del cliente
+$query_dir = "SELECT * FROM direcciones WHERE id_cliente = ?";
+$stmt_dir = $con->prepare($query_dir);
+$stmt_dir->bind_param("i", $user_id);
+$stmt_dir->execute();
+$result_dir = $stmt_dir->get_result();
+$direccion = $result_dir->fetch_assoc();
+
+if (!$direccion) {
+    $direccion = "No se encontraron datos de dirección.";
 }
 ?>
 
@@ -44,7 +57,6 @@ if (!$user) {
         <li><a href="services.php" title="Servicios"><i class="fas fa-concierge-bell"></i></a></li>
         <li><a href="#contact" title="Contacto"><i class="fas fa-envelope"></i></a></li>
         <li><a href="../Login/logout.php" title="Cerrar Sesión"><i class="fas fa-sign-out-alt"></i></a></li>
-
         </ul>
     </nav>
 </header>
@@ -52,6 +64,7 @@ if (!$user) {
 <div id="Alert"></div>
 
 <div class="container mt-5 d-flex justify-content-center">
+    <!-- Card for Personal Information -->
     <div class="card text-center" style="width: 24rem;">
         <div class="card-body">
             <h5 class="card-title">Datos Personales</h5>
@@ -60,6 +73,19 @@ if (!$user) {
             <p><strong>Correo:</strong> <?php echo htmlspecialchars($user['correo_electronico'] ?? 'No disponible'); ?></p>
             <p><strong>Teléfono:</strong> <?php echo htmlspecialchars($user['telefono_personal'] ?? 'No disponible'); ?></p>
             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editModal">Editar Datos</button>
+        </div>
+    </div>
+
+    <!-- Card for Address Information -->
+    <div class="card text-center mt-4" style="width: 24rem;">
+        <div class="card-body">
+            <h5 class="card-title">Dirección</h5>
+            <p><strong>Calle:</strong> <?php echo htmlspecialchars($direccion['calle'] ?? 'No disponible'); ?></p>
+            <p><strong>Número Exterior:</strong> <?php echo htmlspecialchars($direccion['num_ext'] ?? 'No disponible'); ?></p>
+            <p><strong>Número Interior:</strong> <?php echo htmlspecialchars($direccion['num_int'] ?? 'No disponible'); ?></p>
+            <p><strong>Ciudad:</strong> <?php echo htmlspecialchars($direccion['ciudad'] ?? 'No disponible'); ?></p>
+            <p><strong>Estado:</strong> <?php echo htmlspecialchars($direccion['estado'] ?? 'No disponible'); ?></p>
+            <p><strong>Código Postal:</strong> <?php echo htmlspecialchars($direccion['codigo_postal'] ?? 'No disponible'); ?></p>
         </div>
     </div>
 </div>
@@ -104,7 +130,6 @@ if (!$user) {
 </div>
 
 <script>
-
 function mostrarToast(titulo, mensaje, tipo) {
             let icon = '';
             let alertClass = '';
@@ -156,7 +181,6 @@ function mostrarToast(titulo, mensaje, tipo) {
                 <?php unset($_SESSION['status_message'], $_SESSION['status_type']); ?>
             <?php endif; ?>
         });
-        
 </script>
 
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
