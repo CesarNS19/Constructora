@@ -33,14 +33,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $folio_presupuesto = $_POST['folio_presupuesto'] ?? ('FP' . strtoupper(uniqid())); // Generar folio si no está presente
 
     $sql_insert_presupuesto = "
-        INSERT INTO presupuestos (id_empresa, id_cliente, id_direccion, observaciones, fecha_elaboracion) 
-        VALUES (?, ?, ?, ?, ?)";
+        INSERT INTO presupuestos (id_empresa, id_cliente, id_direccion, id_servicio, observaciones, fecha_elaboracion) 
+        VALUES (?, ?, ?, ?, ?, ?)";
     $stmt_insert = $con->prepare($sql_insert_presupuesto);
 
     $id_empresa = 1; // Empresa fija
     $fecha_elaboracion = date('Y-m-d');
 
-    $stmt_insert->bind_param('iiiss', $id_empresa, $id_cliente, $id_direccion, $observaciones, $fecha_elaboracion);
+    $stmt_insert->bind_param('iiiiss', $id_empresa, $id_cliente, $id_direccion, $id_servicio, $observaciones, $fecha_elaboracion);
 
     if ($stmt_insert->execute()) {
         echo json_encode(['status' => 'success', 'message' => 'Presupuesto registrado correctamente.']);
@@ -70,13 +70,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div id="message"></div>
 
         <!-- Formulario para registrar presupuesto -->
-        <form id="presupuestoForm">
+        <form action="cotizar.php" id="presupuestoForm" method="POST">
           
             <div class="mb-3">
                 <label for="observaciones" class="form-label">Observaciones</label>
                 <textarea class="form-control" id="observaciones" name="observaciones" rows="3"></textarea>
             </div>
-            <button type="submit" class="btn btn-primary">Registrar</button>
+            <button type="submit" class="btn btn-primary"> Registrar</button>
         </form>
     </div>
 
