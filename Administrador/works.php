@@ -206,68 +206,83 @@ require '../Administrador/superior_admin.php';
     </div>
 </div>
 
-    <!-- Tabla de Obras -->
-<section class="services-table container my-2"><br/>
-<div class="table-responsive">
-    <table class="table table-bordered table-hover text-center">
-        <thead class="thead-dark">
-            <tr>
-                <h2 class="text-center">Manage Works</h2><br/>
-                <th>Company Name</th>
-                <th>Customer Name</th>
-                <th>Customer Address</th>
-                <th>Start Date</th>
-                <th>Advance Payment</th>
-                <th>Debit</th>
-                <th>Total Work</th>
-                <th>Observations</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php
-            $sql = "SELECT o.*, e.nombre_empresa, c.nombre_cliente, c.apellido_paterno, c.apellido_materno, d.ciudad 
-                    FROM obras o
-                    LEFT JOIN empresa e ON o.id_empresa = e.id_empresa
-                    LEFT JOIN clientes c ON o.id_cliente = c.id_cliente
-                    LEFT JOIN direcciones d ON o.id_direccion = d.id_direccion";
-            $result = $con->query($sql);
+<!-- Tabla de Obras -->
+<section class="my-2"><br/>
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover text-center">
+            <thead class="thead-dark">
+                <tr>
+                    <h2 class="text-center">Manage Works</h2><br/>
+                    <th>Company Name</th>
+                    <th>Customer Name</th>
+                    <th>Customer Address</th>
+                    <th>Start Date</th>
+                    <th>Advance Payment</th>
+                    <th>Debit</th>
+                    <th>Total Work</th>
+                    <th>Observations</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                $sql = "SELECT o.*, e.nombre_empresa, c.nombre_cliente, c.apellido_paterno, c.apellido_materno, d.ciudad 
+                        FROM obras o
+                        LEFT JOIN empresa e ON o.id_empresa = e.id_empresa
+                        LEFT JOIN clientes c ON o.id_cliente = c.id_cliente
+                        LEFT JOIN direcciones d ON o.id_direccion = d.id_direccion";
+                $result = $con->query($sql);
 
-            if ($result->num_rows > 0) {
-                while ($row = $result->fetch_assoc()) {
-                    $nombre_cliente = htmlspecialchars($row['nombre_cliente'] . ' ' . $row['apellido_paterno'] . ' ' . $row['apellido_materno']);
-                    echo "<tr>";
-                    echo "<td>" . htmlspecialchars($row['nombre_empresa']) . "</td>";
-                    echo "<td>" . $nombre_cliente . "</td>";
-                    echo "<td>" . htmlspecialchars($row['ciudad']) . "</td>";
-                    echo "<td>" . htmlspecialchars($row['fecha_inicio']) . "</td>";
-                    echo "<td>" . htmlspecialchars($row['anticipo']) . "</td>";
-                    echo "<td>" . htmlspecialchars($row['adeudo']) . "</td>";
-                    echo "<td>" . htmlspecialchars($row['total_obra']) . "</td>";
-                    echo "<td>" . htmlspecialchars($row['observaciones']) . "</td>";
-                    echo "<td>";
-                    echo "<button class='btn btn-info btn-sm me-1' onclick='openEditModal(" . json_encode($row) . ")' title='Edit Work'>
+                if ($result->num_rows > 0) {
+                    while ($row = $result->fetch_assoc()) {
+                        $nombre_cliente = htmlspecialchars($row['nombre_cliente'] . ' ' . $row['apellido_paterno'] . ' ' . $row['apellido_materno']);
+                        $folio_obra = htmlspecialchars($row['folio_obra']);
+                        $file_path = "../pdf/proposal_" . $folio_obra . ".pdf";
+
+                        echo "<tr data-folio='$folio_obra'>";
+                        echo "<td>" . htmlspecialchars($row['nombre_empresa']) . "</td>";
+                        echo "<td>" . $nombre_cliente . "</td>";
+                        echo "<td>" . htmlspecialchars($row['ciudad']) . "</td>";
+                        echo "<td>" . htmlspecialchars($row['fecha_inicio']) . "</td>";
+                        echo "<td>" . htmlspecialchars($row['anticipo']) . "</td>";
+                        echo "<td>" . htmlspecialchars($row['adeudo']) . "</td>";
+                        echo "<td>" . htmlspecialchars($row['total_obra']) . "</td>";
+                        echo "<td>" . htmlspecialchars($row['observaciones']) . "</td>";
+                        echo "<td>";
+                        echo "<button class='btn btn-info btn-sm me-1 edit-button' onclick='openEditModal(" . json_encode($row) . ")' title='Edit Work'>
                             <i class='fas fa-edit'></i>
-                        </button>
-                        <a href='delete_work.php?id=" . $row['folio_obra'] . "' class='btn btn-danger btn-sm' onclick='return confirm(\"¿Estás seguro de que deseas eliminar esta obra?\")' title='Delete Work'>
-                            <i class='fas fa-trash'></i>
-                        </a>
-                        <button class='btn btn-success btn-sm' onclick='openAddAddressModal(" . json_encode($row) . ")' title='Add Address'>
+                        </button>";
+                        echo "<a href='delete_work.php?id=$folio_obra' class='btn btn-danger btn-sm me-2 delete-button' onclick='return confirm(\"¿Estás seguro de que deseas eliminar esta obra?\")' title='Delete Work'>
+                                <i class='fas fa-trash'></i>
+                              </a>";
+                        echo "<button class='btn btn-success btn-sm me-2' onclick='openAddAddressModal(" . json_encode($row) . ")' title='Add Address'>
                             <i class='fas fa-plus'></i>
-                        </button>
-                        <a href='generate_pdf.php?folio=" . $row['folio_obra'] . "' class='btn btn-danger btn-sm' title='Generate PDF'>
-                            <i class='fas fa-file-pdf'></i>
-                        </a>
-                    </td>";
-                    echo "</tr>";
+                        </button>";
+                        echo "<a href='generate_pdf.php?folio=$folio_obra' class='btn btn-danger btn-sm me-2 generate-pdf-button' title='Generate PDF'>
+                                <i class='fas fa-file-pdf'></i>
+                              </a>";
+                        if (file_exists($file_path)) {
+                            echo "<a href='$file_path' target='_blank' class='btn btn-success btn-sm me-2 view-pdf-button' title='View PDF'>
+                                    <i class='fas fa-eye'></i>
+                                </a>";
+                        }
+                        echo "<a href='send_pdf.php?folio=$folio_obra&file=" . urlencode($file_path) . "' 
+                                class='btn btn-primary send-button btn-sm me-2' 
+                                title='Enviar PDF' 
+                                data-folio='$folio_obra' 
+                                onclick='sendPDF(this)'>
+                                <i class='fas fa-envelope'></i>
+                            </a>";
+                        echo "</td>";
+                        echo "</tr>";
+                    }
+                } else {
+                    echo "<tr><td colspan='9'>No hay obras registradas.</td></tr>";
                 }
-            } else {
-                echo "<tr><td colspan='9'>No hay obras registradas.</td></tr>";
-            }
-            ?>
-        </tbody>
-    </table>
-</div>
+                ?>
+            </tbody>
+        </table>
+    </div>
 </section>
 
     <script>
@@ -409,6 +424,29 @@ require '../Administrador/superior_admin.php';
             }
         });
 
+        function sendPDF(button) {
+            const folio = button.getAttribute('data-folio');
+
+        const sentPDFs = JSON.parse(localStorage.getItem('sentPDFs')) || [];
+            if (!sentPDFs.includes(folio)) {
+                 sentPDFs.push(folio);
+                localStorage.setItem('sentPDFs', JSON.stringify(sentPDFs));
+            }
+
+        const row = button.closest('tr');
+            row.querySelectorAll('.edit-button, .generate-pdf-button, .send-button').forEach(btn => btn.style.display = 'none');
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+        const sentPDFs = JSON.parse(localStorage.getItem('sentPDFs')) || [];
+
+        sentPDFs.forEach(folio => {
+            const row = document.querySelector(`tr[data-folio="${folio}"]`);
+            if (row) {
+                row.querySelectorAll('.edit-button, .generate-pdf-button, .send-button').forEach(btn => btn.style.display = 'none');
+            }
+        });
+    });
     </script>
 </body>
 </html>
