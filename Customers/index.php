@@ -1,14 +1,6 @@
 <?php
-session_start();
-
-// Conexión a la base de datos
 require '../Login/conexion.php';
-$con = new mysqli("localhost", "root", "", "constructora");
-$con->set_charset("utf8");
-
-if ($con->connect_error) {
-    die("Error de conexión: " . $con->connect_error);
-}
+require 'superior_customer.php';
 
 // Verificar si el cliente está en sesión
 if (!isset($_SESSION['id_cliente'])) {
@@ -16,6 +8,12 @@ if (!isset($_SESSION['id_cliente'])) {
 }
 
 $id_cliente = $_SESSION['id_cliente'];
+$con = new mysqli("localhost", "root", "", "constructora");
+$con->set_charset("utf8");
+
+if ($con->connect_error) {
+    die("Error de conexión: " . $con->connect_error);
+}
 
 // Obtener información del cliente
 $sql_cliente = "SELECT nombre_cliente, apellido_paterno, apellido_materno FROM clientes WHERE id_cliente = ?";
@@ -27,7 +25,8 @@ $stmt_cliente->fetch();
 $stmt_cliente->close();
 
 // Obtener dirección asociada al cliente
-$sql_direccion = "SELECT id_direccion, calle, ciudad, estado, codigo_postal FROM direcciones WHERE id_cliente = ?";
+$sql_direccion = "SELECT id_direccion, calle, ciudad, estado, codigo_postal 
+                  FROM direcciones WHERE id_cliente = ?";
 $stmt_direccion = $con->prepare($sql_direccion);
 $stmt_direccion->bind_param('i', $id_cliente);
 $stmt_direccion->execute();
@@ -35,7 +34,7 @@ $stmt_direccion->bind_result($id_direccion, $calle, $ciudad, $estado, $codigo_po
 $stmt_direccion->fetch();
 $stmt_direccion->close();
 
-// Consultar servicios y obtener el total
+// Consultar servicios
 $query = "SELECT id_servicio, nombre_servicio, descripcion_servicio, imagen_servicio, total FROM servicios LIMIT 3";
 $result = $con->query($query);
 
@@ -46,25 +45,13 @@ if ($result->num_rows > 0) {
     }
 }
 
-// Procesar formulario de presupuesto
+// Procesar formulario de presupuesto (sin AJAX)
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $observaciones = htmlspecialchars($_POST['observaciones'] ?? '', ENT_QUOTES, 'UTF-8');
     $id_servicio = intval($_POST['id_servicio']);
     $folio_presupuesto = 'FP' . strtoupper(uniqid());
     $id_empresa = 1; // Empresa fija
     $fecha_elaboracion = date('Y-m-d');
-
-    // Obtener el precio del servicio seleccionado
-    $sql_precio = "SELECT precio_servicio FROM servicios WHERE id_servicio = ?";
-    $stmt_precio = $con->prepare($sql_precio);
-    $stmt_precio->bind_param('i', $id_servicio);
-    $stmt_precio->execute();
-    $stmt_precio->bind_result($precio_servicio);
-    $stmt_precio->fetch();
-    $stmt_precio->close();
-
-    // Calcular el total (puedes agregar lógica de descuentos, impuestos, etc.)
-    $total = $precio_servicio; // Para este ejemplo, solo se usa el precio del servicio
 
     // Si se agrega nueva dirección
     if ($_POST['nueva_direccion'] === 'si') {
@@ -73,7 +60,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $estado = htmlspecialchars($_POST['estado'], ENT_QUOTES, 'UTF-8');
         $codigo_postal = htmlspecialchars($_POST['codigo_postal'], ENT_QUOTES, 'UTF-8');
 
-        $sql_insert_direccion = "INSERT INTO direcciones (id_cliente, calle, ciudad, estado, codigo_postal) VALUES (?, ?, ?, ?, ?)";
+        $sql_insert_direccion = "INSERT INTO direcciones (id_cliente, calle, ciudad, estado, codigo_postal) 
+                                 VALUES (?, ?, ?, ?, ?)";
         $stmt_insert_direccion = $con->prepare($sql_insert_direccion);
         $stmt_insert_direccion->bind_param('issss', $id_cliente, $calle, $ciudad, $estado, $codigo_postal);
         if ($stmt_insert_direccion->execute()) {
@@ -82,17 +70,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt_insert_direccion->close();
     }
 
-    // Insertar presupuesto con el total calculado
+    // Insertar presupuesto en la base de datos
     $sql_insert_presupuesto = "
-        INSERT INTO presupuestos (id_empresa, id_cliente, id_direccion, id_servicio, observaciones, folio_presupuesto, fecha_elaboracion, total) 
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+    INSERT INTO presupuestos (id_empresa, id_cliente, id_direccion, id_servicio, observaciones, folio_presupuesto, fecha_elaboracion) 
+    VALUES (?, ?, ?, ?, ?, ?, ?)";
     $stmt_insert = $con->prepare($sql_insert_presupuesto);
-    $stmt_insert->bind_param('iiissssi', $id_empresa, $id_cliente, $id_direccion, $id_servicio, $observaciones, $folio_presupuesto, $fecha_elaboracion, $total);
+    $stmt_insert->bind_param('', $id_cliente, $id_direccion, $id_servicio, $observaciones, $folio_presupuesto, $fecha_elaboracion);
 
     if ($stmt_insert->execute()) {
-        echo json_encode(['status' => 'success', 'message' => 'Presupuesto registrado correctamente.']);
+        echo "<script>alert('Presupuesto registrado correctamente.'); window.location.href = window.location.href;</script>";
     } else {
-        echo json_encode(['status' => 'error', 'message' => 'Error al registrar el presupuesto: ' . $stmt_insert->error]);
+        echo "<script>alert('Error al registrar el presupuesto: " . $stmt_insert->error . "');</script>";
     }
     $stmt_insert->close();
     $con->close();
@@ -108,7 +96,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <title>Servicios y Cotización</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
     <div class="container mt-5">
@@ -125,11 +112,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <div class="card-body">
                                 <h5 class="card-title"><?php echo htmlspecialchars($servicio['nombre_servicio']); ?></h5>
                                 <p class="card-text"><?php echo htmlspecialchars($servicio['descripcion_servicio']); ?></p>
-                                <p class="card-text">Precio: $<?php echo number_format($servicio['total'], 2); ?></p>
                                 <button type="button" class="btn btn-secondary" data-bs-toggle="modal" 
                                     data-bs-target="#cotizarModal" 
                                     data-id-servicio="<?php echo $servicio['id_servicio']; ?>"
-                                    data-nombre-servicio="<?php echo htmlspecialchars($servicio['nombre_servicio']); ?>">
+                                    data-nombre-servicio="<?php echo htmlspecialchars($servicio['nombre_servicio']); ?>"
+                                    data-total-servicio="<?php echo htmlspecialchars($servicio['total']); ?>">
                                     Cotizar
                                 </button>
                             </div>
@@ -151,7 +138,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="presupuestoForm">
+                    <form id="presupuestoForm" method="POST">
                         <input type="hidden" name="id_servicio" id="modalIdServicio">
                         <div class="mb-3">
                             <label>Cliente:</label>
@@ -160,6 +147,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <div class="mb-3">
                             <label>Servicio Seleccionado:</label>
                             <p id="modalNombreServicio"></p>
+                        </div>
+                        <div class="mb-3">
+                            <label>Total del Servicio:</label>
+                            <p id="modalTotalServicio"></p>
                         </div>
                         <div class="mb-3">
                             <label>¿Desea agregar una nueva dirección?</label>
@@ -190,7 +181,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <label>Observaciones:</label>
                             <textarea class="form-control" name="observaciones" rows="3"></textarea>
                         </div>
-                        <button type="submit" class="btn btn-primary">Generar Presupuesto</button>
+                        <button type="submit" class="btn btn-primary">Enviar Cotización</button>
                     </form>
                 </div>
             </div>
@@ -198,34 +189,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
 
     <script>
-        $('#cotizarModal').on('show.bs.modal', function (event) {
-            var button = $(event.relatedTarget);
-            var idServicio = button.data('id-servicio');
-            var nombreServicio = button.data('nombre-servicio');
-            $('#modalIdServicio').val(idServicio);
-            $('#modalNombreServicio').text(nombreServicio);
-        });
+        document.addEventListener('DOMContentLoaded', function () {
+            const cotizarModal = new bootstrap.Modal(document.getElementById('cotizarModal'));
+            const modalIdServicio = document.getElementById('modalIdServicio');
+            const modalNombreServicio = document.getElementById('modalNombreServicio');
+            const modalTotalServicio = document.getElementById('modalTotalServicio');
+            const nuevaDireccionForm = document.getElementById('nuevaDireccionForm');
+            const nuevaDireccionSelect = document.getElementById('nuevaDireccion');
 
-        $('#nuevaDireccion').change(function () {
-            if ($(this).val() === 'si') {
-                $('#nuevaDireccionForm').removeClass('d-none');
-            } else {
-                $('#nuevaDireccionForm').addClass('d-none');
-            }
-        });
+            document.querySelectorAll('[data-bs-toggle="modal"]').forEach(button => {
+                button.addEventListener('click', function () {
+                    modalIdServicio.value = this.getAttribute('data-id-servicio');
+                    modalNombreServicio.textContent = this.getAttribute('data-nombre-servicio');
+                    modalTotalServicio.textContent = this.getAttribute('data-total-servicio');
+                });
+            });
 
-        $('#presupuestoForm').submit(function (event) {
-            event.preventDefault();
-            $.ajax({
-                type: 'POST',
-                url: '', // Mismo archivo PHP
-                data: $(this).serialize(),
-                success: function(response) {
-                    var data = JSON.parse(response);
-                    alert(data.message);
-                    if (data.status === 'success') {
-                        $('#cotizarModal').modal('hide');
-                    }
+            nuevaDireccionSelect.addEventListener('change', function () {
+                if (this.value === 'si') {
+                    nuevaDireccionForm.classList.remove('d-none');
+                } else {
+                    nuevaDireccionForm.classList.add('d-none');
                 }
             });
         });

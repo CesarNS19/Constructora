@@ -9,6 +9,32 @@ if (!isset($_SESSION['id_cliente'])) {
 
 // Establecer el ID del cliente desde la sesión
 $id_cliente = $_SESSION['id_cliente'];
+
+// Conexión a la base de datos
+$servername = "localhost";
+$username = "root";
+$password = "";
+$database = "constructora";
+
+$con = new mysqli($servername, $username, $password, $database);
+
+if ($con->connect_error) {
+    die("Conexión fallida: " . $con->connect_error);
+}
+
+// Consulta para verificar si el cliente tiene obras asociadas
+$sql = "SELECT COUNT(*) AS total_obras FROM obras WHERE id_cliente = ?";
+$stmt = $con->prepare($sql);
+$stmt->bind_param("i", $id_cliente);
+$stmt->execute();
+$result = $stmt->get_result();
+$row = $result->fetch_assoc();
+
+$total_obras = $row['total_obras'];
+$showNotification = isset($_COOKIE['obra_notificada']) ? false : $total_obras > 0;
+
+$stmt->close();
+$con->close();
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -26,68 +52,29 @@ $id_cliente = $_SESSION['id_cliente'];
     <header>
         <nav>
             <ul class="nav-links">
-                <li><button class="language-toggle btn btn-primary" id="languageButton" aria-label="Change Language" title="Cambiar idioma">
-                    <i class="fas fa-globe"></i>
-                </button></li> 
                 <li><a href="index.php" title="Home"><i class="fas fa-home"></i></a></li>
                 <li><a href="perfil.php" title="Profile"><i class="fas fa-user"></i></a></li>
                 <li><a href="services.php" title="Services"><i class="fas fa-concierge-bell"></i></a></li>
                 <li><a href="#contact" title="Contact"><i class="fas fa-envelope"></i></a></li>
                 <li><a href="../Login/logout.php" title="Cerrar Sesión"><i class="fas fa-sign-out-alt"></i></a></li>
+                <?php if ($total_obras > 0): ?>
+                    <li>
+                        <a href="obra.php" title="Mis Obras" onclick="dismissNotification()">
+                            <i class="fas fa-hard-hat"></i>
+                            <?php if ($showNotification): ?>
+                                <span class="badge bg-danger">!</span>
+                            <?php endif; ?>
+                        </a>
+                    </li>
+                <?php endif; ?>
             </ul>
-            <div class="user-controls" style="display: flex; align-items: center; margin-left: auto;">
-            <?php
-            if (isset($_SESSION['nombre'], $_SESSION['apellido_paterno'], $_SESSION['apellido_materno'])) {
-                $fullName = $_SESSION['nombre'] . ' ' . $_SESSION['apellido_paterno'] . ' ' . $_SESSION['apellido_materno'];
-                
-                if (isset($_COOKIE['timezone'])) {
-                    date_default_timezone_set($_COOKIE['timezone']);
-                }
-
-                $hour = date('H');
-                
-                if ($hour >= 5 && $hour < 12) {
-                    $greeting = "Good Morning";
-                } elseif ($hour >= 12 && $hour < 19) {
-                    $greeting = "Good Afternoon";
-                } else {
-                    $greeting = "Good night";
-                }
-
-                echo "
-                <div class='nav-item' style='display: flex; align-items: center;'>
-                    <a class='nav-link' href='perfil.php' style='color: black; font-size: 18px; text-decoration: none; font-weight: 600;'>
-                        $greeting $fullName
-                    </a>
-                    <div class='vr' style='height: 24px; width: 1px; background-color: #ffffff; margin: 0 10px;'></div>
-                    <button id='themeToggle' style='background: none; border: none; color: black; font-size: 20px; cursor: pointer;'>
-                        <i class='fas fa-adjust'></i>
-                    </button>
-                </div>";
-            } else {
-                echo "<a class='nav-link' href='../Login/login.php' style='color: black; font-size: 18px; text-decoration: none; font-weight: 600;'>Iniciar sesión</a>";
-            }
-            ?>
-        </div>
         </nav>
     </header>
+
     <script>
-        document.cookie = "timezone=" + Intl.DateTimeFormat().resolvedOptions().timeZone;
-
-        if (localStorage.getItem('theme') === 'dark') {
-            document.body.classList.add('dark-mode');
+        function dismissNotification() {
+            document.cookie = "obra_notificada=true; path=/; max-age=86400"; // Notificación válida por 1 día
         }
-
-        document.getElementById('themeToggle').addEventListener('click', function() {
-            document.body.classList.toggle('dark-mode');
-            
-            if (document.body.classList.contains('dark-mode')) {
-                localStorage.setItem('theme', 'dark');
-            } else {
-                localStorage.setItem('theme', 'light');
-            }
-        })
     </script>
-    <script src="../Js/language.js"></script>
 </body>
 </html>

@@ -12,9 +12,17 @@ $limit = 6; // Número de servicios por página
 $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
 $offset = ($page - 1) * $limit;
 
-// Consultar los servicios
-$query = "SELECT id_servicio, nombre_servicio, descripcion_servicio, imagen_servicio FROM servicios LIMIT $limit OFFSET $offset";
-$result = $con->query($query);
+// Consultar las categorías
+$categoryQuery = "SELECT id_categoria, categoria FROM categorias_servicios";
+$categoryResult = $con->query($categoryQuery);
+
+// Consultar los servicios, agrupados por categorías
+$servicesQuery = "SELECT s.id_servicio, s.nombre_servicio, s.descripcion_servicio, s.imagen_servicio, s.id_categoria, c.categoria
+                  FROM servicios s
+                  JOIN categorias_servicios c ON s.id_categoria = c.id_categoria
+                  ORDER BY c.categoria
+                  LIMIT $limit OFFSET $offset";
+$servicesResult = $con->query($servicesQuery);
 
 // Contar el total de servicios para la paginación
 $totalQuery = "SELECT COUNT(*) as total FROM servicios";
@@ -37,19 +45,35 @@ $totalPages = ceil($totalServices / $limit);
 <div class="container mt-5">
     <h2>Our Services</h2>
     <div class="row">
-        <?php if ($result->num_rows > 0): ?>
-            <?php while ($row = $result->fetch_assoc()): ?>
-                <div class="col-md-4">
-                    <div class="card mb-4">
-                        <img src="<?php echo htmlspecialchars($row['imagen_servicio']); ?>" alt="<?php echo htmlspecialchars($row['nombre_servicio']); ?>" class="card-img-top" style="height: 100px; object-fit: cover;">
-                        <div class="card-body">
-                            <h5 class="card-title"><?php echo htmlspecialchars($row['nombre_servicio']); ?></h5>
-                            <p class="card-text"><?php echo htmlspecialchars($row['descripcion_servicio']); ?></p>
-                            <a href="https://www.example.com" target="_blank" class="btn btn-primary">Learn More</a>
-                        </div>
+        <?php if ($servicesResult->num_rows > 0): ?>
+            <?php 
+            // Crear un array para agrupar servicios por categoría
+            $servicesByCategory = [];
+            while ($row = $servicesResult->fetch_assoc()) {
+                $categoryName = $row['categoria'];
+                $servicesByCategory[$categoryName][] = $row;
+            }
+
+            // Mostrar servicios por categorías
+            foreach ($servicesByCategory as $categoryName => $services): ?>
+                <div class="col-md-12 mb-4">
+                    <h3><?php echo htmlspecialchars($categoryName); ?></h3>
+                    <div class="row">
+                        <?php foreach ($services as $service): ?>
+                            <div class="col-md-4">
+                                <div class="card mb-4">
+                                    <img src="<?php echo htmlspecialchars($service['imagen_servicio']); ?>" alt="<?php echo htmlspecialchars($service['nombre_servicio']); ?>" class="card-img-top" style="height: 100px; object-fit: cover;">
+                                    <div class="card-body">
+                                        <h5 class="card-title"><?php echo htmlspecialchars($service['nombre_servicio']); ?></h5>
+                                        <p class="card-text"><?php echo htmlspecialchars($service['descripcion_servicio']); ?></p>
+                                        <a href="https://www.example.com" target="_blank" class="btn btn-primary">Learn More</a>
+                                    </div>
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
                     </div>
                 </div>
-            <?php endwhile; ?>
+            <?php endforeach; ?>
         <?php else: ?>
             <p>No se encontraron servicios.</p>
         <?php endif; ?>
