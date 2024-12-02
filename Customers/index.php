@@ -2,6 +2,7 @@
 session_start();
 
 // Conexión a la base de datos
+require '../Customers/superior_customer.php';
 require '../Login/conexion.php';
 $con = new mysqli("localhost", "root", "", "constructora");
 $con->set_charset("utf8");
@@ -218,7 +219,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             event.preventDefault();
             $.ajax({
                 type: 'POST',
-                url: '', // Mismo archivo PHP
+                url: 'cotizar.php', 
                 data: $(this).serialize(),
                 success: function(response) {
                     var data = JSON.parse(response);

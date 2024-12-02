@@ -1,13 +1,10 @@
 <?php
-session_start();
 
-// Verifica si el cliente está logueado
 if (!isset($_SESSION['id_cliente'])) {
     echo "Error: No se ha definido el ID del cliente en la sesión.";
     exit;
 }
 
-// Establecer el ID del cliente desde la sesión
 $id_cliente = $_SESSION['id_cliente'];
 ?>
 <!DOCTYPE html>
