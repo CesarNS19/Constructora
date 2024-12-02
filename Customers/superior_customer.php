@@ -55,7 +55,7 @@ $con->close();
                 <li><a href="index.php" title="Home"><i class="fas fa-home"></i></a></li>
                 <li><a href="perfil.php" title="Profile"><i class="fas fa-user"></i></a></li>
                 <li><a href="services.php" title="Services"><i class="fas fa-concierge-bell"></i></a></li>
-                <li><a href="#contact" title="Contact"><i class="fas fa-envelope"></i></a></li>
+    
                 <li><a href="../Login/logout.php" title="Cerrar Sesión"><i class="fas fa-sign-out-alt"></i></a></li>
                 <?php if ($total_obras > 0): ?>
                     <li>
