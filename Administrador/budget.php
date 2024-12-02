@@ -229,67 +229,95 @@ require '../Administrador/superior_admin.php';
     </div>
 </div>
 
-    <!-- Tabla de Presupuestos -->
+<!-- Tabla de Presupuestos -->
 <section class="services-table container my-2"><br/>
-<div class="table-responsive">
-    <table class="table table-bordered table-hover text-center">
-        <thead class="thead-dark">
-            <tr>
-                <h2 class="text-center">Manage Budgets</h2><br/>
-                <th>Company Name</th>
-                <th>Customer Name</th>
-                <th>Customer Address</th>
-                <th>Service Name</th>
-                <th>Date of Preparation</th>
-                <th>Total</th>
-                <th>Observations</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php
-             $sql = "SELECT o.*, e.nombre_empresa, c.nombre_cliente, c.apellido_paterno, c.apellido_materno, d.ciudad, s.nombre_servicio
-             FROM presupuestos o
-             LEFT JOIN empresa e ON o.id_empresa = e.id_empresa
-             LEFT JOIN clientes c ON o.id_cliente = c.id_cliente
-             LEFT JOIN servicios s ON o.id_servicio = s.id_servicio
-             LEFT JOIN direcciones d ON o.id_direccion = d.id_direccion";
-                    
-            $result = $con->query($sql);
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover text-center">
+            <thead class="thead-dark">
+                <tr>
+                    <h2 class="text-center">Manage Budgets</h2><br/>
+                    <th>Company Name</th>
+                    <th>Customer Name</th>
+                    <th>Customer Address</th>
+                    <th>Service Name</th>
+                    <th>Date of Preparation</th>
+                    <th>Total</th>
+                    <th>Observations</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                $sql = "SELECT o.*, e.nombre_empresa, c.nombre_cliente, c.apellido_paterno, c.apellido_materno, d.ciudad, s.nombre_servicio
+                        FROM presupuestos o
+                        LEFT JOIN empresa e ON o.id_empresa = e.id_empresa
+                        LEFT JOIN clientes c ON o.id_cliente = c.id_cliente
+                        LEFT JOIN servicios s ON o.id_servicio = s.id_servicio
+                        LEFT JOIN direcciones d ON o.id_direccion = d.id_direccion";
 
-            if ($result->num_rows > 0) {
-                while ($row = $result->fetch_assoc()) {
-                    $nombre_cliente = htmlspecialchars($row['nombre_cliente'] . ' ' . $row['apellido_paterno'] . ' ' . $row['apellido_materno']);
-                    $servicio = htmlspecialchars($row['nombre_servicio']);
-                    echo "<tr>";
-                    echo "<td>" . htmlspecialchars($row['nombre_empresa']) . "</td>";
-                    echo "<td>" . $nombre_cliente . "</td>";
-                    echo "<td>" . htmlspecialchars($row['ciudad']) . "</td>";
-                    echo "<td>" . $servicio . "</td>";
-                    echo "<td>" . htmlspecialchars($row['fecha_elaboracion']) . "</td>";
-                    echo "<td>" . htmlspecialchars($row['total']) . "</td>";
-                    echo "<td>" . htmlspecialchars($row['observaciones']) . "</td>";
-                    echo "<td>";
-                    echo "<button class='btn btn-info btn-sm me-1' onclick='openEditModal(" . json_encode($row) . ")' title='Editar presupuesto'>
-                            <i class='fas fa-edit'></i>
-                        </button>
-                        <a href='delete_budget.php?id=" . $row['folio_presupuesto'] . "' class='btn btn-danger btn-sm' onclick='return confirm(\"¿Estás seguro de que deseas eliminar este presupuesto?\")' title='Eliminar presupuesto'>
-                            <i class='fas fa-trash'></i>
-                        </a>
-                        <button class='btn btn-success btn-sm' onclick='openAddAddressModal(" . json_encode($row) . ")' title='Agregar Dirección'>
-                            <i class='fas fa-plus'></i>
-                        </button>
-                    </td>";
-                    echo "</tr>";
+                $result = $con->query($sql);
+
+                if ($result->num_rows > 0) {
+                    while ($row = $result->fetch_assoc()) {
+                        $folio_presupuesto = htmlspecialchars($row['folio_presupuesto']);
+                        $nombre_cliente = htmlspecialchars($row['nombre_cliente'] . ' ' . $row['apellido_paterno'] . ' ' . $row['apellido_materno']);
+                        $servicio = htmlspecialchars($row['nombre_servicio']);
+                        $file_path = "../pdf/Proposal_" . $folio_presupuesto . ".pdf";
+
+                        echo "<tr>";
+                        echo "<td>" . htmlspecialchars($row['nombre_empresa']) . "</td>";
+                        echo "<td>" . $nombre_cliente . "</td>";
+                        echo "<td>" . htmlspecialchars($row['ciudad']) . "</td>";
+                        echo "<td>" . $servicio . "</td>";
+                        echo "<td>" . htmlspecialchars($row['fecha_elaboracion']) . "</td>";
+                        echo "<td>" . htmlspecialchars($row['total']) . "</td>";
+                        echo "<td>" . htmlspecialchars($row['observaciones']) . "</td>";
+                        echo "<td>
+                                <div class='d-flex flex-wrap justify-content-center gap-2'>
+                                    <button class='btn btn-info btn-sm edit-button' onclick='openEditModal(" . json_encode($row) . ")' title='Editar presupuesto'>
+                                        <i class='fas fa-edit'></i>
+                                    </button>
+                                    <a href='delete_budget.php?id=" . $row['folio_presupuesto'] . "' 
+                                       class='btn btn-danger btn-sm' 
+                                       onclick='return confirm(\"¿Estás seguro de que deseas eliminar este presupuesto?\")' 
+                                       title='Eliminar presupuesto'>
+                                        <i class='fas fa-trash'></i>
+                                    </a>
+                                    <button class='btn btn-success btn-sm' onclick='openAddAddressModal(" . json_encode($row) . ")' title='Agregar Dirección'>
+                                        <i class='fas fa-plus'></i>
+                                    </button>
+                                    <a href='generate_pdf_proposal.php?folio=$folio_presupuesto' 
+                                       class='btn btn-danger btn-sm generate-pdf-button' 
+                                       title='Generate PDF'>
+                                        <i class='fas fa-file-pdf'></i>
+                                    </a>";
+                        if (file_exists($file_path)) {
+                            echo "<a href='$file_path' 
+                                       target='_blank' 
+                                       class='btn btn-success btn-sm' 
+                                       title='View PDF'>
+                                        <i class='fas fa-eye'></i>
+                                  </a>";
+                        }
+                        echo "<a href='send_pdf_proposal.php?folio=$folio_presupuesto&file=" . urlencode($file_path) . "' 
+                                   class='btn btn-primary btn-sm send-button' 
+                                   title='Enviar PDF' 
+                                   data-folio='$folio_presupuesto' 
+                                   onclick='sendPDF(this)'>
+                                   <i class='fas fa-envelope'></i>
+                              </a>";
+                        echo "</div></td>";
+                        echo "</tr>";
+                    }
+                } else {
+                    echo "<tr><td colspan='8'>No hay presupuestos registrados.</td></tr>";
                 }
-            } else {
-                echo "<tr><td colspan='7'>No hay presupuestos registrados.</td></tr>";
-            }
-            ?>
-        </tbody>
-    </table>
-</div>
+                ?>
+            </tbody>
+        </table>
+    </div>
 </section>
+
 
     <script>
 
@@ -401,6 +429,30 @@ require '../Administrador/superior_admin.php';
                 }
             });
         });
+
+        function sendPDF(button) {
+            const folio = button.getAttribute('data-folio');
+
+        const sentPDFs = JSON.parse(localStorage.getItem('sentPDFs')) || [];
+            if (!sentPDFs.includes(folio)) {
+                 sentPDFs.push(folio);
+                localStorage.setItem('sentPDFs', JSON.stringify(sentPDFs));
+            }
+
+        const row = button.closest('tr');
+            row.querySelectorAll('.edit-button, .generate-pdf-button, .send-button').forEach(btn => btn.style.display = 'none');
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+        const sentPDFs = JSON.parse(localStorage.getItem('sentPDFs')) || [];
+
+        sentPDFs.forEach(folio => {
+            const row = document.querySelector(`tr[data-folio="${folio}"]`);
+            if (row) {
+                row.querySelectorAll('.edit-button, .generate-pdf-button, .send-button').forEach(btn => btn.style.display = 'none');
+            }
+        });
+    });
     </script>
 </body>
 </html>

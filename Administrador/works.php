@@ -241,6 +241,35 @@ require '../Administrador/superior_admin.php';
     </div>
 </div>
 
+<div class="modal fade" id="workStatusModal" tabindex="-1" aria-labelledby="workStatusModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="workStatusModalLabel">Change Work Status</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="status_work.php" method="POST">
+                <div class="modal-body">
+                    <input type="hidden" id="folioObra" name="folio_obra">
+                    <div class="mb-3">
+                        <label for="newStatus" class="form-label">New Status</label>
+                        <select class="form-select" id="newStatus" name="estatus">
+                            <option value="iniciada">Initial</option>
+                            <option value="medium">Medium</option>
+                            <option value="complete">Complete</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
 <!-- Tabla de Obras -->
 <section class="my-2"><br/>
     <div class="table-responsive">
@@ -257,6 +286,7 @@ require '../Administrador/superior_admin.php';
                     <th>Debit</th>
                     <th>Total Work</th>
                     <th>Observations</th>
+                    <th>Estatus</th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -287,6 +317,7 @@ require '../Administrador/superior_admin.php';
                         echo "<td>" . htmlspecialchars($row['adeudo']) . "</td>";
                         echo "<td>" . htmlspecialchars($row['total_obra']) . "</td>";
                         echo "<td>" . htmlspecialchars($row['observaciones']) . "</td>";
+                        echo "<td>" . htmlspecialchars($row['estatus']) . "</td>";
                         echo "<td>";
                         echo "<button class='btn btn-info btn-sm me-1 edit-button' onclick='openEditModal(" . json_encode($row) . ")' title='Edit Work'>
                             <i class='fas fa-edit'></i>
@@ -301,7 +332,7 @@ require '../Administrador/superior_admin.php';
                                 <i class='fas fa-file-pdf'></i>
                               </a>";
                         if (file_exists($file_path)) {
-                            echo "<a href='$file_path' target='_blank' class='btn btn-success btn-sm me-2 view-pdf-button' title='View PDF'>
+                            echo "<a href='$file_path' target='_blank' class='btn btn-warning btn-sm me-2 view-pdf-button' title='View PDF'>
                                     <i class='fas fa-eye'></i>
                                 </a>";
                         }
@@ -312,6 +343,9 @@ require '../Administrador/superior_admin.php';
                                 onclick='sendPDF(this)'>
                                 <i class='fas fa-envelope'></i>
                             </a>";
+                        echo "<button class='btn btn-info btn-sm me-2 btn-status d-none' onclick='openStatusModal(" . json_encode($row) . ")' title='Work Status'>
+                            <i class='fas fa-spinner fa-spin'></i>
+                        </button>";
                         echo "</td>";
                         echo "</tr>";
                     }
@@ -364,6 +398,23 @@ require '../Administrador/superior_admin.php';
 
         $('#addWorkAddressModal').modal('show');
     }
+
+    document.getElementById('newStatus').addEventListener('change', function() {
+        localStorage.setItem('selectedStatus', this.value);
+    });
+
+
+    function openStatusModal(data) {
+        document.getElementById('folioObra').value = data.folio_obra;
+        const storedStatus = localStorage.getItem('selectedStatus');
+        if (storedStatus) {
+            document.getElementById('newStatus').value = storedStatus;
+        }
+
+        const statusModal = new bootstrap.Modal(document.getElementById('workStatusModal'));
+        statusModal.show();
+    }
+
 
         function mostrarToast(titulo, mensaje, tipo) {
             let icon = '';
@@ -480,18 +531,25 @@ require '../Administrador/superior_admin.php';
                 document.getElementById('edit_anticipo').addEventListener('input', validarYCalcularEditar);
             }
 
-        function sendPDF(button) {
-            const folio = button.getAttribute('data-folio');
+            function sendPDF(button) {
+    const folio = button.getAttribute('data-folio');
 
-        const sentPDFs = JSON.parse(localStorage.getItem('sentPDFs')) || [];
-            if (!sentPDFs.includes(folio)) {
-                 sentPDFs.push(folio);
-                localStorage.setItem('sentPDFs', JSON.stringify(sentPDFs));
-            }
+    const sentPDFs = JSON.parse(localStorage.getItem('sentPDFs')) || [];
+    if (!sentPDFs.includes(folio)) {
+        sentPDFs.push(folio);
+        localStorage.setItem('sentPDFs', JSON.stringify(sentPDFs));
+    }
 
-        const row = button.closest('tr');
-            row.querySelectorAll('.edit-button, .generate-pdf-button, .send-button').forEach(btn => btn.style.display = 'none');
-        }
+    const row = button.closest('tr');
+    row.querySelectorAll('.edit-button, .generate-pdf-button, .send-button').forEach(btn => btn.style.display = 'none');
+    
+    // Mostrar el botón de estatus
+    const statusButton = row.querySelector('.btn-status');
+    if (statusButton) {
+        statusButton.classList.remove('d-none');
+    }
+}
+
 
         document.addEventListener('DOMContentLoaded', function () {
         const sentPDFs = JSON.parse(localStorage.getItem('sentPDFs')) || [];
