@@ -7,6 +7,8 @@ $result_empresas = $con->query($sql_empresas);
 $sql_clientes = "SELECT id_cliente, nombre_cliente, apellido_paterno, apellido_materno FROM clientes WHERE rol = 'usuario'";
 $result_clientes = $con->query($sql_clientes);
 
+$sql_servicios = "SELECT id_servicio, nombre_servicio, total FROM servicios";
+
 require '../Administrador/superior_admin.php';
 ?>
 
@@ -79,6 +81,22 @@ require '../Administrador/superior_admin.php';
                         </select>
                     </div>
                     <div class="form-group mb-3">
+                        <label for="id_servicio">Select a Service</label>
+                        <select name="id_servicio" id="select_servicio" class="form-control" required>
+                            <option value="">Select a Service</option>
+                            <?php
+                            $result_servicios = $con->query($sql_servicios);
+                            if ($result_servicios->num_rows > 0) {
+                                while ($servicio = $result_servicios->fetch_assoc()) {
+                                    echo "<option value='" . htmlspecialchars($servicio['id_servicio']) . "' data-total='" . htmlspecialchars($servicio['total']) . "'>" . htmlspecialchars($servicio['nombre_servicio']) . "</option>";
+                                }
+                            } else {
+                                echo "<option value=''>No services available</option>";
+                            }
+                            ?>
+                        </select>
+                    </div>
+                    <div class="form-group mb-3">
                         <label for="direccion_cliente">Customer Address</label>
                         <input type="text" id="direccion_cliente" class="form-control" readonly>
                         <input type="hidden" name="id_direccion" id="id_direccion">
@@ -123,7 +141,24 @@ require '../Administrador/superior_admin.php';
             <form action="edit_works.php" method="POST">
                 <div class="modal-body">
                     <input type="hidden" name="folio_obra" id="edit_folio_obra">
-                    
+
+                    <div class="form-group mb-3">
+                    <label for="edit_id_servicio">Select a Service</label>
+                    <select name="id_servicio" id="edit_id_servicio" class="form-control" required>
+                        <option value="">Select a Service</option>
+                        <?php
+                        $result_servicios = $con->query($sql_servicios);
+                        if ($result_servicios->num_rows > 0) {
+                            while ($servicio = $result_servicios->fetch_assoc()) {
+                                echo "<option value='" . htmlspecialchars($servicio['id_servicio']) . "' data-total='" . htmlspecialchars($servicio['total']) . "'>" . htmlspecialchars($servicio['nombre_servicio']) . "</option>";
+                            }
+                        } else {
+                            echo "<option value=''>No services available</option>";
+                        }
+                        ?>
+                    </select>
+                    </div>
+
                     <div class="form-group mb-3">
                         <label for="edit_fecha_inicio">Start Date</label>
                         <input type="date" name="fecha_inicio" id="edit_fecha_inicio" class="form-control" required>
@@ -136,7 +171,7 @@ require '../Administrador/superior_admin.php';
                     
                     <div class="form-group mb-3">
                         <label for="edit_adeudo">Debit</label>
-                        <input type="number" name="adeudo" id="edit_adeudo" class="form-control" required>
+                        <input type="number" name="adeudo" id="edit_adeudo" class="form-control" readonly>
                     </div>
                     
                     <div class="form-group mb-3">
@@ -214,6 +249,7 @@ require '../Administrador/superior_admin.php';
                 <tr>
                     <h2 class="text-center">Manage Works</h2><br/>
                     <th>Company Name</th>
+                    <th>Service Name</th>
                     <th>Customer Name</th>
                     <th>Customer Address</th>
                     <th>Start Date</th>
@@ -226,10 +262,11 @@ require '../Administrador/superior_admin.php';
             </thead>
             <tbody>
                 <?php
-                $sql = "SELECT o.*, e.nombre_empresa, c.nombre_cliente, c.apellido_paterno, c.apellido_materno, d.ciudad 
+                $sql = "SELECT o.*, e.nombre_empresa, c.nombre_cliente, c.apellido_paterno, c.apellido_materno, d.ciudad, s.nombre_servicio
                         FROM obras o
                         LEFT JOIN empresa e ON o.id_empresa = e.id_empresa
                         LEFT JOIN clientes c ON o.id_cliente = c.id_cliente
+                        LEFT JOIN servicios s ON o.id_servicio = s.id_servicio
                         LEFT JOIN direcciones d ON o.id_direccion = d.id_direccion";
                 $result = $con->query($sql);
 
@@ -237,10 +274,12 @@ require '../Administrador/superior_admin.php';
                     while ($row = $result->fetch_assoc()) {
                         $nombre_cliente = htmlspecialchars($row['nombre_cliente'] . ' ' . $row['apellido_paterno'] . ' ' . $row['apellido_materno']);
                         $folio_obra = htmlspecialchars($row['folio_obra']);
-                        $file_path = "../pdf/proposal_" . $folio_obra . ".pdf";
+                        $servicio = htmlspecialchars($row['nombre_servicio']);
+                        $file_path = "../pdf/Contract_" . $folio_obra . ".pdf";
 
                         echo "<tr data-folio='$folio_obra'>";
                         echo "<td>" . htmlspecialchars($row['nombre_empresa']) . "</td>";
+                        echo "<td>" . $servicio . "</td>";
                         echo "<td>" . $nombre_cliente . "</td>";
                         echo "<td>" . htmlspecialchars($row['ciudad']) . "</td>";
                         echo "<td>" . htmlspecialchars($row['fecha_inicio']) . "</td>";
@@ -295,10 +334,29 @@ require '../Administrador/superior_admin.php';
         $('#edit_total_obra').val(obraData.total_obra);
         $('#edit_observaciones').val(obraData.observaciones);
 
-        calcularTotal();
+        $('#edit_id_servicio').val(obraData.id_servicio);
+
+        let selectedServiceTotal = $('#edit_id_servicio option:selected').data('total');
+        $('#edit_total_obra').val(selectedServiceTotal);
+
+        $('#edit_id_servicio').off('change').on('change', function() {
+            let selectedServiceTotal = $('#edit_id_servicio option:selected').data('total');
+            $('#edit_total_obra').val(selectedServiceTotal);
+
+            $('#edit_anticipo').val('');
+            $('#edit_adeudo').val('');
+        });
 
         $('#editWorksModal').modal('show');
     }
+
+    $('#select_servicio').on('change', function () {
+        var total = parseFloat($(this).find(':selected').data('total')) || 0;
+        $('#total_obra').val(total.toFixed(2));
+        $('#anticipo').val('');
+        $('#adeudo').val('');
+    });
+
 
     function openAddAddressModal(obra) {
         document.getElementById('id_obra_modal_display').value = obra.folio_obra;
@@ -385,44 +443,42 @@ require '../Administrador/superior_admin.php';
             });
         });
 
-        document.addEventListener('DOMContentLoaded', function() {
-            function calcularTotalAgregar() {
-                var anticipo = parseFloat(document.getElementById('anticipo').value) || 0;
-                var adeudo = parseFloat(document.getElementById('adeudo').value) || 0;
-                document.getElementById('total_obra').value = (anticipo + adeudo).toFixed(2);
+
+        function validarYCalcularAgregar() {
+            var total = parseFloat(document.getElementById('total_obra').value) || 0;
+            var anticipo = parseFloat(document.getElementById('anticipo').value) || 0;
+
+            if (anticipo > total) {
+                alert("El anticipo no puede exceder el total.");
+                document.getElementById('anticipo').value = total.toFixed(2);
+                anticipo = total;
             }
 
-            function calcularTotalEditar() {
-                var anticipo = parseFloat(document.getElementById('edit_anticipo').value) || 0;
-                var adeudo = parseFloat(document.getElementById('edit_adeudo').value) || 0;
-                document.getElementById('edit_total_obra').value = (anticipo + adeudo).toFixed(2);
+            var adeudo = total - anticipo;
+            document.getElementById('adeudo').value = adeudo.toFixed(2);
+        }
+
+    function validarYCalcularEditar() {
+        var total = parseFloat(document.getElementById('edit_total_obra').value) || 0;
+        var anticipo = parseFloat(document.getElementById('edit_anticipo').value) || 0;
+
+        if (anticipo > total) {
+                alert("El anticipo no puede exceder el total.");
+                document.getElementById('edit_anticipo').value = total.toFixed(2);
+                anticipo = total;
+            }
+
+                var adeudo = total - anticipo;
+                document.getElementById('edit_adeudo').value = adeudo.toFixed(2);
             }
 
             if (document.getElementById('anticipo')) {
-                document.getElementById('anticipo').addEventListener('input', calcularTotalAgregar);
-            }
-            if (document.getElementById('adeudo')) {
-                document.getElementById('adeudo').addEventListener('input', calcularTotalAgregar);
+                document.getElementById('anticipo').addEventListener('input', validarYCalcularAgregar);
             }
 
             if (document.getElementById('edit_anticipo')) {
-                document.getElementById('edit_anticipo').addEventListener('input', calcularTotalEditar);
+                document.getElementById('edit_anticipo').addEventListener('input', validarYCalcularEditar);
             }
-            if (document.getElementById('edit_adeudo')) {
-                document.getElementById('edit_adeudo').addEventListener('input', calcularTotalEditar);
-            }
-
-            window.openEditModal = function(obraData) {
-                document.getElementById('edit_folio_obra').value = obraData.folio_obra;
-                document.getElementById('edit_fecha_inicio').value = obraData.fecha_inicio;
-                document.getElementById('edit_anticipo').value = obraData.anticipo;
-                document.getElementById('edit_adeudo').value = obraData.adeudo;
-                document.getElementById('edit_total_obra').value = (parseFloat(obraData.anticipo) + parseFloat(obraData.adeudo)).toFixed(2);
-                document.getElementById('edit_observaciones').value = obraData.observaciones;
-
-                $('#editWorksModal').modal('show');
-            }
-        });
 
         function sendPDF(button) {
             const folio = button.getAttribute('data-folio');

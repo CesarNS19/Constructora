@@ -4,7 +4,7 @@ session_start();
 
 if (isset($_GET['folio'])) {
     $folio_obra = $_GET['folio'];
-    $file_path = "../pdf/proposal_" . $folio_obra . ".pdf"; // Ruta del archivo PDF
+    $file_path = "../pdf/Contract_" . $folio_obra . ".pdf";
 
     // Verificar si el archivo existe
     if (file_exists($file_path)) {

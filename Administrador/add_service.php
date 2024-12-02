@@ -3,6 +3,7 @@ require '../Login/conexion.php';
 session_start();
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $id_categoria = $_POST["id_categoria"];
     $nombre_servicio = $_POST['nombre_servicio'];
     $descripcion_servicio = $_POST['descripcion_servicio'];
     $total = $_POST['total'];
@@ -22,8 +23,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $relative_path = "../Img/" . basename($_FILES["imagen_servicio"]["name"]);
                 
                 // Insertar los datos en la base de datos
-                $sql = "INSERT INTO servicios (nombre_servicio, descripcion_servicio, total, imagen_servicio) 
-                        VALUES ('$nombre_servicio', '$descripcion_servicio', '$total', '$relative_path')";
+                $sql = "INSERT INTO servicios (id_categoria, nombre_servicio, descripcion_servicio, total, imagen_servicio) 
+                        VALUES ('$id_categoria', '$nombre_servicio', '$descripcion_servicio', '$total', '$relative_path')";
 
                 if ($con->query($sql) === TRUE) {
                     $_SESSION['status_message'] = "Servicio agregado exitosamente";

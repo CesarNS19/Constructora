@@ -10,6 +10,9 @@ $result_clientes = $con->query($sql_clientes);
 $sql_direccion_clientes = "SELECT id_cliente, ciudad FROM direcciones";
 $result_direccion_clientes = $con->query($sql_direccion_clientes);
 
+$sql_servicios = "SELECT id_servicio, nombre_servicio, total FROM servicios";
+$result_servicios = $con->query($sql_servicios);
+
 require '../Administrador/superior_admin.php';
 ?>
 
@@ -81,14 +84,36 @@ require '../Administrador/superior_admin.php';
                             ?>
                         </select>
                     </div>
+
                     <div class="form-group mb-3">
                         <label for="direccion_cliente">Customer Address</label>
                         <input type="text" id="direccion_cliente" class="form-control" readonly>
                         <input type="hidden" name="id_direccion" id="id_direccion">
                     </div>
+
+                    <div class="form-group mb-3">
+                        <label for="id_servicio">Select a Service</label>
+                        <select name="id_servicio" id="select_servicio" class="form-control" required>
+                            <option value="">Select a Service</option>
+                            <?php
+                            $result_servicios = $con->query($sql_servicios);
+                            if ($result_servicios->num_rows > 0) {
+                                while ($servicio = $result_servicios->fetch_assoc()) {
+                                    echo "<option value='" . htmlspecialchars($servicio['id_servicio']) . "' data-total='" . htmlspecialchars($servicio['total']) . "'>" . htmlspecialchars($servicio['nombre_servicio']) . "</option>";
+                                }
+                            } else {
+                                echo "<option value=''>No services available</option>";
+                            }
+                            ?>
+                        </select>
+                    </div>
                     <div class="form-group mb-3">
                         <label for="date">Date of Preparation</label>
                         <input type="date" step="0.01" name="fecha_elaboracion" class="form-control" required>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label >Total Work</label>
+                        <input type="number" name="total" id="total" class="form-control" readonly>
                     </div>
                     <div class="form-group mb-3">
                         <label for="">Observations</label>
@@ -116,8 +141,30 @@ require '../Administrador/superior_admin.php';
                     <input type="hidden" name="folio_presupuesto" id="edit_folio_presupuesto">
                     
                     <div class="form-group mb-3">
+                    <label for="edit_id_servicio">Select a Service</label>
+                    <select name="id_servicio" id="edit_id_servicio" class="form-control" required>
+                        <option value="">Select a Service</option>
+                        <?php
+                        $result_servicios = $con->query($sql_servicios);
+                        if ($result_servicios->num_rows > 0) {
+                            while ($servicio = $result_servicios->fetch_assoc()) {
+                                echo "<option value='" . htmlspecialchars($servicio['id_servicio']) . "' data-total='" . htmlspecialchars($servicio['total']) . "'>" . htmlspecialchars($servicio['nombre_servicio']) . "</option>";
+                            }
+                        } else {
+                            echo "<option value=''>No services available</option>";
+                        }
+                        ?>
+                    </select>
+                </div>
+
+                    <div class="form-group mb-3">
                         <label for="edit_fecha_elaboracion">Date of Preparation</label>
                         <input type="date" name="fecha_elaboracion" id="edit_fecha_elaboracion" class="form-control" required>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="edit_total">Total Work</label>
+                        <input type="number" name="total" id="edit_total" class="form-control" readonly>
                     </div>
                                         
                     <div class="form-group mb-3">
@@ -192,31 +239,35 @@ require '../Administrador/superior_admin.php';
                 <th>Company Name</th>
                 <th>Customer Name</th>
                 <th>Customer Address</th>
+                <th>Service Name</th>
                 <th>Date of Preparation</th>
+                <th>Total</th>
                 <th>Observations</th>
                 <th>Actions</th>
             </tr>
         </thead>
         <tbody>
             <?php
-            $sql = "SELECT p.*, e.nombre_empresa, 
-                           CONCAT(c.nombre_cliente, ' ', c.apellido_paterno, ' ', c.apellido_materno) AS nombre_cliente,
-                           d.ciudad AS direccion_cliente
-                    FROM presupuestos p
-                    LEFT JOIN empresa e ON p.id_empresa = e.id_empresa
-                    LEFT JOIN clientes c ON p.id_cliente = c.id_cliente
-                    LEFT JOIN direcciones d ON p.id_cliente = d.id_cliente";
+             $sql = "SELECT o.*, e.nombre_empresa, c.nombre_cliente, c.apellido_paterno, c.apellido_materno, d.ciudad, s.nombre_servicio
+             FROM presupuestos o
+             LEFT JOIN empresa e ON o.id_empresa = e.id_empresa
+             LEFT JOIN clientes c ON o.id_cliente = c.id_cliente
+             LEFT JOIN servicios s ON o.id_servicio = s.id_servicio
+             LEFT JOIN direcciones d ON o.id_direccion = d.id_direccion";
                     
             $result = $con->query($sql);
 
             if ($result->num_rows > 0) {
                 while ($row = $result->fetch_assoc()) {
-                    $nombre_cliente = htmlspecialchars($row['nombre_cliente']);
+                    $nombre_cliente = htmlspecialchars($row['nombre_cliente'] . ' ' . $row['apellido_paterno'] . ' ' . $row['apellido_materno']);
+                    $servicio = htmlspecialchars($row['nombre_servicio']);
                     echo "<tr>";
                     echo "<td>" . htmlspecialchars($row['nombre_empresa']) . "</td>";
                     echo "<td>" . $nombre_cliente . "</td>";
-                    echo "<td>" . htmlspecialchars($row['direccion_cliente']) . "</td>";
+                    echo "<td>" . htmlspecialchars($row['ciudad']) . "</td>";
+                    echo "<td>" . $servicio . "</td>";
                     echo "<td>" . htmlspecialchars($row['fecha_elaboracion']) . "</td>";
+                    echo "<td>" . htmlspecialchars($row['total']) . "</td>";
                     echo "<td>" . htmlspecialchars($row['observaciones']) . "</td>";
                     echo "<td>";
                     echo "<button class='btn btn-info btn-sm me-1' onclick='openEditModal(" . json_encode($row) . ")' title='Editar presupuesto'>
@@ -246,10 +297,26 @@ require '../Administrador/superior_admin.php';
         $('#edit_folio_presupuesto').val(customerData.folio_presupuesto);
         $('#edit_fecha_elaboracion').val(customerData.fecha_elaboracion);
         $('#edit_total_obra').val(customerData.total_obra);
+        $('#edit_total').val(customerData.total);
         $('#edit_observaciones').val(customerData.observaciones);
         
+        $('#edit_id_servicio').val(customerData.id_servicio);
+
         $('#editBudgetModal').modal('show');
     }
+        $(document).ready(function () {
+        $('#select_servicio').change(function () {
+            const selectedOption = $(this).find('option:selected');
+            const total = selectedOption.data('total') || 0;
+            $('#total').val(total);
+        });
+
+        $('#edit_id_servicio').change(function () {
+            const selectedOption = $(this).find('option:selected');
+            const total = selectedOption.data('total') || 0;
+            $('#edit_total').val(total);
+        });
+    });
 
     function openAddAddressModal(presupuesto) {
         document.getElementById('folio_presupuesto_modal').value = presupuesto.folio_presupuesto;

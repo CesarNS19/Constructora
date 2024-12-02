@@ -18,6 +18,9 @@ require '../Administrador/superior_admin.php';
 <div id="Alert"></div>
 
 <section class="company-header">
+        <a href="../Administrador/categorias_servicios.php" class="btn btn-primary" style="float: right; margin: 10px;">
+            Services Category
+        </a>
         <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addServicesModal" style="float: right; margin: 10px;">
             Add Service
         </button><br/>
@@ -31,6 +34,19 @@ require '../Administrador/superior_admin.php';
             </div>
             <form action="add_service.php" method="POST" enctype="multipart/form-data">
                 <div class="modal-body">
+                <div class="form-group mb-3">
+                    <label for="categoria_servicio">Service Category</label>
+                    <select name="id_categoria" class="form-control" required>
+                        <?php
+                        $categoria_sql = "SELECT * FROM categorias_servicios";
+                        $categoria_result = $con->query($categoria_sql);
+
+                        while ($categoria = $categoria_result->fetch_assoc()) {
+                            echo "<option value='" . $categoria['id_categoria'] . "'>" . htmlspecialchars($categoria['categoria']) . "</option>";
+                        }
+                        ?>
+                    </select>
+                </div>
                     <div class="form-group mb-3">
                         <label for="">Name of Service</label>
                         <input type="text" name="nombre_servicio" class="form-control" required>
@@ -65,6 +81,20 @@ require '../Administrador/superior_admin.php';
             <form action="edit_services.php" method="POST" enctype="multipart/form-data">
                 <div class="modal-body">
                     <input type="hidden" name="id_servicio" id="edit_id_servicio">
+                    
+                    <div class="form-group mb-3">
+                        <label for="edit_categoria_servicio">Service Category</label>
+                        <select name="id_categoria" id="edit_categoria_servicio" class="form-control" required>
+                            <?php
+                            $categoria_sql = "SELECT * FROM categorias_servicios";
+                            $categoria_result = $con->query($categoria_sql);
+
+                            while ($categoria = $categoria_result->fetch_assoc()) {
+                                echo "<option value='" . $categoria['id_categoria'] . "'>" . htmlspecialchars($categoria['categoria']) . "</option>";
+                            }
+                            ?>
+                        </select>
+                    </div>
 
                     <div class="form-group mb-3">
                         <label for="edit_nombre_servicio">Name of Service</label>
@@ -111,6 +141,7 @@ require '../Administrador/superior_admin.php';
             <thead class="thead-dark">
                 <tr>
                     <th>Name of Service</th>
+                    <th>Service Category</th>
                     <th>Description of the Service</th>
                     <th>Total Service</th>
                     <th>Service Image</th>
@@ -119,46 +150,51 @@ require '../Administrador/superior_admin.php';
             </thead>
             <tbody>
                 <?php
-                $sql = "SELECT * FROM servicios";
-                $result = $con->query($sql);
-
-                if ($result->num_rows > 0) {
-                    while ($row = $result->fetch_assoc()) {
-                        echo "<tr>";
-                        echo "<td>" . htmlspecialchars($row['nombre_servicio']) . "</td>";
-                        echo "<td>" . htmlspecialchars($row['descripcion_servicio']) . "</td>";
-                        echo "<td>" . htmlspecialchars($row['total']) . "</td>";
-                        echo "<td><img src='../Img/" . htmlspecialchars($row['imagen_servicio']) . "' width='100px' height='60px' alt='Service Image'></td>";
-                        echo "<td>";
-                        echo "<button class='btn btn-info btn-sm me-1' onclick='openEditModal(" . json_encode($row) . ")' title='Editar servicio'>
-                                <i class='fas fa-edit'></i>
-                              </button>
-                              <a href='delete_service.php?id=" . $row['id_servicio'] . "' class='btn btn-danger btn-sm' onclick='return confirm(\"¿Estás seguro de que deseas eliminar este servicio?\")' title='Eliminar Servicio'>
-                                  <i class='fas fa-trash'></i>
-                              </a>";
-                        echo "</td>";
-                        echo "</tr>";
+                $sql = "SELECT servicios.*, categorias_servicios.categoria FROM servicios 
+                JOIN categorias_servicios ON servicios.id_categoria = categorias_servicios.id_categoria";
+                    $result = $con->query($sql);
+                    
+                    if ($result->num_rows > 0) {
+                        while ($row = $result->fetch_assoc()) {
+                            echo "<tr>";
+                            echo "<td>" . htmlspecialchars($row['nombre_servicio']) . "</td>";
+                            echo "<td>" . htmlspecialchars($row['categoria']) . "</td>";
+                            echo "<td>" . htmlspecialchars($row['descripcion_servicio']) . "</td>";
+                            echo "<td>" . htmlspecialchars($row['total']) . "</td>";
+                            echo "<td><img src='../Img/" . htmlspecialchars($row['imagen_servicio']) . "' width='100px' height='60px' alt='Service Image'></td>";
+                            echo "<td>";
+                            echo "<button class='btn btn-info btn-sm me-1' onclick='openEditModal(" . json_encode($row) . ")' title='Editar servicio'>
+                                    <i class='fas fa-edit'></i>
+                                </button>
+                                <a href='delete_service.php?id=" . $row['id_servicio'] . "' class='btn btn-danger btn-sm' onclick='return confirm(\"¿Estás seguro de que deseas eliminar este servicio?\")' title='Eliminar Servicio'>
+                                    <i class='fas fa-trash'></i>
+                                </a>";
+                            echo "</td>";
+                            echo "</tr>";
+                        }
+                    } else {
+                        echo "<tr><td colspan='6'>No hay servicios registrados.</td></tr>";
                     }
-                } else {
-                    echo "<tr><td colspan='5'>No hay servicios registrados.</td></tr>";
-                }
                 ?>
             </tbody>
         </table>
     </div>
 </section>
 
-    <script>
+<script>
 
-    function openEditModal(serviceData) {
-        $('#edit_id_servicio').val(serviceData.id_servicio);
-        $('#edit_nombre_servicio').val(serviceData.nombre_servicio);
-        $('#edit_descripcion_servicio').val(serviceData.descripcion_servicio);
-        $('#edit_total').val(serviceData.total);
-        $('#current_image').attr('src', '../Img/' + serviceData.imagen_servicio);
-        
-        $('#editServicesModal').modal('show');
-    }
+function openEditModal(serviceData) {
+    $('#edit_id_servicio').val(serviceData.id_servicio);
+    $('#edit_nombre_servicio').val(serviceData.nombre_servicio);
+    $('#edit_descripcion_servicio').val(serviceData.descripcion_servicio);
+    $('#edit_total').val(serviceData.total);
+    $('#current_image').attr('src', '../Img/' + serviceData.imagen_servicio);
+
+    $('#edit_categoria_servicio').val(serviceData.id_categoria);
+
+    $('#editServicesModal').modal('show');
+}
+
 
 
         function mostrarToast(titulo, mensaje, tipo) {

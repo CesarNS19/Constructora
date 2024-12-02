@@ -4,6 +4,7 @@ session_start();
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $id_servicio = $_POST['id_servicio'];
+    $id_categoria = $_POST['id_categoria'];
     $nombre_servicio = $_POST['nombre_servicio'];
     $descripcion_servicio = $_POST['descripcion_servicio'];
     $total = $_POST['total'];
@@ -47,9 +48,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Crear la consulta SQL, incluyendo la imagen solo si hay una nueva
     if ($imagen_ruta) {
-        $sql = "UPDATE servicios SET nombre_servicio='$nombre_servicio', descripcion_servicio='$descripcion_servicio', total='$total' , imagen_servicio='$imagen_ruta' WHERE id_servicio='$id_servicio'";
+        $sql = "UPDATE servicios SET id_categoria='$id_categoria', nombre_servicio='$nombre_servicio', descripcion_servicio='$descripcion_servicio', total='$total' , imagen_servicio='$imagen_ruta' WHERE id_servicio='$id_servicio'";
     } else {
-        $sql = "UPDATE servicios SET nombre_servicio='$nombre_servicio', descripcion_servicio='$descripcion_servicio', total='$total' WHERE id_servicio='$id_servicio'";
+        $sql = "UPDATE servicios SET id_categoria='$id_categoria', nombre_servicio='$nombre_servicio', descripcion_servicio='$descripcion_servicio', total='$total' WHERE id_servicio='$id_servicio'";
     }
 
     if ($con->query($sql) === TRUE) {

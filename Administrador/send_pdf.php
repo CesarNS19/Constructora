@@ -50,11 +50,11 @@ try {
     $mail->addAttachment($file_path);
 
     $mail->isHTML(true);
-    $mail->Subject = 'Proposal Document';
-    $mail->Body = 'Please find the attached proposal document.';
+    $mail->Subject = 'Contract Document';
+    $mail->Body = 'Please find the attached contract document.';
 
     $mail->send();
-    $_SESSION['status_message'] = "Correo enviado exitosamente.";
+    $_SESSION['status_message'] = "Contrato enviado correctamente al cliente";
     $_SESSION['status_type'] = "success";
 } catch (Exception $e) {
     $_SESSION['status_message'] = "Error al enviar el correo: {$mail->ErrorInfo}";

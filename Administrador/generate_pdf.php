@@ -1,17 +1,17 @@
 <?php
 require __DIR__ . '../../vendor/setasign/fpdf/fpdf.php';
 require '../Login/conexion.php';
-session_start(); // Iniciar la sesión para manejar las alertas
+session_start();
 
 if ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['folio'])) {
     $folio_obra = $_GET['folio'];
 
-    // Consulta para obtener los datos necesarios de la obra
     $sql = "SELECT o.*, e.nombre_empresa, c.nombre_cliente, c.apellido_paterno, c.apellido_materno, 
-                   d.ciudad, d.estado, c.correo_electronico
+                   d.ciudad, d.estado, c.correo_electronico, s.nombre_servicio
             FROM obras o
             LEFT JOIN empresa e ON o.id_empresa = e.id_empresa
             LEFT JOIN clientes c ON o.id_cliente = c.id_cliente
+            LEFT JOIN servicios s ON o.id_servicio = s.id_servicio
             LEFT JOIN direcciones d ON o.id_direccion = d.id_direccion
             WHERE o.folio_obra = ?";
     $stmt = $con->prepare($sql);
@@ -23,93 +23,106 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['folio'])) {
 
         if ($obra) {
             try {
-                // Ruta del archivo PDF
-                $file_path = "../pdf/proposal_" . $folio_obra . ".pdf";
+                $file_path = "../pdf/Contract_" . $folio_obra . ".pdf";
 
-                // Eliminar el archivo existente si ya existe
                 if (file_exists($file_path)) {
-                    unlink($file_path); // Borra el archivo
+                    unlink($file_path);
                 }
 
-                // Crear el PDF
                 $pdf = new FPDF();
                 $pdf->AddPage();
-                $pdf->SetFont('Arial', 'B', 14);
+                $pdf->SetMargins(10, 10, 10);
 
                 // Encabezado
-                $pdf->Cell(0, 10, 'PROPOSAL', 0, 1, 'C');
-                $pdf->SetFont('Arial', '', 12);
-                $pdf->Cell(0, 10, 'Ph # 609-966-9947 & Email: familydrywall@gmail.com', 0, 1, 'C');
-                $pdf->Cell(0, 10, 'FAMILY DRYWALL LLC.', 0, 1, 'C');
-                $pdf->Cell(0, 10, '1100 S. NEW RD, PLEASANTVILLE, N.J. 08232', 0, 1, 'C');
+                $pdf->SetFont('Arial', 'B', 16);
+                $pdf->Cell(0, 10, 'CONTRACT', 0, 1, 'C');
+                $pdf->SetFont('Arial', '', 10);
+                $pdf->Cell(0, 5, 'Ph # 609-966-9947 & Email: familydrywall@gmail.com', 0, 1, 'C');
+                $pdf->SetFont('Arial', 'B', 12);
+                $pdf->Cell(0, 7, 'FAMILY DRYWALL LLC.', 0, 1, 'C');
+                $pdf->SetFont('Arial', '', 10);
+                $pdf->Cell(0, 5, '1100 S. NEW RD, PLEASANTVILLE, N.J. 08232', 0, 1, 'C');
                 $pdf->Ln(10);
 
-                // Información de la obra
-                $pdf->SetFont('Arial', 'B', 12);
-                $pdf->Cell(50, 10, 'PROPOSAL SUBMITTED TO DATE:', 0, 0);
-                $pdf->SetFont('Arial', '', 12);
-                $pdf->Cell(100, 10, date('m/d/Y', strtotime($obra['fecha_inicio'])), 0, 1);
+                $pdf->SetFont('Arial', 'B', 10);
+                $pdf->Cell(70, 10, 'CONTRACT SUBMITTED TO: DATE:', 'L,T,B', 0, 'L');
+                $pdf->SetFont('Arial', '', 10);
+                $pdf->Cell(120, 10, date('d/m/Y', strtotime($obra['fecha_inicio'])), 'T,R,B', 1, 'L');
 
-                $pdf->SetFont('Arial', 'B', 12);
-                $pdf->Cell(50, 10, 'BUILDER NAME:', 0, 0);
-                $pdf->SetFont('Arial', '', 12);
-                $pdf->Cell(100, 10, $obra['nombre_empresa'], 0, 1);
+                $pdf->SetFont('Arial', 'B', 10);
+                $pdf->Cell(70, 10, 'BUILDER NAME:', 'L,T,B', 0, 'L');
+                $pdf->SetFont('Arial', '', 10);
+                $pdf->Cell(120, 10, mb_convert_encoding($obra['nombre_empresa'], 'ISO-8859-1', 'UTF-8'), 'T,R,B', 1, 'L');
 
-                $pdf->SetFont('Arial', 'B', 12);
-                $pdf->Cell(50, 10, 'JOB LOCATION:', 0, 0);
-                $pdf->SetFont('Arial', '', 12);
-                $pdf->Cell(100, 10, $obra['ciudad'], 0, 1);
+                $pdf->SetFont('Arial', 'B', 10);
+                $pdf->Cell(70, 10, 'JOB LOCATION:', 'L,T,B', 0, 'L');
+                $pdf->SetFont('Arial', '', 10);
+                $pdf->Cell(120, 10, mb_convert_encoding($obra['ciudad'], 'ISO-8859-1', 'UTF-8'), 'T,R,B', 1, 'L');
 
-                $pdf->SetFont('Arial', 'B', 12);
-                $pdf->Cell(50, 10, 'CITY, STATE:', 0, 0);
-                $pdf->SetFont('Arial', '', 12);
-                $pdf->Cell(100, 10, $obra['ciudad'] . ', ' . $obra['estado'], 0, 1);
+                $pdf->SetFont('Arial', 'B', 10);
+                $pdf->Cell(70, 10, 'CITY, STATE:', 'L,T,B', 0, 'L');
+                $pdf->SetFont('Arial', '', 10);
+                $pdf->Cell(120, 10, mb_convert_encoding($obra['ciudad'] . ', ' . $obra['estado'], 'ISO-8859-1', 'UTF-8'), 'T,R,B', 1, 'L');
 
-                $pdf->SetFont('Arial', 'B', 12);
-                $pdf->Cell(50, 10, 'EMAIL:', 0, 0);
-                $pdf->SetFont('Arial', '', 12);
-                $pdf->Cell(100, 10, $obra['correo_electronico'], 0, 1);
+                $pdf->SetFont('Arial', 'B', 10);
+                $pdf->Cell(70, 10, 'EMAIL:', 'L,T,B', 0, 'L');
+                $pdf->SetFont('Arial', '', 10);
+                $pdf->Cell(120, 10, mb_convert_encoding($obra['correo_electronico'], 'ISO-8859-1', 'UTF-8'), 'T,R,B', 1, 'L');
 
-                $pdf->SetFont('Arial', 'B', 12);
-                $pdf->Cell(50, 10, 'JOB:', 0, 0);
-                $pdf->SetFont('Arial', '', 12);
-                $pdf->Cell(100, 10, 'Drywall and Spackle', 0, 1);
+                $pdf->SetFont('Arial', 'B', 10);
+                $pdf->Cell(70, 10, 'JOB:', 'L,T,B', 0, 'L');
+                $pdf->SetFont('Arial', '', 10);
+                $pdf->Cell(120, 10, 'Drywall and Spackle', 'T,R,B', 1, 'L');
                 $pdf->Ln(10);
+
 
                 // Especificaciones
                 $pdf->SetFont('Arial', 'B', 12);
-                $pdf->Cell(0, 10, 'SPECIFICATIONS: Use Screws', 0, 1);
-                $pdf->SetFont('Arial', '', 12);
-                $pdf->Cell(0, 10, '144 SHEETROCK TO INSTALL AND SPACKLE.', 0, 1);
+                $pdf->Cell(0, 10, 'SPECIFICATIONS: Use Screws.', 0, 1);
+                $pdf->SetFont('Arial', '', 10);
+                $pdf->MultiCell(0, 8, '   ' . mb_convert_encoding($obra['nombre_servicio'], 'ISO-8859-1', 'UTF-8'), 1);
                 $pdf->Ln(10);
 
                 // Condiciones
-                $pdf->SetFont('Arial', '', 12);
-                $pdf->MultiCell(0, 10, "We hereby propose to furnish labor -- complete in accordance with the above specifications, for the sum of $". $obra['anticipo']." with payment to be made as follows:
-                HALF OF THE AMOUNT DUE WHEN SHEETROCK INSTALLED -- $".
-                $obra['adeudo']." 
-                FINAL PAYMENT DUE AT COMPLETION OF JOB -- $". $obra['total_obra']."
-                All agreements contingent upon strikes, accidents, or delays beyond our control.", 0, 'L');
-                        $pdf->Ln(20);
+                $pdf->SetFont('Arial', 'B', 10);
+                $pdf->MultiCell(0, 6, "We hereby propose to furnish labor -- complete in accordance with the above specifications, for the sum of $" . $obra['anticipo'] . " with payment to be made as follows:");
+                $pdf->Cell(0, 8, 'HALF OF THE AMOUNT DUE WHEN SHEETROCK INSTALLED -- $' . $obra['adeudo'], 0, 1);
+                $pdf->Cell(0, 8, 'FINAL PAYMENT DUE AT COMPLETION OF JOB -- $' . $obra['total_obra'], 0, 1);
+                $pdf->Ln(8);
 
-                // Firmas
-                $pdf->Cell(0, 10, 'Authorized Signature: _____________________', 0, 1, 'L');
-                $pdf->Cell(0, 10, 'Accepted Signature: ______________________', 0, 1, 'L');
+                // Términos
+                $pdf->SetFont('Arial', 'B', 10);
+                $pdf->MultiCell(0, 5, "All material is guaranteed to be as specified. All work to be completed in a workmanlike manner according to standard practices. Any alteration or deviation from above specifications involving extra costs will be executed only upon written orders and will become an extra charge over and above the estimate. All agreements contingent upon strikes, accident, or delays beyond our control.");
                 $pdf->Ln(10);
 
-                // Crear la carpeta si no existe
+                // Texto de la primera firma
+                 // Espacio para la firma de aceptación
+                 $pdf->Cell(30, 10, 'Authorized: Signature:', 0, 0, 'L');
+                 $pdf->Cell(0, 10, '         _______________________________', 0, 1, 'L');
+
+                // Línea divisoria
+                $pdf->Ln(10);
+                $pdf->SetFont('Arial', 'B', 10);
+                $pdf->Cell(0, 10, 'ACCEPTACE OF CONTRACT', 0, 1, 'C');
+
+                // Texto de aceptación
+                $pdf->SetFont('Arial', 'B', 10);
+                $pdf->MultiCell(0, 6, 'The above prices, specifications and conditions are hereby accepted. You are authorized to do the work as specified. Payment will be made as outlined above.', 0, 'L');
+
+                // Espacio para la firma de aceptación
+                $pdf->Ln(10);
+                $pdf->Cell(30, 10, 'Accepted: Signature:', 0, 0, 'L');
+                $pdf->Cell(0, 10, '       _______________________________', 0, 1, 'L');
+
+
                 if (!is_dir('../pdf')) {
                     mkdir('../pdf', 0755, true);
                 }
 
-                // Guardar el PDF
                 $pdf->Output('F', $file_path);
-
-                // Mensaje de éxito
                 $_SESSION['status_message'] = "PDF generado exitosamente.";
                 $_SESSION['status_type'] = "success";
             } catch (Exception $e) {
-                // Mensaje de error
                 $_SESSION['status_message'] = "Error al generar el PDF: " . $e->getMessage();
                 $_SESSION['status_type'] = "danger";
             }
@@ -124,7 +137,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['folio'])) {
 
     $stmt->close();
     $con->close();
-    // Redirigir a la página principal (o la que desees)
     header("Location: works.php");
     exit();
 } else {
@@ -133,4 +145,5 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['folio'])) {
     header("Location: works.php");
     exit();
 }
+
 ?>
