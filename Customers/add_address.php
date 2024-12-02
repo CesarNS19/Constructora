@@ -16,26 +16,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $estado = $_POST['estado'];
     $codigo_postal = $_POST['codigo_postal'];
 
-    $query = "INSERT INTO direcciones (num_ext, num_int, calle, ciudad, estado, codigo_postal) 
-              VALUES (?, ?, ?, ?, ?, ?)";
+    // Inserta la dirección en la tabla direcciones
+    $query = "INSERT INTO direcciones (num_ext, num_int, calle, ciudad, estado, codigo_postal, id_cliente) 
+              VALUES (?, ?, ?, ?, ?, ?, ?)";
     $stmt = $con->prepare($query);
-    $stmt->bind_param("ssssss", $num_ext, $num_int, $calle, $ciudad, $estado, $codigo_postal);
+    $stmt->bind_param("ssssssi", $num_ext, $num_int, $calle, $ciudad, $estado, $codigo_postal, $id_cliente);
     
     if ($stmt->execute()) {
-        $direccion_id = $stmt->insert_id;
-        
-        // Actualizar la dirección del cliente en la tabla de clientes
-        $update_cliente_query = "UPDATE direcciones SET id_direccion = ? WHERE id_cliente = ?";
-        $stmt_cliente = $con->prepare($update_cliente_query);
-        $stmt_cliente->bind_param("ii", $direccion_id, $id_cliente);
-        
-        if ($stmt_cliente->execute()) {
-            header("Location: perfil.php");
-        } else {
-            echo "Error al actualizar la dirección del cliente.";
-        }
+        header("Location: perfil.php");
     } else {
-        echo "Error al agregar la dirección.";
+        echo "Error al agregar la dirección: " . $stmt->error;
     }
 }
 ?>
