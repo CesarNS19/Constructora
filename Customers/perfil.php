@@ -31,7 +31,7 @@ $result_dir = $stmt_dir->get_result();
 $direccion = $result_dir->fetch_assoc();
 
 if (!$direccion) {
-    $direccion = "No se encontraron datos de dirección.";
+    $direccion = null; // Indica que no hay dirección registrada
 }
 ?>
 
@@ -43,8 +43,8 @@ if (!$direccion) {
     <title>Perfil de Usuario</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" href="../Css/style.css">
 </head>
 <body style="background-color: #ffffff;">
@@ -52,11 +52,11 @@ if (!$direccion) {
 <header>
     <nav>
         <ul class="nav-links">
-        <li><a href="index.php" title="Inicio"><i class="fas fa-home"></i></a></li>
-        <li><a href="perfil.php" title="Perfil"><i class="fas fa-user"></i></a></li>
-        <li><a href="services.php" title="Servicios"><i class="fas fa-concierge-bell"></i></a></li>
-        <li><a href="#contact" title="Contacto"><i class="fas fa-envelope"></i></a></li>
-        <li><a href="../Login/logout.php" title="Cerrar Sesión"><i class="fas fa-sign-out-alt"></i></a></li>
+            <li><a href="index.php" title="Inicio"><i class="fas fa-home"></i></a></li>
+            <li><a href="perfil.php" title="Perfil"><i class="fas fa-user"></i></a></li>
+            <li><a href="services.php" title="Servicios"><i class="fas fa-concierge-bell"></i></a></li>
+            <li><a href="#contact" title="Contacto"><i class="fas fa-envelope"></i></a></li>
+            <li><a href="../Login/logout.php" title="Cerrar Sesión"><i class="fas fa-sign-out-alt"></i></a></li>
         </ul>
     </nav>
 </header>
@@ -80,22 +80,28 @@ if (!$direccion) {
     <div class="card text-center mt-4" style="width: 24rem;">
         <div class="card-body">
             <h5 class="card-title">Dirección</h5>
-            <p><strong>Calle:</strong> <?php echo htmlspecialchars($direccion['calle'] ?? 'No disponible'); ?></p>
-            <p><strong>Número Exterior:</strong> <?php echo htmlspecialchars($direccion['num_ext'] ?? 'No disponible'); ?></p>
-            <p><strong>Número Interior:</strong> <?php echo htmlspecialchars($direccion['num_int'] ?? 'No disponible'); ?></p>
-            <p><strong>Ciudad:</strong> <?php echo htmlspecialchars($direccion['ciudad'] ?? 'No disponible'); ?></p>
-            <p><strong>Estado:</strong> <?php echo htmlspecialchars($direccion['estado'] ?? 'No disponible'); ?></p>
-            <p><strong>Código Postal:</strong> <?php echo htmlspecialchars($direccion['codigo_postal'] ?? 'No disponible'); ?></p>
+            <?php if ($direccion) { ?>
+                <p><strong>Calle:</strong> <?php echo htmlspecialchars($direccion['calle'] ?? 'No disponible'); ?></p>
+                <p><strong>Número Exterior:</strong> <?php echo htmlspecialchars($direccion['num_ext'] ?? 'No disponible'); ?></p>
+                <p><strong>Número Interior:</strong> <?php echo htmlspecialchars($direccion['num_int'] ?? 'No disponible'); ?></p>
+                <p><strong>Ciudad:</strong> <?php echo htmlspecialchars($direccion['ciudad'] ?? 'No disponible'); ?></p>
+                <p><strong>Estado:</strong> <?php echo htmlspecialchars($direccion['estado'] ?? 'No disponible'); ?></p>
+                <p><strong>Código Postal:</strong> <?php echo htmlspecialchars($direccion['codigo_postal'] ?? 'No disponible'); ?></p>
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editAddressModal">Editar Dirección</button>
+            <?php } else { ?>
+                <p>No se encontraron datos de dirección.</p>
+                <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#addAddressModal">Agregar Dirección</button>
+            <?php } ?>
         </div>
     </div>
 </div>
 
-<!-- Modal para editar datos -->
+<!-- Modal para editar datos personales -->
 <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="editModalLabel">Editar Datos</h5>
+                <h5 class="modal-title" id="editModalLabel">Editar Datos Personales</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -104,87 +110,120 @@ if (!$direccion) {
                 <form action="update_profile.php" method="post">
                     <div class="form-group">
                         <label for="nombre_cliente">Nombre</label>
-                        <input type="text" class="form-control" name="nombre_cliente" id="nombre_cliente" value="<?php echo htmlspecialchars($user['nombre_cliente'] ?? ''); ?>">
+                        <input type="text" class="form-control" name="nombre_cliente" id="nombre_cliente" value="<?php echo htmlspecialchars($user['nombre_cliente']); ?>" required>
                     </div>
                     <div class="form-group">
                         <label for="apellido_paterno">Apellido Paterno</label>
-                        <input type="text" class="form-control" name="apellido_paterno" id="apellido_paterno" value="<?php echo htmlspecialchars($user['apellido_paterno'] ?? ''); ?>">
+                        <input type="text" class="form-control" name="apellido_paterno" id="apellido_paterno" value="<?php echo htmlspecialchars($user['apellido_paterno']); ?>" required>
                     </div>
                     <div class="form-group">
                         <label for="apellido_materno">Apellido Materno</label>
-                        <input type="text" class="form-control" name="apellido_materno" id="apellido_materno" value="<?php echo htmlspecialchars($user['apellido_materno'] ?? ''); ?>">
+                        <input type="text" class="form-control" name="apellido_materno" id="apellido_materno" value="<?php echo htmlspecialchars($user['apellido_materno']); ?>" required>
                     </div>
                     <div class="form-group">
                         <label for="correo_electronico">Correo Electrónico</label>
-                        <input type="email" class="form-control" name="correo_electronico" id="correo_electronico" value="<?php echo htmlspecialchars($user['correo_electronico'] ?? ''); ?>">
+                        <input type="email" class="form-control" name="correo_electronico" id="correo_electronico" value="<?php echo htmlspecialchars($user['correo_electronico']); ?>" required>
                     </div>
                     <div class="form-group">
                         <label for="telefono_personal">Teléfono</label>
-                        <input type="text" class="form-control" name="telefono_personal" id="telefono_personal" value="<?php echo htmlspecialchars($user['telefono_personal'] ?? ''); ?>">
+                        <input type="text" class="form-control" name="telefono_personal" id="telefono_personal" value="<?php echo htmlspecialchars($user['telefono_personal']); ?>" required>
                     </div>
-                    <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                    <input type="hidden" name="id_cliente" value="<?php echo htmlspecialchars($user['id_cliente']); ?>">
+                    <button type="submit" class="btn btn-primary">Actualizar Perfil</button>
                 </form>
             </div>
         </div>
     </div>
 </div>
 
-<script>
-function mostrarToast(titulo, mensaje, tipo) {
-            let icon = '';
-            let alertClass = '';
+<!-- Modal para agregar dirección -->
+<div class="modal fade" id="addAddressModal" tabindex="-1" role="dialog" aria-labelledby="addAddressModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addAddressModalLabel">Agregar Dirección</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="add_address.php" method="post">
+                    <div class="form-group">
+                        <label for="calle">Calle</label>
+                        <input type="text" class="form-control" name="calle" id="calle" placeholder="Calle" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="num_ext">Número Exterior</label>
+                        <input type="text" class="form-control" name="num_ext" id="num_ext" placeholder="Número Exterior" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="num_int">Número Interior</label>
+                        <input type="text" class="form-control" name="num_int" id="num_int" placeholder="Número Interior">
+                    </div>
+                    <div class="form-group">
+                        <label for="ciudad">Ciudad</label>
+                        <input type="text" class="form-control" name="ciudad" id="ciudad" placeholder="Ciudad" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="estado">Estado</label>
+                        <input type="text" class="form-control" name="estado" id="estado" placeholder="Estado" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="codigo_postal">Código Postal</label>
+                        <input type="text" class="form-control" name="codigo_postal" id="codigo_postal" placeholder="Código Postal" required>
+                    </div>
+                    <input type="hidden" name="id_cliente" value="<?php echo htmlspecialchars($user['id_cliente']); ?>">
+                    <button type="submit" class="btn btn-primary">Agregar Dirección</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 
-            switch (tipo) {
-                case 'success':
-                    icon = '<span class="fas fa-check-circle text-white fs-6"></span>';
-                    alertClass = 'alert-success';
-                    break;
-                case 'error':
-                    icon = '<span class="fas fa-times-circle text-white fs-6"></span>';
-                    alertClass = 'alert-danger';
-                    break;
-                case 'warning':
-                    icon = '<span class="fas fa-exclamation-circle text-white fs-6"></span>';
-                    alertClass = 'alert-warning';
-                    break;
-                case 'info':
-                    icon = '<span class="fas fa-info-circle text-white fs-6"></span>';
-                    alertClass = 'alert-info';
-                    break;
-                default:
-                    icon = '<span class="fas fa-info-circle text-white fs-6"></span>';
-                    alertClass = 'alert-info';
-                    break;
-            }
+<!-- Modal para editar dirección -->
+<div class="modal fade" id="editAddressModal" tabindex="-1" role="dialog" aria-labelledby="editAddressModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editAddressModalLabel">Editar Dirección</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="update_address.php" method="post">
+                    <div class="form-group">
+                        <label for="calle">Calle</label>
+                        <input type="text" class="form-control" name="calle" id="calle" value="<?php echo htmlspecialchars($direccion['calle']); ?>" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="num_ext">Número Exterior</label>
+                        <input type="text" class="form-control" name="num_ext" id="num_ext" value="<?php echo htmlspecialchars($direccion['num_ext']); ?>" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="num_int">Número Interior</label>
+                        <input type="text" class="form-control" name="num_int" id="num_int" value="<?php echo htmlspecialchars($direccion['num_int']); ?>" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="ciudad">Ciudad</label>
+                        <input type="text" class="form-control" name="ciudad" id="ciudad" value="<?php echo htmlspecialchars($direccion['ciudad']); ?>" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="estado">Estado</label>
+                        <input type="text" class="form-control" name="estado" id="estado" value="<?php echo htmlspecialchars($direccion['estado']); ?>" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="codigo_postal">Código Postal</label>
+                        <input type="text" class="form-control" name="codigo_postal" id="codigo_postal" value="<?php echo htmlspecialchars($direccion['codigo_postal']); ?>" required>
+                    </div>
+                    <input type="hidden" name="id_cliente" value="<?php echo htmlspecialchars($user['id_cliente']); ?>">
+                    <input type="hidden" name="id_direccion" value="<?php echo htmlspecialchars($direccion['id_direccion']); ?>">
+                    <button type="submit" class="btn btn-primary">Actualizar Dirección</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 
-            const alert = `
-            <div class="alert ${alertClass} d-flex align-items-center alert-dismissible fade show" role="alert">
-                <div class="me-2">${icon}</div>
-                <div>${titulo}: ${mensaje}</div>
-                <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>`;
-
-            $("#Alert").html(alert);
-
-            setTimeout(() => {
-                $(".alert").alert('close');
-            }, 4000);
-        }
-
-        document.addEventListener('DOMContentLoaded', function() {
-            <?php if (isset($_SESSION['status_message']) && isset($_SESSION['status_type'])): ?>
-                mostrarToast(
-                    '<?= $_SESSION["status_type"] === "warning" ? "Advertencia" : "Éxito" ?>',
-                    '<?= $_SESSION["status_message"] ?>',
-                    '<?= $_SESSION["status_type"] ?>'
-                );
-                <?php unset($_SESSION['status_message'], $_SESSION['status_type']); ?>
-            <?php endif; ?>
-        });
-</script>
-
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
