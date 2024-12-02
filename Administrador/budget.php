@@ -318,8 +318,7 @@ require '../Administrador/superior_admin.php';
     </div>
 </section>
 
-
-    <script>
+<script>
 
     function openEditModal(customerData) {
         $('#edit_folio_presupuesto').val(customerData.folio_presupuesto);
@@ -431,28 +430,22 @@ require '../Administrador/superior_admin.php';
         });
 
         function sendPDF(button) {
-            const folio = button.getAttribute('data-folio');
+                const folio = button.getAttribute('data-folio');
 
-        const sentPDFs = JSON.parse(localStorage.getItem('sentPDFs')) || [];
-            if (!sentPDFs.includes(folio)) {
-                 sentPDFs.push(folio);
-                localStorage.setItem('sentPDFs', JSON.stringify(sentPDFs));
-            }
+                const sentPDFs = JSON.parse(localStorage.getItem('sentPDFs')) || [];
+                if (!sentPDFs.includes(folio)) {
+                    sentPDFs.push(folio);
+                    localStorage.setItem('sentPDFs', JSON.stringify(sentPDFs));
+                }
 
-        const row = button.closest('tr');
-            row.querySelectorAll('.edit-button, .generate-pdf-button, .send-button').forEach(btn => btn.style.display = 'none');
-        }
-
-        document.addEventListener('DOMContentLoaded', function () {
-        const sentPDFs = JSON.parse(localStorage.getItem('sentPDFs')) || [];
-
-        sentPDFs.forEach(folio => {
-            const row = document.querySelector(`tr[data-folio="${folio}"]`);
-            if (row) {
+                const row = button.closest('tr');
                 row.querySelectorAll('.edit-button, .generate-pdf-button, .send-button').forEach(btn => btn.style.display = 'none');
+                
+                const statusButton = row.querySelector('.btn-status');
+                if (statusButton) {
+                    statusButton.classList.remove('d-none');
+                }
             }
-        });
-    });
     </script>
 </body>
 </html>

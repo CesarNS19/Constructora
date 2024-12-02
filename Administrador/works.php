@@ -343,7 +343,7 @@ require '../Administrador/superior_admin.php';
                                 onclick='sendPDF(this)'>
                                 <i class='fas fa-envelope'></i>
                             </a>";
-                        echo "<button class='btn btn-info btn-sm me-2 btn-status d-none' onclick='openStatusModal(" . json_encode($row) . ")' title='Work Status'>
+                        echo "<button class='btn btn-info btn-sm me-2 btn-status' onclick='openStatusModal(" . json_encode($row) . ")' title='Work Status'>
                             <i class='fas fa-spinner fa-spin'></i>
                         </button>";
                         echo "</td>";
