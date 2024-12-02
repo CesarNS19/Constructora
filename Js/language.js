@@ -133,6 +133,7 @@ const translations = {
     "Our Services": { es: "Nuestros Servicios", en: "Our Services" },
     "Generate PDF": { es: "Generar PDF", en: "Generate PDF" },
     "Delete Work": { es: "Eliminar Obra", en: "Delete Work" },
+    "Service Name": { es: "Nombre del Servicio", en: "Service Name" },
 };
 
 
