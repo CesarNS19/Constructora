@@ -26,7 +26,8 @@ require '../Administrador/superior_admin.php';
         </button><br/>
     </section><br/>
 
-    <div class="modal fade" id="addCompanyModal" tabindex="-1" role="dialog" aria-labelledby="addCompanyModalLabel" aria-hidden="true">
+<!-- Modal para añadir empresa -->
+<div class="modal fade" id="addCompanyModal" tabindex="-1" role="dialog" aria-labelledby="addCompanyModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -60,6 +61,7 @@ require '../Administrador/superior_admin.php';
     </div>
 </div>
 
+<!-- Modal para editar empresa -->
 <div class="modal fade" id="editCompanyModal" tabindex="-1" role="dialog" aria-labelledby="editCompanyModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -148,6 +150,7 @@ require '../Administrador/superior_admin.php';
     </div>
 </div>
 
+<!-- Tabla de empresas -->
 <section class="services-table container my-2"><br/>
 <div class="table-responsive">
     <table class="table table-bordered table-hover text-center">

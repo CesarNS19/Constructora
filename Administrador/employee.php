@@ -28,6 +28,7 @@ require '../Administrador/superior_admin.php';
     </button><br/>
 </section><br/>
 
+<!-- Modal para añadir empleado -->
 <div class="modal fade" id="addEmployeeModal" tabindex="-1" role="dialog" aria-labelledby="addEmployeeModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -102,6 +103,7 @@ require '../Administrador/superior_admin.php';
     </div>
 </div>
 
+<!-- Modal para editar empleado -->
 <div class="modal fade" id="editEmployeeModal" tabindex="-1" role="dialog" aria-labelledby="editEmployeeModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -182,6 +184,7 @@ require '../Administrador/superior_admin.php';
     </div>
 </div>
 
+<!-- Modal para agregar días trabajados -->
 <div id="calendarModal" class="modal fade" tabindex="-1" aria-labelledby="calendarModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content">

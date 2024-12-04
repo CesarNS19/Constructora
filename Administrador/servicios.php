@@ -26,6 +26,7 @@ require '../Administrador/superior_admin.php';
         </button><br/>
     </section><br/>
 
+<!-- Modal para añadir servicio -->
 <div class="modal fade" id="addServicesModal" tabindex="-1" role="dialog" aria-labelledby="addServicesModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -72,6 +73,7 @@ require '../Administrador/superior_admin.php';
     </div>
 </div>
 
+<!-- Modal para editar servicio -->
 <div class="modal fade" id="editServicesModal" tabindex="-1" role="dialog" aria-labelledby="editServicesLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">

@@ -241,6 +241,7 @@ require '../Administrador/superior_admin.php';
     </div>
 </div>
 
+<!-- Modal para editar el estado de la obra -->
 <div class="modal fade" id="workStatusModal" tabindex="-1" aria-labelledby="workStatusModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -267,7 +268,6 @@ require '../Administrador/superior_admin.php';
         </div>
     </div>
 </div>
-
 
 <!-- Tabla de Obras -->
 <section class="my-2"><br/>

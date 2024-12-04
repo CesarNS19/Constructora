@@ -78,6 +78,7 @@ require '../Administrador/superior_admin.php';
     </div>
 </div>
 
+<!-- Tabla de direcciones de clientes -->
 <section  class="services-table container my-4"><br/>
 <div class="table-responsive">
     <table class="table table-bordered table-hover text-center">

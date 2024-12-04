@@ -31,6 +31,7 @@ $result = $con->query($sql);
     Add Payroll
 </button><br/>
 
+<!-- Modal para añadir nómina -->
 <div class="modal fade" id="addPayrollModal" tabindex="-1" aria-labelledby="addPayrollModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -77,6 +78,7 @@ $result = $con->query($sql);
     </div>
 </div></br>
 
+<!-- Tabla de nóminas -->
 <section class="services-table container my-2"><br/>
 <div class="table-responsive">
     <table class="table table-bordered table-hover text-center">

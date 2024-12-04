@@ -61,6 +61,7 @@ $result = $con->query($sql);
 <div id="Alert"></div>
 <a href="../Administrador/payroll.php" class="btn btn-primary" style="float: right; margin: 10px;">Back</a><br>
 
+<!-- Formulario para búsqueda de nóminas -->
 <form action="" method="POST" class="container mt-5">
     <h3>Search Payroll</h3>
     <div class="row">
@@ -107,6 +108,7 @@ $result = $con->query($sql);
     </div>
 </form><br>
 
+<!-- Tabla con los resultados de la búsqueda -->
 <section class="services-table container my-2"><br>
     <div class="table-responsive">
         <table class="table table-bordered table-hover text-center">

@@ -77,6 +77,7 @@ require '../Administrador/superior_admin.php';?>
     </div>
 </div>
 
+<!-- Tabla de direcciones de empresas -->
 <section><br/>
     <table class="table table-bordered table-hover text-center">
         <thead class="thead-dark">
