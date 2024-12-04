@@ -13,7 +13,7 @@ $result_direccion_clientes = $con->query($sql_direccion_clientes);
 $sql_servicios = "SELECT id_servicio, nombre_servicio, total FROM servicios";
 $result_servicios = $con->query($sql_servicios);
 
-require '../Administrador/superior_admin.php';
+require '../Employee/superior_employee.php';
 ?>
 
 <!DOCTYPE html>
@@ -31,7 +31,7 @@ require '../Administrador/superior_admin.php';
 <div id="Alert"></div>
 
 <section class="company-header">
-        <a href="../Administrador/budget_address.php" class="btn btn-primary" style="float: right; margin: 10px;">
+        <a href="../Employee/budget_address.php" class="btn btn-primary" style="float: right; margin: 10px;">
             View Addresses
         </a>
         <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addBudgetModal" style="float: right; margin: 10px;">

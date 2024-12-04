@@ -174,20 +174,20 @@ require '../Administrador/superior_admin.php';
                     echo "<td>" . htmlspecialchars($row['pagina_web']) . "</td>";
                     echo "<td>" . htmlspecialchars($row['correo_empresa']) . "</td>";
                     echo "<td>";
-                    echo "<button class='btn btn-info btn-sm me-1' onclick='openEditModal(" . json_encode($row) . ")' title='Editar Empresa'>
+                    echo "<button class='btn btn-info btn-sm me-1' onclick='openEditModal(" . json_encode($row) . ")' title='Edit Company'>
                             <i class='fas fa-edit'></i>
                         </button>";
-                    echo "<a href='delete_company.php?id=" . $row['id_empresa'] . "' class='btn btn-danger btn-sm me-1' onclick='return confirm(\"¿Estás seguro de que deseas eliminar esta empresa?\")' title='Eliminar Empresa'>
+                    echo "<a href='delete_company.php?id=" . $row['id_empresa'] . "' class='btn btn-danger btn-sm me-1' onclick='return confirm(\"¿Estás seguro de que deseas eliminar esta empresa?\")' title='Delete Company'>
                             <i class='fas fa-trash'></i>
                         </a>";
-                    echo "<button class='btn btn-success btn-sm' onclick='openAddAddressModal(" . json_encode($row) . ")' title='Agregar Dirección'>
+                    echo "<button class='btn btn-success btn-sm' onclick='openAddAddressModal(" . json_encode($row) . ")' title='Add Address'>
                             <i class='fas fa-plus'></i>
                         </button>";
                     echo "</td>";
                     echo "</tr>";
                 }
             } else {
-                echo "<tr><td colspan='6'>No hay empresas registradas.</td></tr>";
+                echo "<tr><td colspan='6'>There are no company recorded.</td></tr>";
             }
             ?>
         </tbody>

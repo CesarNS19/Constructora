@@ -123,7 +123,7 @@ require '../Administrador/superior_admin.php';
                         echo "</tr>";
                     }
                 } else {
-                    echo "<tr><td colspan='11'>No hay direcciones de obras registrados.</td></tr>";
+                    echo "<tr><td colspan='11'>There are no work addresses recorded.</td></tr>";
                 }
             ?>
         </tbody>

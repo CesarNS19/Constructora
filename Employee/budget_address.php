@@ -1,6 +1,7 @@
 <?php
 require '../Login/conexion.php';
-require '../Administrador/superior_admin.php';?>
+require '../Employee/superior_employee.php';
+?>
 
 <!DOCTYPE html>
 <html lang="es">
@@ -16,25 +17,23 @@ require '../Administrador/superior_admin.php';?>
 
 <div id="Alert"></div>
 
-        <a href="../Administrador/company.php" class="btn btn-primary" style="float: right; margin: 20px;">
-            Back
-        </a><br/>
+<a href="../Employee/budget.php" class="btn btn-primary" style="float: right; margin: 20px;">Back</a><br/>
 
-<!-- Modal para editar dirección de la empresa -->
-<div class="modal fade" id="editCompanyAddressModal" tabindex="-1" role="dialog" aria-labelledby="editCompanyAddressModalLabel" aria-hidden="true">
+<!-- Modal para editar dirección del presupuesto -->
+<div class="modal fade" id="editBudgetAddressModal" tabindex="-1" role="dialog" aria-labelledby="editBudgetAddressModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="editCompanyAddressLabel">Edit Company Address</h5>
+                <h5 class="modal-title" id="editBudgetAddressLabel">Edit Budget Address</h5>
             </div>
-            <form action="edit_company_address.php" method="POST">
+            <form action="edit_budget_address.php" method="POST">
                 <div class="modal-body">
-                <input type="hidden" name="id_direccion" id="edit_id_direccion">
+                    <input type="hidden" name="id_direccion" id="edit_id_direccion">
 
-                <div class="form-group mb-3">
-                        <label for="edit_id_empresa">Company</label>
-                        <input type="text" name="edit_id_empresa" id="edit_id_empresa" class="form-control" readonly>
-                        <input type="hidden" name="id_empresa" id="id_empresa">
+                    <div class="form-group mb-3">
+                        <label for="edit_folio_presupuesto">Budget</label>
+                        <input type="text" name="edit_folio_presupuesto" id="edit_folio_presupuesto" class="form-control" readonly>
+                        <input type="hidden" name="folio_presupuesto" id="folio_presupuesto">
                     </div>
 
                     <div class="form-group mb-3">
@@ -66,7 +65,6 @@ require '../Administrador/superior_admin.php';?>
                         <label for="edit_codigo_postal">Postal Code</label>
                         <input type="number" name="codigo_postal" id="edit_codigo_postal" class="form-control" placeholder="Enter Postal Code" required>
                     </div>
-
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -77,12 +75,13 @@ require '../Administrador/superior_admin.php';?>
     </div>
 </div>
 
-<section><br/>
+<section class="services-table container my-2"><br/>
+<div class="table-responsive">
     <table class="table table-bordered table-hover text-center">
         <thead class="thead-dark">
-        <h2 class="text-center">Manage Company Addresses</h2><br/>
+            <h2 class="text-center">Manage Budget Addresses</h2><br/>
             <tr>
-                <th>Company</th>
+                <th>Budget</th>
                 <th>Outside Number</th>
                 <th>Inner Number</th>
                 <th>Street</th>
@@ -93,48 +92,47 @@ require '../Administrador/superior_admin.php';?>
             </tr>
         </thead>
         <tbody>
-            <?php
-            $sql = "SELECT d.id_direccion, d.id_empresa, e.nombre_empresa, d.num_ext, d.num_int, d.calle, d.ciudad, d.estado, d.codigo_postal
-                    FROM direcciones d
-                    JOIN empresa e ON d.id_empresa = e.id_empresa";
+        <?php
+            $sql = "SELECT d.id_direccion, d.folio_presupuesto, c.observaciones, 
+            d.num_ext, d.num_int, d.calle, d.ciudad, d.estado, d.codigo_postal
+            FROM direcciones d
+            JOIN presupuestos c ON d.folio_presupuesto = c.folio_presupuesto";
             $result = $con->query($sql);
-
             if ($result->num_rows > 0) {
                 while ($row = $result->fetch_assoc()) {
-                    $nombre_empresa = htmlspecialchars($row['nombre_empresa']);
                     echo "<tr>";
-                    echo "<td>" . $nombre_empresa . "</td>";
+                    echo "<td>" . htmlspecialchars($row['folio_presupuesto']) . "</td>";
                     echo "<td>" . htmlspecialchars($row['num_ext']) . "</td>";
                     echo "<td>" . htmlspecialchars($row['num_int']) . "</td>";
                     echo "<td>" . htmlspecialchars($row['calle']) . "</td>";
                     echo "<td>" . htmlspecialchars($row['ciudad']) . "</td>";
                     echo "<td>" . htmlspecialchars($row['estado']) . "</td>";
                     echo "<td>" . htmlspecialchars($row['codigo_postal']) . "</td>";
-                    echo "<td>";
-                        echo "<button class='btn btn-info btn-sm me-1' onclick='openEditCompanyAddressModal(" . json_encode($row) . ")' title='Edit Company Address'>
+                    echo "<td>
+                            <button class='btn btn-info btn-sm me-1' onclick='openEditAddressModal(" . json_encode($row) . ")' title='Edit Budget Address'>
                                 <i class='fas fa-edit'></i>
                             </button>
-                            <a href='delete_company_address.php?id=" . $row['id_empresa'] . "' class='btn btn-danger btn-sm' onclick='return confirm(\"¿Estás seguro de que deseas eliminar esta direccion de la empresa?\")' title='Delete Company Address'>
+                            <a href='delete_budget_address.php?id=" . $row['folio_presupuesto'] . "' class='btn btn-danger btn-sm' onclick='return confirm(\"¿Estás seguro de que deseas eliminar esta dirección del presupuesto?\")' title='Delete Budget Address'>
                                 <i class='fas fa-trash'></i>
                             </a>
-                        </td>";
-                        echo "</tr>";
-                    }
-                } else {
-                    echo "<tr><td colspan='11'>There are no company address recorded.</td></tr>";
+                          </td>";
+                    echo "</tr>";
                 }
-            ?>
+            } else {
+                echo "<tr><td colspan='9'>No hay direcciones de presupuestos registradas.</td></tr>";
+            }
+        ?>
         </tbody>
     </table>
+</div>
 </section>
 
 <script>
 
-    function openEditCompanyAddressModal(customerData) {
-        var empresa = customerData.nombre_empresa;
-
+    function openEditAddressModal(customerData) {
         $('#edit_id_direccion').val(customerData.id_direccion);
-        $('#edit_id_empresa').val(empresa);
+        $('#edit_folio_presupuesto').val(customerData.folio_presupuesto)
+        $('#folio_presupuesto').val(customerData.folio_presupuesto);
         $('#edit_num_ext').val(customerData.num_ext);
         $('#edit_num_int').val(customerData.num_int);
         $('#edit_calle').val(customerData.calle);
@@ -142,51 +140,51 @@ require '../Administrador/superior_admin.php';?>
         $('#edit_estado').val(customerData.estado);
         $('#edit_codigo_postal').val(customerData.codigo_postal);
 
-        $('#editCompanyAddressModal').modal('show');
+        $('#editBudgetAddressModal').modal('show');
     }
 
-function mostrarToast(titulo, mensaje, tipo) {
-            let icon = '';
-            let alertClass = '';
+    function mostrarToast(titulo, mensaje, tipo) {
+        let icon = '';
+        let alertClass = '';
 
-            switch (tipo) {
-                case 'success':
-                    icon = '<span class="fas fa-check-circle text-white fs-6"></span>';
-                    alertClass = 'alert-success';
-                    break;
-                case 'error':
-                    icon = '<span class="fas fa-times-circle text-white fs-6"></span>';
-                    alertClass = 'alert-danger';
-                    break;
-                case 'warning':
-                    icon = '<span class="fas fa-exclamation-circle text-white fs-6"></span>';
-                    alertClass = 'alert-warning';
-                    break;
-                case 'info':
-                    icon = '<span class="fas fa-info-circle text-white fs-6"></span>';
-                    alertClass = 'alert-info';
-                    break;
-                default:
-                    icon = '<span class="fas fa-info-circle text-white fs-6"></span>';
-                    alertClass = 'alert-info';
-                    break;
-            }
-
-            const alert = `
-            <div class="alert ${alertClass} d-flex align-items-center alert-dismissible fade show" role="alert">
-                <div class="me-2">${icon}</div>
-                <div>${titulo}: ${mensaje}</div>
-                <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>`;
-
-            $("#Alert").html(alert);
-
-            setTimeout(() => {
-                $(".alert").alert('close');
-            }, 4000);
+        switch (tipo) {
+            case 'success':
+                icon = '<span class="fas fa-check-circle text-white fs-6"></span>';
+                alertClass = 'alert-success';
+                break;
+            case 'error':
+                icon = '<span class="fas fa-times-circle text-white fs-6"></span>';
+                alertClass = 'alert-danger';
+                break;
+            case 'warning':
+                icon = '<span class="fas fa-exclamation-circle text-white fs-6"></span>';
+                alertClass = 'alert-warning';
+                break;
+            case 'info':
+                icon = '<span class="fas fa-info-circle text-white fs-6"></span>';
+                alertClass = 'alert-info';
+                break;
+            default:
+                icon = '<span class="fas fa-info-circle text-white fs-6"></span>';
+                alertClass = 'alert-info';
+                break;
         }
 
-        document.addEventListener('DOMContentLoaded', function() {
+        const alert = `
+        <div class="alert ${alertClass} d-flex align-items-center alert-dismissible fade show" role="alert">
+            <div class="me-2">${icon}</div>
+            <div>${titulo}: ${mensaje}</div>
+            <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>`;
+
+        $("#Alert").html(alert);
+
+        setTimeout(() => {
+            $(".alert").alert('close');
+        }, 4000);
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
             <?php if (isset($_SESSION['status_message']) && isset($_SESSION['status_type'])): ?>
                 <?php if ($_SESSION["status_type"] === "warning"): ?>
                     mostrarToast("Advertencia", '<?= $_SESSION["status_message"] ?>', '<?= $_SESSION["status_type"] ?>');
@@ -200,6 +198,7 @@ function mostrarToast(titulo, mensaje, tipo) {
                 <?php unset($_SESSION['status_message'], $_SESSION['status_type']); ?>
             <?php endif; ?>
         });
-    </script>
+</script>
+
 </body>
 </html>

@@ -1,5 +1,6 @@
 <?php
 require '../Login/conexion.php';
+require '../Administrador/superior_admin.php';
 
 $sql_empleados = "SELECT id_empleado, nombre, apellido_paterno, apellido_materno FROM empleados";
 $result_empleados = $con->query($sql_empleados);
@@ -8,8 +9,6 @@ $sql = "SELECT n.id_nomina, e.nombre, e.apellido_paterno, e.apellido_materno, n.
         FROM nomina n
         JOIN empleados e ON n.id_empleado = e.id_empleado";
 $result = $con->query($sql);
-
-require '../Administrador/superior_admin.php';
 ?>
 
 <!DOCTYPE html>
@@ -25,7 +24,9 @@ require '../Administrador/superior_admin.php';
 <body>
 
 <div id="Alert"></div>
-
+<a href="../Administrador/payroll_search.php" class="btn btn-primary" style="float: right; margin: 10px;">
+    Search Payroll
+</a>
 <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addPayrollModal" style="float: right; margin: 10px;">
     Add Payroll
 </button><br/>
@@ -74,47 +75,7 @@ require '../Administrador/superior_admin.php';
             </form>
         </div>
     </div>
-</div>
-
-<!-- Modal para editar la nómina -->
-<div class="modal fade" id="editPayrollModal" tabindex="-1" role="dialog" aria-labelledby="editPayrollModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="editPayrollLabel">Edit Payroll</h5>
-            </div>
-            <form action="edit_payroll.php" method="POST">
-                <div class="modal-body">
-                    <input type="hidden" name="id_nomina" id="edit_id_nomina">
-                    <div class="form-group mb-3">
-                        <label for="edit_id_empleado">Employee Name</label>
-                        <input type="text" name="edit_id_empleado" id="edit_id_empleado" class="form-control" readonly>
-                        <input type="hidden" name="id_empleado" id="id_empleado">
-                    </div>
-
-                    <div class="form-group mb-3">
-                        <label for="edit_dias_trabajados">Days Worked</label>
-                        <input type="number" id="edit_dias_trabajados" name="dias_trabajados" class="form-control" readonly>
-                    </div>
-
-                    <div class="form-group mb-3">
-                        <label for="edit_sueldo_diario">Daily Salary</label>
-                        <input type="number" id="edit_sueldo_diario" name="sueldo_diario" class="form-control" required>
-                    </div>
-
-                    <div class="form-group mb-3">
-                        <label for="edit_total">Total</label>
-                        <input type="number" id="edit_total" name="total" class="form-control" readonly>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Save Changes</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
+</div></br>
 
 <section class="services-table container my-2"><br/>
 <div class="table-responsive">
@@ -127,7 +88,6 @@ require '../Administrador/superior_admin.php';
                 <th>Daily Salary</th>
                 <th>Days Worked</th>
                 <th>Total</th>
-                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -141,15 +101,10 @@ require '../Administrador/superior_admin.php';
                     echo "<td>" . htmlspecialchars($row['sueldo_diario']) . "</td>";
                     echo "<td>" . htmlspecialchars($row['dias_trabajados']) . "</td>";
                     echo "<td>" . htmlspecialchars($row['total']) . "</td>";
-                    echo "<td>";
-                    echo "<button class='btn btn-info btn-sm me-1' onclick='openEditModal(" . json_encode($row) . ")' title='Edit Payroll'>
-                            <i class='fas fa-edit'></i>
-                          </button>";
-                    echo "</td>";
                     echo "</tr>";
                 }
             } else {
-                echo "<tr><td colspan='6'>No hay nóminas registradas.</td></tr>";
+                echo "<tr><td colspan='6'>There are no payrolls recorded.</td></tr>";
             }
             ?>
         </tbody>
@@ -158,19 +113,6 @@ require '../Administrador/superior_admin.php';
 </section>
 
 <script>
-
-    function openEditModal(customerData) {
-        var nombreCompleto = customerData.nombre + ' ' + customerData.apellido_paterno + ' ' + customerData.apellido_materno;
-
-        $('#edit_id_nomina').val(customerData.id_nomina);
-        $('#edit_id_empleado').val(nombreCompleto);
-        $('#edit_sueldo_diario').val(customerData.sueldo_diario);
-        $('#edit_dias_trabajados').val(customerData.dias_trabajados);
-        $('#edit_total').val(customerData.total);
-
-        $('#editPayrollModal').modal('show');
-    }
-
     function mostrarToast(titulo, mensaje, tipo) {
             let icon = '';
             let alertClass = '';
@@ -235,16 +177,6 @@ require '../Administrador/superior_admin.php';
             const diasTrabajados = parseFloat(document.getElementById('dias_trabajados').value) || 0;
             const total = sueldoDiario * diasTrabajados;
             document.getElementById('total').value = total.toFixed(2);
-        }
-
-        document.getElementById('edit_sueldo_diario').addEventListener('input', calcularTotalEdit);
-        document.getElementById('edit_dias_trabajados').addEventListener('input', calcularTotalEdit);
-
-        function calcularTotalEdit() {
-            const sueldoDiario = parseFloat(document.getElementById('edit_sueldo_diario').value) || 0;
-            const diasTrabajados = parseFloat(document.getElementById('edit_dias_trabajados').value) || 0;
-            const total = sueldoDiario * diasTrabajados;
-            document.getElementById('edit_total').value = total.toFixed(2);
         }
 
         document.getElementById('id_empleado').addEventListener('change', function () {

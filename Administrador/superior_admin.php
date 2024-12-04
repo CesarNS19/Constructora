@@ -1,3 +1,39 @@
+<?php
+session_start();
+
+$lang = 'en';
+if (isset($_COOKIE['lang'])) {
+    $lang = $_COOKIE['lang'];
+}
+
+$translations = [
+    'en' => [
+        'morning' => 'Good Morning',
+        'afternoon' => 'Good Afternoon',
+        'night' => 'Good Night',
+        'log_in' => 'Log In'
+    ],
+    'es' => [
+        'morning' => 'Buenos Días',
+        'afternoon' => 'Buenas Tardes',
+        'night' => 'Buenas Noches',
+        'log_in' => 'Iniciar Sesión'
+    ]
+];
+
+if (isset($_COOKIE['timezone'])) {
+    date_default_timezone_set($_COOKIE['timezone']);
+}
+
+$hour = date('H');
+if ($hour >= 5 && $hour < 12) {
+    $greeting = $translations[$lang]['morning'];
+} elseif ($hour >= 12 && $hour < 19) {
+    $greeting = $translations[$lang]['afternoon'];
+} else {
+    $greeting = $translations[$lang]['night'];
+}
+?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -30,39 +66,24 @@
             </ul>
             <div class="user-controls" style="display: flex; align-items: center; margin-left: auto;">
             <?php
-            session_start();
+                if (isset($_SESSION['nombre'], $_SESSION['apellido_paterno'], $_SESSION['apellido_materno'])) {
+                    $fullName = $_SESSION['nombre'] . ' ' . $_SESSION['apellido_paterno'] . ' ' . $_SESSION['apellido_materno'];
 
-            if (isset($_SESSION['nombre'], $_SESSION['apellido_paterno'], $_SESSION['apellido_materno'])) {
-                $fullName = $_SESSION['nombre'] . ' ' . $_SESSION['apellido_paterno'] . ' ' . $_SESSION['apellido_materno'];
-                
-                if (isset($_COOKIE['timezone'])) {
-                    date_default_timezone_set($_COOKIE['timezone']);
-                }
-
-                $hour = date('H');
-                
-                if ($hour >= 5 && $hour < 12) {
-                    $greeting = "Good Morning";
-                } elseif ($hour >= 12 && $hour < 19) {
-                    $greeting = "Good Afternoon";
+                    echo "
+                    <div class='nav-item' style='display: flex; align-items: center;'>
+                        <a class='nav-link' href='perfil.php' style='color: black; font-size: 18px; text-decoration: none; font-weight: 600;'>
+                            $greeting $fullName
+                        </a>
+                        <div class='vr' style='height: 24px; width: 1px; background-color: black; margin: 0 10px;'></div>
+                        <button title='Change Theme' id='themeToggle' style='background: none; border: none; color: black; font-size: 20px; cursor: pointer;'>
+                            <i class='fas fa-adjust'></i>
+                        </button>
+                    </div>";
                 } else {
-                    $greeting = "Good night";
+                    $logInText = $translations[$lang]['log_in'];
+                    echo "<a class='nav-link' href='../Login/login.php' style='color: black; font-size: 18px; text-decoration: none; font-weight: 600;'>$logInText</a>";
                 }
-
-                echo "
-                <div class='nav-item' style='display: flex; align-items: center;'>
-                    <a class='nav-link' href='perfil.php' style='color: black; font-size: 18px; text-decoration: none; font-weight: 600;'>
-                        $greeting $fullName
-                    </a>
-                    <div class='vr' style='height: 24px; width: 1px; background-color: black; margin: 0 10px;'></div>
-                    <button title='Canbiar tema' id='themeToggle' style='background: none; border: none; color: black; font-size: 20px; cursor: pointer;'>
-                        <i class='fas fa-adjust'></i>
-                    </button>
-                </div>";
-            } else {
-                echo "<a class='nav-link' href='../Login/login.php' style='color: black; font-size: 18px; text-decoration: none; font-weight: 600;'>Iniciar sesión</a>";
-            }
-            ?>
+                ?>
         </div>
         </nav>
     </header>
@@ -82,7 +103,13 @@
             } else {
                 localStorage.setItem('theme', 'light');
             }
-        })
+        });
+
+        document.getElementById('languageButton').addEventListener('click', () => {
+            const newLang = document.documentElement.lang === 'es' ? 'en' : 'es';
+            document.cookie = `lang=${newLang}; path=/`;
+            location.reload();
+        });
     </script>
     
         <script src="../Js/language.js"></script>

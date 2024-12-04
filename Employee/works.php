@@ -1,5 +1,6 @@
 <?php
 require '../Login/conexion.php';
+require '../Employee/superior_employee.php';
 
 $sql_empresas = "SELECT id_empresa, nombre_empresa FROM empresa";
 $result_empresas = $con->query($sql_empresas);
@@ -7,13 +8,7 @@ $result_empresas = $con->query($sql_empresas);
 $sql_clientes = "SELECT id_cliente, nombre_cliente, apellido_paterno, apellido_materno FROM clientes WHERE rol = 'usuario'";
 $result_clientes = $con->query($sql_clientes);
 
-$sql_direccion_clientes = "SELECT id_cliente, ciudad FROM direcciones";
-$result_direccion_clientes = $con->query($sql_direccion_clientes);
-
 $sql_servicios = "SELECT id_servicio, nombre_servicio, total FROM servicios";
-$result_servicios = $con->query($sql_servicios);
-
-require '../Administrador/superior_admin.php';
 ?>
 
 <!DOCTYPE html>
@@ -21,7 +16,7 @@ require '../Administrador/superior_admin.php';
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Company</title>
+    <title>Work</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -30,25 +25,25 @@ require '../Administrador/superior_admin.php';
 
 <div id="Alert"></div>
 
-<section class="company-header">
-        <a href="../Administrador/budget_address.php" class="btn btn-primary" style="float: right; margin: 10px;">
+<section>
+        <a href="../Employee/works_address.php" class="btn btn-primary" style="float: right; margin: 10px;">
             View Addresses
         </a>
-        <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addBudgetModal" style="float: right; margin: 10px;">
-            Add Budget
+        <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addWorksModal" style="float: right; margin: 10px;">
+            Add Work
         </button><br/>
     </section><br/>
 
-<!-- Modal para agregar presupuestos -->
-    <div class="modal fade" id="addBudgetModal" tabindex="-1" role="dialog" aria-labelledby="addBudgetModalLabel" aria-hidden="true">
+<!-- Modal de Agregar Obra -->
+<div class="modal fade" id="addWorksModal" tabindex="-1" role="dialog" aria-labelledby="addWorksModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="addBudgetModalLabel">Add New Budget</h5>
+                <h5 class="modal-title" id="addWorksModalLabel">Add New Work</h5>
             </div>
-            <form action="add_budget.php" method="POST">
+            <form action="add_work.php" method="POST">
                 <div class="modal-body">
-                <div class="form-group mb-3">
+                    <div class="form-group mb-3">
                         <label for="id_empresa">Selected a Company</label>
                         <select name="id_empresa" class="form-control" required>
                             <option value="">Selected a Company</option>
@@ -84,13 +79,6 @@ require '../Administrador/superior_admin.php';
                             ?>
                         </select>
                     </div>
-
-                    <div class="form-group mb-3">
-                        <label for="direccion_cliente">Customer Address</label>
-                        <input type="text" id="direccion_cliente" class="form-control" readonly>
-                        <input type="hidden" name="id_direccion" id="id_direccion">
-                    </div>
-
                     <div class="form-group mb-3">
                         <label for="id_servicio">Select a Service</label>
                         <select name="id_servicio" id="select_servicio" class="form-control" required>
@@ -108,38 +96,51 @@ require '../Administrador/superior_admin.php';
                         </select>
                     </div>
                     <div class="form-group mb-3">
-                        <label for="date">Date of Preparation</label>
-                        <input type="date" step="0.01" name="fecha_elaboracion" class="form-control" required>
+                        <label for="direccion_cliente">Customer Address</label>
+                        <input type="text" id="direccion_cliente" class="form-control" readonly>
+                        <input type="hidden" name="id_direccion" id="id_direccion">
+                    </div>
+                    <div class="form-group mb-3">
+                        <label >Start Date</label>
+                        <input type="date" name="fecha_inicio" class="form-control" required>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label >Advance Payment</label>
+                        <input type="number" name="anticipo" id="anticipo" class="form-control" required>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label >Debit</label>
+                        <input type="number" name="adeudo" id="adeudo" class="form-control" required>
                     </div>
                     <div class="form-group mb-3">
                         <label >Total Work</label>
-                        <input type="number" name="total" id="total" class="form-control" readonly>
+                        <input type="number" name="total_obra" id="total_obra" class="form-control" readonly>
                     </div>
                     <div class="form-group mb-3">
-                        <label for="">Observations</label>
-                        <textarea name="observaciones" class="form-control" required></textarea>
+                        <label >Observations</label>
+                        <textarea name="observaciones" class="form-control"></textarea>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Add New Budget</button>
+                    <button type="submit" class="btn btn-primary">Add New Work</button>
                 </div>
             </form>
         </div>
     </div>
 </div>
 
-<!-- Modal para editar presupuestos -->
-<div class="modal fade" id="editBudgetModal" tabindex="-1" role="dialog" aria-labelledby="editBudgetModalLabel" aria-hidden="true">
+<!-- Modal de Editar Obra -->
+<div class="modal fade" id="editWorksModal" tabindex="-1" role="dialog" aria-labelledby="editWorksModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="editBudgetLabel">Edit Budget</h5>
+                <h5 class="modal-title" id="editWorksLabel">Edit Work</h5>
             </div>
-            <form action="edit_budget.php" method="POST">
+            <form action="edit_works.php" method="POST">
                 <div class="modal-body">
-                    <input type="hidden" name="folio_presupuesto" id="edit_folio_presupuesto">
-                    
+                    <input type="hidden" name="folio_obra" id="edit_folio_obra">
+
                     <div class="form-group mb-3">
                     <label for="edit_id_servicio">Select a Service</label>
                     <select name="id_servicio" id="edit_id_servicio" class="form-control" required>
@@ -155,18 +156,28 @@ require '../Administrador/superior_admin.php';
                         }
                         ?>
                     </select>
-                </div>
-
-                    <div class="form-group mb-3">
-                        <label for="edit_fecha_elaboracion">Date of Preparation</label>
-                        <input type="date" name="fecha_elaboracion" id="edit_fecha_elaboracion" class="form-control" required>
                     </div>
 
                     <div class="form-group mb-3">
-                        <label for="edit_total">Total Work</label>
-                        <input type="number" name="total" id="edit_total" class="form-control" readonly>
+                        <label for="edit_fecha_inicio">Start Date</label>
+                        <input type="date" name="fecha_inicio" id="edit_fecha_inicio" class="form-control" required>
                     </div>
-                                        
+
+                    <div class="form-group mb-3">
+                        <label for="edit_anticipo">Advance Payment</label>
+                        <input type="number" name="anticipo" id="edit_anticipo" class="form-control" required>
+                    </div>
+                    
+                    <div class="form-group mb-3">
+                        <label for="edit_adeudo">Debit</label>
+                        <input type="number" name="adeudo" id="edit_adeudo" class="form-control" readonly>
+                    </div>
+                    
+                    <div class="form-group mb-3">
+                        <label for="edit_total_obra">Total Work</label>
+                        <input type="number" name="total_obra" id="edit_total_obra" class="form-control" readonly>
+                    </div>
+                    
                     <div class="form-group mb-3">
                         <label for="edit_observaciones">Observations</label>
                         <input type="text" name="observaciones" id="edit_observaciones" class="form-control" required>
@@ -181,20 +192,20 @@ require '../Administrador/superior_admin.php';
     </div>
 </div>
 
-<!-- Modal para añadir dirección del presupuesto -->
-<div class="modal fade" id="addBudgetAddressModal" tabindex="-1" role="dialog" aria-labelledby="addAddressBudgetModalLabel" aria-hidden="true">
+<!-- Modal para añadir dirección de la obra -->
+<div class="modal fade" id="addWorkAddressModal" tabindex="-1" role="dialog" aria-labelledby="addWorkAddressModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="addBudgetAddressLabel">Add Budget Address</h5>
+                <h5 class="modal-title" id="addWorkAddressLabel">Add Work Address</h5>
             </div>
-            <form action="add_budget_address.php" method="POST">
+            <form action="add_work_address.php" method="POST">
                 <div class="modal-body">
-                    <input type="hidden" name="folio_presupuesto" id="folio_presupuesto_modal">
                     <div class="form-group mb-3">
-                        <label>Selected Budget</label>
-                        <input type="text" id="presupuesto_modal" class="form-control" readonly>
+                        <label for="id_obra_modal_display">Work ID</label>
+                        <input type="number" id="id_obra_modal_display" class="form-control" readonly>
                     </div>
+                    <input type="hidden" name="folio_obra" id="folio_obra_hidden">
                     <div class="form-group mb-3">
                         <label for="num_ext">Outside Number</label>
                         <input type="number" name="num_ext" class="form-control" required>
@@ -222,95 +233,122 @@ require '../Administrador/superior_admin.php';
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Add Budget Address</button>
+                    <button type="submit" class="btn btn-primary">Add Work Address</button>
                 </div>
             </form>
         </div>
     </div>
 </div>
 
-<!-- Tabla de Presupuestos -->
-<section class="services-table my-2"><br/>
+<div class="modal fade" id="workStatusModal" tabindex="-1" aria-labelledby="workStatusModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="workStatusModalLabel">Change Work Status</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="status_work.php" method="POST">
+                <div class="modal-body">
+                    <input type="hidden" id="folioObra" name="folio_obra">
+                    <div class="mb-3">
+                        <select class="form-select" id="newStatus" name="estatus">
+                            <option value="iniciada">Initial</option>
+                            <option value="medium">Medium</option>
+                            <option value="complete">Complete</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<!-- Tabla de Obras -->
+<section class="my-2"><br/>
     <div class="table-responsive">
         <table class="table table-bordered table-hover text-center">
             <thead class="thead-dark">
                 <tr>
-                    <h2 class="text-center">Manage Budgets</h2><br/>
+                    <h2 class="text-center">Manage Works</h2><br/>
                     <th>Company</th>
+                    <th>Service</th>
                     <th>Customer</th>
                     <th>Customer Address</th>
-                    <th>Service</th>
-                    <th>Date of Preparation</th>
-                    <th>Total</th>
+                    <th>Start Date</th>
+                    <th>Advance Payment</th>
+                    <th>Debit</th>
+                    <th>Total Work</th>
                     <th>Observations</th>
+                    <th>Status</th>
                     <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
                 <?php
                 $sql = "SELECT o.*, e.nombre_empresa, c.nombre_cliente, c.apellido_paterno, c.apellido_materno, d.ciudad, s.nombre_servicio
-                        FROM presupuestos o
+                        FROM obras o
                         LEFT JOIN empresa e ON o.id_empresa = e.id_empresa
                         LEFT JOIN clientes c ON o.id_cliente = c.id_cliente
                         LEFT JOIN servicios s ON o.id_servicio = s.id_servicio
                         LEFT JOIN direcciones d ON o.id_direccion = d.id_direccion";
-
                 $result = $con->query($sql);
 
                 if ($result->num_rows > 0) {
                     while ($row = $result->fetch_assoc()) {
-                        $folio_presupuesto = htmlspecialchars($row['folio_presupuesto']);
                         $nombre_cliente = htmlspecialchars($row['nombre_cliente'] . ' ' . $row['apellido_paterno'] . ' ' . $row['apellido_materno']);
+                        $folio_obra = htmlspecialchars($row['folio_obra']);
                         $servicio = htmlspecialchars($row['nombre_servicio']);
-                        $file_path = "../pdf/Proposal_" . $folio_presupuesto . ".pdf";
+                        $file_path = "../pdf/Contract_" . $folio_obra . ".pdf";
 
-                        echo "<tr>";
+                        echo "<tr data-folio='$folio_obra'>";
                         echo "<td>" . htmlspecialchars($row['nombre_empresa']) . "</td>";
+                        echo "<td>" . $servicio . "</td>";
                         echo "<td>" . $nombre_cliente . "</td>";
                         echo "<td>" . htmlspecialchars($row['ciudad']) . "</td>";
-                        echo "<td>" . $servicio . "</td>";
-                        echo "<td>" . htmlspecialchars($row['fecha_elaboracion']) . "</td>";
-                        echo "<td>" . htmlspecialchars($row['total']) . "</td>";
+                        echo "<td>" . htmlspecialchars($row['fecha_inicio']) . "</td>";
+                        echo "<td>" . htmlspecialchars($row['anticipo']) . "</td>";
+                        echo "<td>" . htmlspecialchars($row['adeudo']) . "</td>";
+                        echo "<td>" . htmlspecialchars($row['total_obra']) . "</td>";
                         echo "<td>" . htmlspecialchars($row['observaciones']) . "</td>";
-                        echo "<td>
-                                <div class='d-flex flex-wrap justify-content-center gap-2'>
-                                    <button class='btn btn-info btn-sm edit-button' onclick='openEditModal(" . json_encode($row) . ")' title='Edit Budget'>
-                                        <i class='fas fa-edit'></i>
-                                    </button>
-                                    <a href='delete_budget.php?id=" . $row['folio_presupuesto'] . "' 
-                                       class='btn btn-danger btn-sm' 
-                                       onclick='return confirm(\"¿Estás seguro de que deseas eliminar este presupuesto?\")' 
-                                       title='Delete Budget'>
-                                        <i class='fas fa-trash'></i>
-                                    </a>
-                                    <button class='btn btn-success btn-sm' onclick='openAddAddressModal(" . json_encode($row) . ")' title='Add Address'>
-                                        <i class='fas fa-plus'></i>
-                                    </button>
-                                    <a href='generate_pdf_proposal.php?folio=$folio_presupuesto' 
-                                       class='btn btn-danger btn-sm generate-pdf-button' 
-                                       title='Generate PDF'>
-                                        <i class='fas fa-file-pdf'></i>
-                                    </a>";
-                        if (file_exists($file_path)) {
-                            echo "<a href='$file_path' 
-                                       target='_blank' 
-                                       class='btn btn-success btn-sm' 
-                                       title='View PDF'>
-                                        <i class='fas fa-eye'></i>
-                                  </a>";
-                        }
-                        echo "<a href='send_pdf_proposal.php?folio=$folio_presupuesto&file=" . urlencode($file_path) . "' 
-                                   class='btn btn-primary btn-sm send-button' 
-                                   title='Send PDF' 
-                                   data-folio='$folio_presupuesto' 
-                                   onclick='sendPDF(this)'>
-                                   <i class='fas fa-envelope'></i>
+                        echo "<td>" . htmlspecialchars($row['estatus']) . "</td>";
+                        echo "<td>";
+                        echo "<button class='btn btn-info btn-sm me-1 edit-button' onclick='openEditModal(" . json_encode($row) . ")' title='Edit Work'>
+                            <i class='fas fa-edit'></i>
+                        </button>";
+                        echo "<a href='delete_work.php?id=$folio_obra' class='btn btn-danger btn-sm me-2 delete-button' onclick='return confirm(\"Are you sure you want to delete this work?\")' title='Delete Work'>
+                                <i class='fas fa-trash'></i>
                               </a>";
-                        echo "</div></td>";
+                        echo "<button class='btn btn-success btn-sm me-2' onclick='openAddAddressModal(" . json_encode($row) . ")' title='Add Address'>
+                            <i class='fas fa-plus'></i>
+                        </button>";
+                        echo "<a href='generate_pdf.php?folio=$folio_obra' class='btn btn-danger btn-sm me-2 generate-pdf-button' title='Generate PDF'>
+                                <i class='fas fa-file-pdf'></i>
+                              </a>";
+                        if (file_exists($file_path)) {
+                            echo "<a href='$file_path' target='_blank' class='btn btn-warning btn-sm me-2 view-pdf-button' title='View PDF'>
+                                    <i class='fas fa-eye'></i>
+                                </a>";
+                        }
+                        echo "<a href='send_pdf.php?folio=$folio_obra&file=" . urlencode($file_path) . "' 
+                                class='btn btn-primary send-button btn-sm me-2' 
+                                title='Send PDF' 
+                                data-folio='$folio_obra' 
+                                onclick='sendPDF(this)'>
+                                <i class='fas fa-envelope'></i>
+                            </a>";
+                        echo "<button class='btn btn-info btn-sm me-2 btn-status' onclick='openStatusModal(" . json_encode($row) . ")' title='Work Status'>
+                            <i class='fas fa-spinner fa-spin'></i>
+                        </button>";
+                        echo "</td>";
                         echo "</tr>";
                     }
                 } else {
-                    echo "<tr><td colspan='8'>No hay presupuestos registrados.</td></tr>";
+                    echo "<tr><td colspan='9'>There are no works recorded.</td></tr>";
                 }
                 ?>
             </tbody>
@@ -318,38 +356,63 @@ require '../Administrador/superior_admin.php';
     </div>
 </section>
 
-<script>
+    <script>
 
-    function openEditModal(customerData) {
-        $('#edit_folio_presupuesto').val(customerData.folio_presupuesto);
-        $('#edit_fecha_elaboracion').val(customerData.fecha_elaboracion);
-        $('#edit_total_obra').val(customerData.total_obra);
-        $('#edit_total').val(customerData.total);
-        $('#edit_observaciones').val(customerData.observaciones);
-        
-        $('#edit_id_servicio').val(customerData.id_servicio);
+    function openEditModal(obraData) {
+        $('#edit_folio_obra').val(obraData.folio_obra);
+        $('#edit_fecha_inicio').val(obraData.fecha_inicio);
+        $('#edit_anticipo').val(obraData.anticipo);
+        $('#edit_adeudo').val(obraData.adeudo);
+        $('#edit_total_obra').val(obraData.total_obra);
+        $('#edit_observaciones').val(obraData.observaciones);
 
-        $('#editBudgetModal').modal('show');
+        $('#edit_id_servicio').val(obraData.id_servicio);
+
+        let selectedServiceTotal = $('#edit_id_servicio option:selected').data('total');
+        $('#edit_total_obra').val(selectedServiceTotal);
+
+        $('#edit_id_servicio').off('change').on('change', function() {
+            let selectedServiceTotal = $('#edit_id_servicio option:selected').data('total');
+            $('#edit_total_obra').val(selectedServiceTotal);
+
+            $('#edit_anticipo').val('');
+            $('#edit_adeudo').val('');
+        });
+
+        $('#editWorksModal').modal('show');
     }
-        $(document).ready(function () {
-        $('#select_servicio').change(function () {
-            const selectedOption = $(this).find('option:selected');
-            const total = selectedOption.data('total') || 0;
-            $('#total').val(total);
-        });
 
-        $('#edit_id_servicio').change(function () {
-            const selectedOption = $(this).find('option:selected');
-            const total = selectedOption.data('total') || 0;
-            $('#edit_total').val(total);
-        });
+    $('#select_servicio').on('change', function () {
+        var total = parseFloat($(this).find(':selected').data('total')) || 0;
+        $('#total_obra').val(total.toFixed(2));
+        $('#anticipo').val('');
+        $('#adeudo').val('');
     });
 
-    function openAddAddressModal(presupuesto) {
-        document.getElementById('folio_presupuesto_modal').value = presupuesto.folio_presupuesto;
-        document.getElementById('presupuesto_modal').value = presupuesto.folio_presupuesto;
-        $('#addBudgetAddressModal').modal('show');
+
+    function openAddAddressModal(obra) {
+        document.getElementById('id_obra_modal_display').value = obra.folio_obra;
+        document.getElementById('folio_obra_hidden').value = obra.folio_obra;
+
+        $('#addWorkAddressModal').modal('show');
     }
+
+    document.getElementById('newStatus').addEventListener('change', function() {
+        localStorage.setItem('selectedStatus', this.value);
+    });
+
+
+    function openStatusModal(data) {
+        document.getElementById('folioObra').value = data.folio_obra;
+        const storedStatus = localStorage.getItem('selectedStatus');
+        if (storedStatus) {
+            document.getElementById('newStatus').value = storedStatus;
+        }
+
+        const statusModal = new bootstrap.Modal(document.getElementById('workStatusModal'));
+        statusModal.show();
+    }
+
 
         function mostrarToast(titulo, mensaje, tipo) {
             let icon = '';
@@ -429,7 +492,44 @@ require '../Administrador/superior_admin.php';
             });
         });
 
-        function sendPDF(button) {
+
+        function validarYCalcularAgregar() {
+            var total = parseFloat(document.getElementById('total_obra').value) || 0;
+            var anticipo = parseFloat(document.getElementById('anticipo').value) || 0;
+
+            if (anticipo > total) {
+                alert("El anticipo no puede exceder el total.");
+                document.getElementById('anticipo').value = total.toFixed(2);
+                anticipo = total;
+            }
+
+            var adeudo = total - anticipo;
+            document.getElementById('adeudo').value = adeudo.toFixed(2);
+        }
+
+    function validarYCalcularEditar() {
+        var total = parseFloat(document.getElementById('edit_total_obra').value) || 0;
+        var anticipo = parseFloat(document.getElementById('edit_anticipo').value) || 0;
+
+        if (anticipo > total) {
+                alert("El anticipo no puede exceder el total.");
+                document.getElementById('edit_anticipo').value = total.toFixed(2);
+                anticipo = total;
+            }
+
+                var adeudo = total - anticipo;
+                document.getElementById('edit_adeudo').value = adeudo.toFixed(2);
+            }
+
+            if (document.getElementById('anticipo')) {
+                document.getElementById('anticipo').addEventListener('input', validarYCalcularAgregar);
+            }
+
+            if (document.getElementById('edit_anticipo')) {
+                document.getElementById('edit_anticipo').addEventListener('input', validarYCalcularEditar);
+            }
+
+            function sendPDF(button) {
                 const folio = button.getAttribute('data-folio');
 
                 const sentPDFs = JSON.parse(localStorage.getItem('sentPDFs')) || [];
@@ -446,6 +546,18 @@ require '../Administrador/superior_admin.php';
                     statusButton.classList.remove('d-none');
                 }
             }
+
+
+        document.addEventListener('DOMContentLoaded', function () {
+        const sentPDFs = JSON.parse(localStorage.getItem('sentPDFs')) || [];
+
+        sentPDFs.forEach(folio => {
+            const row = document.querySelector(`tr[data-folio="${folio}"]`);
+            if (row) {
+                row.querySelectorAll('.edit-button, .generate-pdf-button, .send-button').forEach(btn => btn.style.display = 'none');
+            }
+        });
+    });
     </script>
 </body>
 </html>

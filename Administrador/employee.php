@@ -260,7 +260,7 @@ require '../Administrador/superior_admin.php';
         <thead class="thead-dark">
             <tr>
                 <h2 class="text-center">Manage Employee</h2><br/>
-                <th>Employee Name</th>
+                <th>Employee</th>
                 <th>Entry Time</th>
                 <th>Exit Time</th>
                 <th>Days Worked</th>
@@ -296,31 +296,31 @@ require '../Administrador/superior_admin.php';
                     echo "<td>";
                 
                     if ($row['estatus'] === 'activo') {
-                        echo "<a href='status_employee.php?id=" . $row['id_empleado'] . "&estatus=inactivo' class='btn btn-warning btn-sm me-2' title='Desactivar empleado'>
+                        echo "<a href='status_employee.php?id=" . $row['id_empleado'] . "&estatus=inactivo' class='btn btn-warning btn-sm me-2' title='Deactivate Employee'>
                                 <i class='fas fa-ban'></i>
                             </a>";
                     } else {
-                        echo "<a href='status_employee.php?id=" . $row['id_empleado'] . "&estatus=activo' class='btn btn-success btn-sm me-2' title='Activar empleado'>
+                        echo "<a href='status_employee.php?id=" . $row['id_empleado'] . "&estatus=activo' class='btn btn-success btn-sm me-2' title='Activate Employee'>
                                 <i class='fas fa-check-circle'></i>
                             </a>";
                     }
 
-                    echo "<button class='btn btn-info btn-sm me-1' onclick='openEditModal(" . json_encode($row) . ")' title='Editar empleado'>
+                    echo "<button class='btn btn-info btn-sm me-1' onclick='openEditModal(" . json_encode($row) . ")' title='Edit Employee'>
                             <i class='fas fa-edit'></i>
                         </button>
-                        <a href='delete_employee.php?id=" . $row['id_empleado'] . "' class='btn btn-danger btn-sm' onclick='return confirm(\"¿Estás seguro de que deseas eliminar a este empleado?\")' title='Eliminar empleado'>
+                        <a href='delete_employee.php?id=" . $row['id_empleado'] . "' class='btn btn-danger btn-sm' onclick='return confirm(\"¿Estás seguro de que deseas eliminar a este empleado?\")' title='Delete Employee'>
                             <i class='fas fa-trash'></i>
                         </a>
                         <button class='btn btn-primary btn-sm me-1' 
                                 onclick='openCalendarModal(" . $row['id_empleado'] . ", " . json_encode(explode(",", $row['dias_trabajados'])) . ")' 
-                                title='Seleccionar días trabajados'>
+                                title='Selected Days Worked'>
                             <i class='fas fa-calendar-alt'></i>
                         </button>
                     </td>";
                     echo "</tr>";
                 }
             } else {
-                echo "<tr><td colspan='11'>No hay empleados registrados.</td></tr>";
+                echo "<tr><td colspan='11'>There are no employees recorded.</td></tr>";
             }
             ?>
         </tbody>

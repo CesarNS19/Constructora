@@ -123,7 +123,7 @@ require '../Administrador/superior_admin.php';
                     echo "</tr>";
                 }
             } else {
-                echo "<tr><td colspan='9'>No hay clientes registrados.</td></tr>";
+                echo "<tr><td colspan='9'>There are no customers addresses recorded.</td></tr>";
             }
         ?>
         </tbody>

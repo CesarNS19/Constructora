@@ -8,14 +8,14 @@ use PHPMailer\PHPMailer\Exception;
 session_start();
 
 if (isset($_GET['folio']) && isset($_GET['file'])) {
-    $folio_presupuesto = $_GET['folio'];
+    $folio_obra = $_GET['folio'];
     $file_path = urldecode($_GET['file']);
 
-    $sql = "SELECT c.correo_electronico FROM presupuestos o
+    $sql = "SELECT c.correo_electronico FROM obras o
             LEFT JOIN clientes c ON o.id_cliente = c.id_cliente
-            WHERE o.folio_presupuesto = ?";
+            WHERE o.folio_obra = ?";
     $stmt = $con->prepare($sql);
-    $stmt->bind_param('i', $folio_presupuesto);
+    $stmt->bind_param('i', $folio_obra);
     $stmt->execute();
     $result = $stmt->get_result();
     $obra = $result->fetch_assoc();
@@ -25,13 +25,13 @@ if (isset($_GET['folio']) && isset($_GET['file'])) {
     } else {
         $_SESSION['status_message'] = "No se encontró el cliente o el archivo PDF.";
         $_SESSION['status_type'] = "error";
-        header("Location: budget.php");
+        header("Location: works.php");
         exit;
     }
 } else {
     $_SESSION['status_message'] = "Parámetros inválidos proporcionados.";
     $_SESSION['status_type'] = "warning";
-    header("Location: budget.php");
+    header("Location: works.php");
     exit;
 }
 
@@ -50,17 +50,17 @@ try {
     $mail->addAttachment($file_path);
 
     $mail->isHTML(true);
-    $mail->Subject = 'Proposal Document';
-    $mail->Body = 'Please find the attached proposal document.';
+    $mail->Subject = 'Contract Document';
+    $mail->Body = 'Please find the attached contract document.';
 
     $mail->send();
-    $_SESSION['status_message'] = "Presupuesto enviado correctamente al cliente";
+    $_SESSION['status_message'] = "Contrato enviado correctamente al cliente";
     $_SESSION['status_type'] = "success";
 } catch (Exception $e) {
     $_SESSION['status_message'] = "Error al enviar el correo: {$mail->ErrorInfo}";
     $_SESSION['status_type'] = "error";
 }
 
-header("Location: budget.php");
+header("Location: works.php");
 exit();
 ?>
