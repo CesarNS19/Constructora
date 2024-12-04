@@ -57,6 +57,10 @@ require '../Administrador/superior_admin.php';
                         <input type="time" name="hora_salida" class="form-control" required>
                     </div>
                     <div class="form-group mb-3">
+                        <label>Daily Salary</label>
+                        <input type="number" name="sueldo_diario" class="form-control" required>
+                    </div>
+                    <div class="form-group mb-3">
                         <label>Phone</label>
                         <input type="text" name="telefono_personal" class="form-control" required>
                     </div>
@@ -131,6 +135,11 @@ require '../Administrador/superior_admin.php';
                     <div class="form-group mb-3">
                         <label for="edit_hora_salida">Exit Time</label>
                         <input type="time" name="hora_salida" id="edit_hora_salida" class="form-control" required>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="edit_sueldo_diario">Daily Salary</label>
+                        <input type="number" name="sueldo_diario" id="edit_sueldo_diario" class="form-control" required>
                     </div>
                     
                     <div class="form-group mb-3">
@@ -264,10 +273,10 @@ require '../Administrador/superior_admin.php';
                 <th>Entry Time</th>
                 <th>Exit Time</th>
                 <th>Days Worked</th>
+                <th>Daily Salary</th>
                 <th>Phone</th>
                 <th>Email</th>
                 <th>Position</th>
-                <th>Activities</th>
                 <th>Company</th>
                 <th>Status</th>
                 <th>Actions</th>
@@ -287,10 +296,10 @@ require '../Administrador/superior_admin.php';
                     echo "<td>" . htmlspecialchars($row['hora_entrada']) . "</td>";
                     echo "<td>" . htmlspecialchars($row['hora_salida']) . "</td>";
                     echo "<td>" . htmlspecialchars($row['dias_trabajados']) . "</td>";
+                    echo "<td>" . htmlspecialchars($row['sueldo_diario']) . "</td>";
                     echo "<td>" . htmlspecialchars($row['telefono_personal']) . "</td>";
                     echo "<td>" . htmlspecialchars($row['correo_personal']) . "</td>";
                     echo "<td>" . htmlspecialchars($row['rol']) . "</td>";
-                    echo "<td>" . htmlspecialchars($row['actividades']) . "</td>";
                     echo "<td>" . htmlspecialchars($row['nombre_empresa']) . "</td>";
                     echo "<td>" . htmlspecialchars($row['estatus']) . "</td>";
                     echo "<td>";
@@ -337,6 +346,7 @@ require '../Administrador/superior_admin.php';
         $('#edit_apellido_materno').val(customerData.apellido_materno);
         $('#edit_hora_entrada').val(customerData.hora_entrada);
         $('#edit_hora_salida').val(customerData.hora_salida);
+        $('#edit_sueldo_diario').val(customerData.sueldo_diario);
         $('#edit_telefono_personal').val(customerData.telefono_personal);
         $('#edit_correo_personal').val(customerData.correo_personal);
         $('#edit_actividades').val(customerData.actividades);

@@ -190,6 +190,8 @@ const translations = {
     "Delete Service" : {es: "Eliminar Servicio", en: "Delete Service"},
     "Deactivate Employee" : {es: "Desactivar Empleado", en: "Deactivate Employee"},
     "Activate Employee" : {es: "Activar Empleado", en: "Activate Employee"},
+    "Payrolls" : {es: "Nóminas", en: "Payrolls"},
+
 };
 
 

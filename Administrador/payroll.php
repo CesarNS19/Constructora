@@ -61,7 +61,7 @@ $result = $con->query($sql);
                     </div>
                     <div class="form-group mb-3">
                         <label for="sueldo_diario">Daily Salary</label>
-                        <input type="number" id="sueldo_diario" name="sueldo_diario" class="form-control" required>
+                        <input type="number" id="sueldo_diario" name="sueldo_diario" class="form-control" readonly>
                     </div>
                     <div class="form-group mb-3">
                         <label for="total">Total</label>
@@ -187,16 +187,34 @@ $result = $con->query($sql);
                     .then(response => response.json())
                     .then(data => {
                         if (data.dias_trabajados !== undefined) {
-                            document.getElementById('dias_trabajados').value = data.dias_trabajados;
+                            document.getElementById('dias_trabajados').value = data.dias_trabajados || '';
                         } else {
                             document.getElementById('dias_trabajados').value = '';
                         }
+
+                        if (data.sueldo_diario !== undefined) {
+                            document.getElementById('sueldo_diario').value = data.sueldo_diario || '';
+                        } else {
+                            document.getElementById('sueldo_diario').value = '';
+                        }
+
+                        calcularTotal();
                     })
-                    .catch(error => console.error('Error al obtener días trabajados:', error));
+                    .catch(error => console.error('Error al obtener datos del empleado:', error));
             } else {
                 document.getElementById('dias_trabajados').value = '';
+                document.getElementById('sueldo_diario').value = '';
+                calcularTotal();
             }
         });
+
+        function calcularTotal() {
+            const sueldoDiario = parseFloat(document.getElementById('sueldo_diario').value) || 0;
+            const diasTrabajados = parseFloat(document.getElementById('dias_trabajados').value) || 0;
+            const total = sueldoDiario * diasTrabajados;
+            document.getElementById('total').value = total.toFixed(2);
+        }
+
 
 </script>
 </body>

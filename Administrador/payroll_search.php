@@ -66,7 +66,7 @@ $result = $con->query($sql);
     <div class="row">
         <div class="col-md-4">
             <label for="search_id_empleado">Select Employee</label>
-            <select name="id_empleado" id="search_id_empleado" class="form-control" required>
+            <select name="id_empleado" id="search_id_empleado" class="form-control">
                 <option value="">Select Employee</option>
                 <?php
                 if ($result_empleados->num_rows > 0) {

@@ -253,9 +253,9 @@ require '../Administrador/superior_admin.php';
                     <input type="hidden" id="folioObra" name="folio_obra">
                     <div class="mb-3">
                         <select class="form-select" id="newStatus" name="estatus">
-                            <option value="iniciada">Initial</option>
-                            <option value="medium">Medium</option>
-                            <option value="complete">Complete</option>
+                            <option value="Iniciada">Initial</option>
+                            <option value="En progreso">Medium</option>
+                            <option value="completa">Complete</option>
                         </select>
                     </div>
                 </div>

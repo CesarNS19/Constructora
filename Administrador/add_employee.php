@@ -8,6 +8,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $apellido_materno = $_POST['apellido_materno'];
     $hora_entrada = $_POST['hora_entrada'];
     $hora_salida = $_POST['hora_salida'];
+    $salario = $_POST['sueldo_diario'];
     $telefono_personal = $_POST['telefono_personal'];
     $correo_personal = $_POST['correo_personal'];
     $contrasena = $_POST['contrasena'];
@@ -28,11 +29,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     } else {
         $hashed_password = password_hash($contrasena, PASSWORD_DEFAULT);
 
-        $sql = "INSERT INTO empleados (nombre, apellido_paterno, apellido_materno, hora_entrada, hora_salida, telefono_personal, correo_personal, contrasena, rol, actividades, id_empresa, estatus) 
+        $sql = "INSERT INTO empleados (nombre, apellido_paterno, apellido_materno, hora_entrada, sueldo_diario, hora_salida, telefono_personal, correo_personal, contrasena, rol, actividades, id_empresa, estatus) 
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         
         $stmt = $con->prepare($sql);
-        $stmt->bind_param("ssssssssssss", $nombre, $apellido_paterno, $apellido_materno, $hora_entrada, $hora_salida, $telefono_personal, $correo_personal, $hashed_password, $rol, $actividades, $id_empresa, $estatus);
+        $stmt->bind_param("sssssssssssss", $nombre, $apellido_paterno, $apellido_materno, $hora_entrada, $hora_salida, $salario, $telefono_personal, $correo_personal, $hashed_password, $rol, $actividades, $id_empresa, $estatus);
 
         if ($stmt->execute()) {
             $_SESSION['status_message'] = "Empleado agregado exitosamente.";
