@@ -22,6 +22,8 @@
                 <li><a href="servicios.php" title="Servicios"><i class="fas fa-concierge-bell"></i></a></li>
                 <li><a href="#contact" title="Contacto"><i class="fas fa-envelope"></i></a></li>
                 <li><a href="customers.php" title="Clientes"><i class="fas fa-users"></i></a></li>
+                <li><a href="works.php" title="Works"><i class="fas fa-ruler-combined"></i></a></li>
+                <li><a href="budget.php" title="Budget"><i class="fas fa-file-invoice-dollar"></i></a></li>
             </ul>
             <div class="user-controls" style="display: flex; align-items: center; margin-left: auto;">
             <?php
@@ -78,6 +80,12 @@
                 localStorage.setItem('theme', 'light');
             }
         })
+
+        document.getElementById('languageButton').addEventListener('click', () => {
+            const newLang = document.documentElement.lang === 'es' ? 'en' : 'es';
+            document.cookie = `lang=${newLang}; path=/`;
+            location.reload();
+        });
     </script>
     
         <script src="../Js/language.js"></script>

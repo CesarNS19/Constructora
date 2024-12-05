@@ -18,7 +18,7 @@ if (isset($_POST['id_empleado'])) {
         $apellido_materno = $_POST['apellido_materno'];
         $hora_entrada = $_POST['hora_entrada'];
         $hora_salida = $_POST['hora_salida'];
-        $dias_trabajados = $_POST['dias_trabajados'];
+        $salario = $_POST['sueldo_diario'];
         $telefono = $_POST['telefono_personal'];
         $email = $_POST['correo_personal'];
         $actividades = $_POST['actividades'];
@@ -38,9 +38,9 @@ if (isset($_POST['id_empleado'])) {
             exit();
         }
 
-        $sql = "UPDATE empleados SET nombre = ?, apellido_paterno = ?, apellido_materno = ?, hora_entrada = ?, hora_salida = ?, dias_trabajados = ?, telefono_personal = ?, correo_personal = ?, actividades = ?, id_empresa = ? WHERE id_empleado = ?";
+        $sql = "UPDATE empleados SET nombre = ?, apellido_paterno = ?, apellido_materno = ?, hora_entrada = ?, hora_salida = ?, sueldo_diario = ?, telefono_personal = ?, correo_personal = ?, actividades = ?, id_empresa = ? WHERE id_empleado = ?";
         $stmt = $con->prepare($sql);
-        $stmt->bind_param("ssssssssssi", $nombre, $apellido_paterno, $apellido_materno, $hora_entrada, $hora_salida, $dias_trabajados, $telefono, $email, $actividades, $id_empresa, $id);
+        $stmt->bind_param("ssssssssssi", $nombre, $apellido_paterno, $apellido_materno, $hora_entrada, $hora_salida, $salario, $telefono, $email, $actividades, $id_empresa, $id);
 
         if ($stmt->execute()) {
             if ($stmt->affected_rows > 0) {

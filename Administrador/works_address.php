@@ -78,6 +78,7 @@ require '../Administrador/superior_admin.php';
     </div>
 </div>
 
+<!-- Tabla de direcciones de obras -->
 <section class="services-table container my-2"><br/>
 <div class="table-responsive">
     <table class="table table-bordered table-hover text-center">
@@ -123,7 +124,7 @@ require '../Administrador/superior_admin.php';
                         echo "</tr>";
                     }
                 } else {
-                    echo "<tr><td colspan='11'>No hay direcciones de obras registrados.</td></tr>";
+                    echo "<tr><td colspan='11'>There are no work addresses recorded.</td></tr>";
                 }
             ?>
         </tbody>

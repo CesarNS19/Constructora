@@ -230,16 +230,16 @@ require '../Administrador/superior_admin.php';
 </div>
 
 <!-- Tabla de Presupuestos -->
-<section class="services-table container my-2"><br/>
+<section class="services-table my-2"><br/>
     <div class="table-responsive">
         <table class="table table-bordered table-hover text-center">
             <thead class="thead-dark">
                 <tr>
                     <h2 class="text-center">Manage Budgets</h2><br/>
-                    <th>Company Name</th>
-                    <th>Customer Name</th>
+                    <th>Company</th>
+                    <th>Customer</th>
                     <th>Customer Address</th>
-                    <th>Service Name</th>
+                    <th>Service</th>
                     <th>Date of Preparation</th>
                     <th>Total</th>
                     <th>Observations</th>
@@ -274,16 +274,16 @@ require '../Administrador/superior_admin.php';
                         echo "<td>" . htmlspecialchars($row['observaciones']) . "</td>";
                         echo "<td>
                                 <div class='d-flex flex-wrap justify-content-center gap-2'>
-                                    <button class='btn btn-info btn-sm edit-button' onclick='openEditModal(" . json_encode($row) . ")' title='Editar presupuesto'>
+                                    <button class='btn btn-info btn-sm edit-button' onclick='openEditModal(" . json_encode($row) . ")' title='Edit Budget'>
                                         <i class='fas fa-edit'></i>
                                     </button>
                                     <a href='delete_budget.php?id=" . $row['folio_presupuesto'] . "' 
                                        class='btn btn-danger btn-sm' 
                                        onclick='return confirm(\"¿Estás seguro de que deseas eliminar este presupuesto?\")' 
-                                       title='Eliminar presupuesto'>
+                                       title='Delete Budget'>
                                         <i class='fas fa-trash'></i>
                                     </a>
-                                    <button class='btn btn-success btn-sm' onclick='openAddAddressModal(" . json_encode($row) . ")' title='Agregar Dirección'>
+                                    <button class='btn btn-success btn-sm' onclick='openAddAddressModal(" . json_encode($row) . ")' title='Add Address'>
                                         <i class='fas fa-plus'></i>
                                     </button>
                                     <a href='generate_pdf_proposal.php?folio=$folio_presupuesto' 
@@ -301,7 +301,7 @@ require '../Administrador/superior_admin.php';
                         }
                         echo "<a href='send_pdf_proposal.php?folio=$folio_presupuesto&file=" . urlencode($file_path) . "' 
                                    class='btn btn-primary btn-sm send-button' 
-                                   title='Enviar PDF' 
+                                   title='Send PDF' 
                                    data-folio='$folio_presupuesto' 
                                    onclick='sendPDF(this)'>
                                    <i class='fas fa-envelope'></i>

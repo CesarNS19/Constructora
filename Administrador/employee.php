@@ -28,6 +28,7 @@ require '../Administrador/superior_admin.php';
     </button><br/>
 </section><br/>
 
+<!-- Modal para añadir empleado -->
 <div class="modal fade" id="addEmployeeModal" tabindex="-1" role="dialog" aria-labelledby="addEmployeeModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -55,6 +56,10 @@ require '../Administrador/superior_admin.php';
                     <div class="form-group mb-3">
                         <label for="hora_salida">Exit Time</label>
                         <input type="time" name="hora_salida" class="form-control" required>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label>Daily Salary</label>
+                        <input type="number" name="sueldo_diario" class="form-control" required>
                     </div>
                     <div class="form-group mb-3">
                         <label>Phone</label>
@@ -98,6 +103,7 @@ require '../Administrador/superior_admin.php';
     </div>
 </div>
 
+<!-- Modal para editar empleado -->
 <div class="modal fade" id="editEmployeeModal" tabindex="-1" role="dialog" aria-labelledby="editEmployeeModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -131,6 +137,11 @@ require '../Administrador/superior_admin.php';
                     <div class="form-group mb-3">
                         <label for="edit_hora_salida">Exit Time</label>
                         <input type="time" name="hora_salida" id="edit_hora_salida" class="form-control" required>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="edit_sueldo_diario">Daily Salary</label>
+                        <input type="number" name="sueldo_diario" id="edit_sueldo_diario" class="form-control" required>
                     </div>
                     
                     <div class="form-group mb-3">
@@ -173,6 +184,7 @@ require '../Administrador/superior_admin.php';
     </div>
 </div>
 
+<!-- Modal para agregar días trabajados -->
 <div id="calendarModal" class="modal fade" tabindex="-1" aria-labelledby="calendarModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content">
@@ -260,14 +272,14 @@ require '../Administrador/superior_admin.php';
         <thead class="thead-dark">
             <tr>
                 <h2 class="text-center">Manage Employee</h2><br/>
-                <th>Employee Name</th>
+                <th>Employee</th>
                 <th>Entry Time</th>
                 <th>Exit Time</th>
                 <th>Days Worked</th>
+                <th>Daily Salary</th>
                 <th>Phone</th>
                 <th>Email</th>
                 <th>Position</th>
-                <th>Activities</th>
                 <th>Company</th>
                 <th>Status</th>
                 <th>Actions</th>
@@ -287,40 +299,40 @@ require '../Administrador/superior_admin.php';
                     echo "<td>" . htmlspecialchars($row['hora_entrada']) . "</td>";
                     echo "<td>" . htmlspecialchars($row['hora_salida']) . "</td>";
                     echo "<td>" . htmlspecialchars($row['dias_trabajados']) . "</td>";
+                    echo "<td>" . htmlspecialchars($row['sueldo_diario']) . "</td>";
                     echo "<td>" . htmlspecialchars($row['telefono_personal']) . "</td>";
                     echo "<td>" . htmlspecialchars($row['correo_personal']) . "</td>";
                     echo "<td>" . htmlspecialchars($row['rol']) . "</td>";
-                    echo "<td>" . htmlspecialchars($row['actividades']) . "</td>";
                     echo "<td>" . htmlspecialchars($row['nombre_empresa']) . "</td>";
                     echo "<td>" . htmlspecialchars($row['estatus']) . "</td>";
                     echo "<td>";
                 
                     if ($row['estatus'] === 'activo') {
-                        echo "<a href='status_employee.php?id=" . $row['id_empleado'] . "&estatus=inactivo' class='btn btn-warning btn-sm me-2' title='Desactivar empleado'>
+                        echo "<a href='status_employee.php?id=" . $row['id_empleado'] . "&estatus=inactivo' class='btn btn-warning btn-sm me-2' title='Deactivate Employee'>
                                 <i class='fas fa-ban'></i>
                             </a>";
                     } else {
-                        echo "<a href='status_employee.php?id=" . $row['id_empleado'] . "&estatus=activo' class='btn btn-success btn-sm me-2' title='Activar empleado'>
+                        echo "<a href='status_employee.php?id=" . $row['id_empleado'] . "&estatus=activo' class='btn btn-success btn-sm me-2' title='Activate Employee'>
                                 <i class='fas fa-check-circle'></i>
                             </a>";
                     }
 
-                    echo "<button class='btn btn-info btn-sm me-1' onclick='openEditModal(" . json_encode($row) . ")' title='Editar empleado'>
+                    echo "<button class='btn btn-info btn-sm me-1' onclick='openEditModal(" . json_encode($row) . ")' title='Edit Employee'>
                             <i class='fas fa-edit'></i>
                         </button>
-                        <a href='delete_employee.php?id=" . $row['id_empleado'] . "' class='btn btn-danger btn-sm' onclick='return confirm(\"¿Estás seguro de que deseas eliminar a este empleado?\")' title='Eliminar empleado'>
+                        <a href='delete_employee.php?id=" . $row['id_empleado'] . "' class='btn btn-danger btn-sm' onclick='return confirm(\"¿Estás seguro de que deseas eliminar a este empleado?\")' title='Delete Employee'>
                             <i class='fas fa-trash'></i>
                         </a>
                         <button class='btn btn-primary btn-sm me-1' 
                                 onclick='openCalendarModal(" . $row['id_empleado'] . ", " . json_encode(explode(",", $row['dias_trabajados'])) . ")' 
-                                title='Seleccionar días trabajados'>
+                                title='Selected Days Worked'>
                             <i class='fas fa-calendar-alt'></i>
                         </button>
                     </td>";
                     echo "</tr>";
                 }
             } else {
-                echo "<tr><td colspan='11'>No hay empleados registrados.</td></tr>";
+                echo "<tr><td colspan='11'>There are no employees recorded.</td></tr>";
             }
             ?>
         </tbody>
@@ -337,6 +349,7 @@ require '../Administrador/superior_admin.php';
         $('#edit_apellido_materno').val(customerData.apellido_materno);
         $('#edit_hora_entrada').val(customerData.hora_entrada);
         $('#edit_hora_salida').val(customerData.hora_salida);
+        $('#edit_sueldo_diario').val(customerData.sueldo_diario);
         $('#edit_telefono_personal').val(customerData.telefono_personal);
         $('#edit_correo_personal').val(customerData.correo_personal);
         $('#edit_actividades').val(customerData.actividades);

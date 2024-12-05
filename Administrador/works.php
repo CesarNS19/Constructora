@@ -241,6 +241,7 @@ require '../Administrador/superior_admin.php';
     </div>
 </div>
 
+<!-- Modal para editar el estado de la obra -->
 <div class="modal fade" id="workStatusModal" tabindex="-1" aria-labelledby="workStatusModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -252,11 +253,10 @@ require '../Administrador/superior_admin.php';
                 <div class="modal-body">
                     <input type="hidden" id="folioObra" name="folio_obra">
                     <div class="mb-3">
-                        <label for="newStatus" class="form-label">New Status</label>
                         <select class="form-select" id="newStatus" name="estatus">
-                            <option value="iniciada">Initial</option>
-                            <option value="medium">Medium</option>
-                            <option value="complete">Complete</option>
+                            <option value="Iniciada">Initial</option>
+                            <option value="En progreso">Medium</option>
+                            <option value="completa">Complete</option>
                         </select>
                     </div>
                 </div>
@@ -269,7 +269,6 @@ require '../Administrador/superior_admin.php';
     </div>
 </div>
 
-
 <!-- Tabla de Obras -->
 <section class="my-2"><br/>
     <div class="table-responsive">
@@ -277,16 +276,16 @@ require '../Administrador/superior_admin.php';
             <thead class="thead-dark">
                 <tr>
                     <h2 class="text-center">Manage Works</h2><br/>
-                    <th>Company Name</th>
-                    <th>Service Name</th>
-                    <th>Customer Name</th>
+                    <th>Company</th>
+                    <th>Service</th>
+                    <th>Customer</th>
                     <th>Customer Address</th>
                     <th>Start Date</th>
                     <th>Advance Payment</th>
                     <th>Debit</th>
                     <th>Total Work</th>
                     <th>Observations</th>
-                    <th>Estatus</th>
+                    <th>Status</th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -322,7 +321,7 @@ require '../Administrador/superior_admin.php';
                         echo "<button class='btn btn-info btn-sm me-1 edit-button' onclick='openEditModal(" . json_encode($row) . ")' title='Edit Work'>
                             <i class='fas fa-edit'></i>
                         </button>";
-                        echo "<a href='delete_work.php?id=$folio_obra' class='btn btn-danger btn-sm me-2 delete-button' onclick='return confirm(\"¿Estás seguro de que deseas eliminar esta obra?\")' title='Delete Work'>
+                        echo "<a href='delete_work.php?id=$folio_obra' class='btn btn-danger btn-sm me-2 delete-button' onclick='return confirm(\"Are you sure you want to delete this work?\")' title='Delete Work'>
                                 <i class='fas fa-trash'></i>
                               </a>";
                         echo "<button class='btn btn-success btn-sm me-2' onclick='openAddAddressModal(" . json_encode($row) . ")' title='Add Address'>
@@ -338,7 +337,7 @@ require '../Administrador/superior_admin.php';
                         }
                         echo "<a href='send_pdf.php?folio=$folio_obra&file=" . urlencode($file_path) . "' 
                                 class='btn btn-primary send-button btn-sm me-2' 
-                                title='Enviar PDF' 
+                                title='Send PDF' 
                                 data-folio='$folio_obra' 
                                 onclick='sendPDF(this)'>
                                 <i class='fas fa-envelope'></i>
@@ -350,7 +349,7 @@ require '../Administrador/superior_admin.php';
                         echo "</tr>";
                     }
                 } else {
-                    echo "<tr><td colspan='9'>No hay obras registradas.</td></tr>";
+                    echo "<tr><td colspan='9'>There are no works recorded.</td></tr>";
                 }
                 ?>
             </tbody>

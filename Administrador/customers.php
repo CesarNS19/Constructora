@@ -188,6 +188,7 @@ require '../Administrador/superior_admin.php';
     </div>
 </div>
 
+<!-- Tabla de clientes -->
 <section class="services-table container my-2"><br/>
 <div class="table-responsive">
     <table class="table table-bordered table-hover text-center">
@@ -244,7 +245,7 @@ require '../Administrador/superior_admin.php';
                         echo "</tr>";
                     }
                 } else {
-                    echo "<tr><td colspan='11'>No hay empleados registrados.</td></tr>";
+                    echo "<tr><td colspan='11'>There are no customers recorded.</td></tr>";
                 }
             ?>
         </tbody>

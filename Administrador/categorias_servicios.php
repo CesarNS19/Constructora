@@ -28,7 +28,7 @@ require '../Administrador/superior_admin.php';
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="addServicesModalLabel">Add New Service Category</h5>
+                <h5 class="modal-title" id="addServicesModalLabel">Add Service Category</h5>
             </div>
             <form action="add_service_type.php" method="POST">
                 <div class="modal-body">
@@ -113,7 +113,7 @@ require '../Administrador/superior_admin.php';
                         echo "</tr>";
                     }
                 } else {
-                    echo "<tr><td colspan='5'>No hay servicios registrados.</td></tr>";
+                    echo "<tr><td colspan='5'>There are no service categories recorded.</td></tr>";
                 }
                 ?>
             </tbody>

@@ -77,6 +77,7 @@ require '../Administrador/superior_admin.php';?>
     </div>
 </div>
 
+<!-- Tabla de direcciones de empresas -->
 <section><br/>
     <table class="table table-bordered table-hover text-center">
         <thead class="thead-dark">
@@ -111,17 +112,17 @@ require '../Administrador/superior_admin.php';?>
                     echo "<td>" . htmlspecialchars($row['estado']) . "</td>";
                     echo "<td>" . htmlspecialchars($row['codigo_postal']) . "</td>";
                     echo "<td>";
-                        echo "<button class='btn btn-info btn-sm me-1' onclick='openEditCompanyAddressModal(" . json_encode($row) . ")' title='Edit Company Addres'>
+                        echo "<button class='btn btn-info btn-sm me-1' onclick='openEditCompanyAddressModal(" . json_encode($row) . ")' title='Edit Company Address'>
                                 <i class='fas fa-edit'></i>
                             </button>
-                            <a href='delete_company_address.php?id=" . $row['id_empresa'] . "' class='btn btn-danger btn-sm' onclick='return confirm(\"¿Estás seguro de que deseas eliminar esta direccion de la empresa?\")' title='Delete Customer Address'>
+                            <a href='delete_company_address.php?id=" . $row['id_empresa'] . "' class='btn btn-danger btn-sm' onclick='return confirm(\"¿Estás seguro de que deseas eliminar esta direccion de la empresa?\")' title='Delete Company Address'>
                                 <i class='fas fa-trash'></i>
                             </a>
                         </td>";
                         echo "</tr>";
                     }
                 } else {
-                    echo "<tr><td colspan='11'>No hay empleados registrados.</td></tr>";
+                    echo "<tr><td colspan='11'>There are no company address recorded.</td></tr>";
                 }
             ?>
         </tbody>

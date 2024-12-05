@@ -100,22 +100,22 @@
   .card-body{
     background: #2b2e38;
   }
-  .btn-login{  
-  border-radius: 4px;
-  height: 44px;
-  font-size: 13px;
-  font-weight: 600;
-  text-transform: uppercase;
-  -webkit-transition : all 200ms linear;
-  transition: all 200ms linear;
-  padding: 0 30px;
-  letter-spacing: 1px;
-  display: -webkit-inline-flex;
-  display: -ms-inline-flexbox;
-  display: inline-flex;
-  align-items: center;
-  color: #000000;
-}
+  .btn-login {
+      border-radius: 4px;
+      height: 44px;
+      font-size: 13px;
+      font-weight: 600;
+      text-transform: uppercase;
+      transition: all 200ms linear;
+      padding: 0 30px;
+      letter-spacing: 1px;
+      display: inline-flex;
+      align-items: center;
+      color: #000000; /* Texto negro */
+      background: ;
+      border: none;
+    }
+
 
 .btn-sign{  
   border-radius: 4px;
