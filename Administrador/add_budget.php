@@ -22,7 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $_SESSION['status_type'] = "success";
     } else {
         $_SESSION['status_message'] = "Error al agregar el presupuesto: " . $stmt->error;
-        $_SESSION['status_type'] = "danger";
+        $_SESSION['status_type'] = "error";
     }
 
     $stmt->close();

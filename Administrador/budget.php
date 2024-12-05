@@ -1,5 +1,6 @@
 <?php
 require '../Login/conexion.php';
+require '../Administrador/superior_admin.php';
 
 $sql_empresas = "SELECT id_empresa, nombre_empresa FROM empresa";
 $result_empresas = $con->query($sql_empresas);
@@ -12,8 +13,6 @@ $result_direccion_clientes = $con->query($sql_direccion_clientes);
 
 $sql_servicios = "SELECT id_servicio, nombre_servicio, total FROM servicios";
 $result_servicios = $con->query($sql_servicios);
-
-require '../Administrador/superior_admin.php';
 ?>
 
 <!DOCTYPE html>
@@ -294,7 +293,7 @@ require '../Administrador/superior_admin.php';
                         if (file_exists($file_path)) {
                             echo "<a href='$file_path' 
                                        target='_blank' 
-                                       class='btn btn-success btn-sm' 
+                                       class='btn btn-warning btn-sm' 
                                        title='View PDF'>
                                         <i class='fas fa-eye'></i>
                                   </a>";
