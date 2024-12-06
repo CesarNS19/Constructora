@@ -25,10 +25,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['folio'])) {
             try {
                 $file_path = "../pdf/Contract_" . $folio_obra . ".pdf";
 
+                // Eliminar archivo previo si existe
                 if (file_exists($file_path)) {
                     unlink($file_path);
                 }
 
+                // Crear PDF
                 $pdf = new FPDF();
                 $pdf->AddPage();
                 $pdf->SetMargins(10, 10, 10);
@@ -44,6 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['folio'])) {
                 $pdf->Cell(0, 5, '1100 S. NEW RD, PLEASANTVILLE, N.J. 08232', 0, 1, 'C');
                 $pdf->Ln(10);
 
+                // Información de la obra
                 $pdf->SetFont('Arial', 'B', 10);
                 $pdf->Cell(70, 10, 'CONTRACT SUBMITTED TO: DATE:', 'L,T,B', 0, 'L');
                 $pdf->SetFont('Arial', '', 10);
@@ -75,7 +78,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['folio'])) {
                 $pdf->Cell(120, 10, 'Drywall and Spackle', 'T,R,B', 1, 'L');
                 $pdf->Ln(10);
 
-
                 // Especificaciones
                 $pdf->SetFont('Arial', 'B', 12);
                 $pdf->Cell(0, 10, 'SPECIFICATIONS: Use Screws.', 0, 1);
@@ -95,26 +97,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['folio'])) {
                 $pdf->MultiCell(0, 5, "All material is guaranteed to be as specified. All work to be completed in a workmanlike manner according to standard practices. Any alteration or deviation from above specifications involving extra costs will be executed only upon written orders and will become an extra charge over and above the estimate. All agreements contingent upon strikes, accident, or delays beyond our control.");
                 $pdf->Ln(10);
 
-                // Texto de la primera firma
-                 // Espacio para la firma de aceptación
-                 $pdf->Cell(30, 10, 'Authorized: Signature:', 0, 0, 'L');
-                 $pdf->Cell(0, 10, '         _______________________________', 0, 1, 'L');
+                // Espacio para la firma de autorización
+                $signature_path = "../signatures/signature_" . $folio_obra . ".png"; // Ruta de la firma
+                $pdf->Cell(30, 10, 'Authorized: Signature:', 0, 0, 'L');
+                if (file_exists($signature_path)) {
+                    $pdf->Image($signature_path, $pdf->GetX() + 40, $pdf->GetY() - 8, 40); // Ajusta tamaño y posición
+                }
+                $pdf->Ln(20);
 
-                // Línea divisoria
-                $pdf->Ln(10);
+                // Aceptación del contrato
                 $pdf->SetFont('Arial', 'B', 10);
-                $pdf->Cell(0, 10, 'ACCEPTACE OF CONTRACT', 0, 1, 'C');
-
-                // Texto de aceptación
-                $pdf->SetFont('Arial', 'B', 10);
+                $pdf->Cell(0, 10, 'ACCEPTANCE OF CONTRACT', 0, 1, 'C');
                 $pdf->MultiCell(0, 6, 'The above prices, specifications and conditions are hereby accepted. You are authorized to do the work as specified. Payment will be made as outlined above.', 0, 'L');
-
-                // Espacio para la firma de aceptación
                 $pdf->Ln(10);
                 $pdf->Cell(30, 10, 'Accepted: Signature:', 0, 0, 'L');
                 $pdf->Cell(0, 10, '       _______________________________', 0, 1, 'L');
 
-
+                // Guardar el PDF
                 if (!is_dir('../pdf')) {
                     mkdir('../pdf', 0755, true);
                 }
@@ -124,15 +123,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['folio'])) {
                 $_SESSION['status_type'] = "success";
             } catch (Exception $e) {
                 $_SESSION['status_message'] = "Error al generar el PDF: " . $e->getMessage();
-                $_SESSION['status_type'] = "danger";
+                $_SESSION['status_type'] = "error";
             }
         } else {
             $_SESSION['status_message'] = "No se encontró la obra con el folio proporcionado.";
-            $_SESSION['status_type'] = "danger";
+            $_SESSION['status_type'] = "error";
         }
     } else {
         $_SESSION['status_message'] = "Error en la consulta a la base de datos: " . $stmt->error;
-        $_SESSION['status_type'] = "danger";
+        $_SESSION['status_type'] = "error";
     }
 
     $stmt->close();
@@ -141,9 +140,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['folio'])) {
     exit();
 } else {
     $_SESSION['status_message'] = "Folio no proporcionado.";
-    $_SESSION['status_type'] = "danger";
+    $_SESSION['status_type'] = "error";
     header("Location: works.php");
     exit();
 }
-
 ?>

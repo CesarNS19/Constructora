@@ -19,7 +19,7 @@
 <body class="bg-light">
     <!-- Archivo superior -->
     <?php
-        require 'superior_customer.php'; // Asegúrate de que este archivo no añada márgenes o paddings innecesarios.
+        require 'superior_customer.php';
     ?>
 
     <div class="container-fluid">

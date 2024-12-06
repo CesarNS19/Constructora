@@ -269,6 +269,13 @@ require '../Administrador/superior_admin.php';
     </div>
 </div>
 
+<form action="upload_signature.php" method="POST" enctype="multipart/form-data">
+    <input type="hidden" name="folio_obra" value="<?php echo isset($folio_obra) ? $folio_obra : ''; ?>">
+    <label for="signature">Upload Authorized Signature:</label>
+    <input type="file" name="signature" id="signature" accept="image/*" required>
+    <button type="submit">Upload</button>
+</form>
+
 <!-- Tabla de Obras -->
 <section class="my-2"><br/>
     <div class="table-responsive">

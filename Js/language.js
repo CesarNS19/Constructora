@@ -191,6 +191,7 @@ const translations = {
     "Deactivate Employee" : {es: "Desactivar Empleado", en: "Deactivate Employee"},
     "Activate Employee" : {es: "Activar Empleado", en: "Activate Employee"},
     "Payrolls" : {es: "Nóminas", en: "Payrolls"},
+    "log out" : {es: "Cerrar Sesión", en: "log out"},
 
 };
 
