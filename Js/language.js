@@ -194,6 +194,12 @@ const translations = {
     "log out" : {es: "Cerrar Sesión", en: "log out"},
     "Upload" : {es: "Cargar", en: "Upload"},
     "Upload Signature:" : {es: "Cargar Firma", en: "Upload Signature:"},
+    "Personal Data" : {es: "Datos Personales", en: "Personal Data"},
+    "Name" : {es: "Nombre", en: "Name"},
+    "Last Name" : {es: "Apellidos", en: "Last Name"},
+    "Address" : {es: "Dirección", en: "Address"},
+    "Add Address" : {es: "Agregar Dirección", en: "Add Address"},
+    "The address data was not found." : {es: "No se encontraron datos de dirección.", en: "The address data was not found."},
 
 };
 

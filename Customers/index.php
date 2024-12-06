@@ -49,7 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $observaciones = htmlspecialchars($_POST['observaciones'] ?? '', ENT_QUOTES, 'UTF-8');
     $id_servicio = intval($_POST['id_servicio']);
     $folio_presupuesto = 'FP' . strtoupper(uniqid());
-    $id_empresa = 4; // Empresa fija
+    $id_empresa = 6; // Empresa fija
     $fecha_elaboracion = date('Y-m-d');
     $total = floatval($_POST['total_servicio']); // Usamos el total del servicio seleccionado
 

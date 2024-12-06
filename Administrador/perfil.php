@@ -20,6 +20,39 @@ if (!$user) {
     echo "No se encontraron datos para este usuario.";
     exit;
 }
+
+$lang = 'en';
+if (isset($_COOKIE['lang'])) {
+    $lang = $_COOKIE['lang'];
+}
+
+$translations = [
+    'en' => [
+        'morning' => 'Good Morning',
+        'afternoon' => 'Good Afternoon',
+        'night' => 'Good Night',
+        'log_in' => 'Log In'
+    ],
+    'es' => [
+        'morning' => 'Buenos Días',
+        'afternoon' => 'Buenas Tardes',
+        'night' => 'Buenas Noches',
+        'log_in' => 'Iniciar Sesión'
+    ]
+];
+
+if (isset($_COOKIE['timezone'])) {
+    date_default_timezone_set($_COOKIE['timezone']);
+}
+
+$hour = date('H');
+if ($hour >= 5 && $hour < 12) {
+    $greeting = $translations[$lang]['morning'];
+} elseif ($hour >= 12 && $hour < 19) {
+    $greeting = $translations[$lang]['afternoon'];
+} else {
+    $greeting = $translations[$lang]['night'];
+}
 ?>
 
 <!DOCTYPE html>
@@ -36,6 +69,9 @@ if (!$user) {
 <header>
     <nav>
         <ul class="nav-links">
+        <li><button class="language-toggle btn btn-primary" id="languageButton" aria-label="Change Language" title="Change Language">
+                    <i class="fas fa-globe"></i>
+        </button></li> 
         <li><a href="index_admin.php" title="Inicio"><i class="fas fa-home"></i></a></li>
         <li><a href="perfil.php" title="Perfil"><i class="fas fa-user"></i></a></li>
         <li><a href="servicios.php" title="Servicios"><i class="fas fa-concierge-bell"></i></a></li>
@@ -48,7 +84,28 @@ if (!$user) {
         <li><a href="payroll.php" title="Nómina Empleado"><i class="fas fa-money-check-alt"></i></a></li>
 
         </ul>
+        <div class="user-controls" style="display: flex; align-items: center; margin-left: auto;">
         <li class="nav-links"><a href="../Login/logout.php" title="Cerrar sesión"><i class="fas fa-sign-out-alt text-dark"></i></a></li>
+            <?php
+                if (isset($_SESSION['nombre'], $_SESSION['apellido_paterno'], $_SESSION['apellido_materno'])) {
+                    $fullName = $_SESSION['nombre'] . ' ' . $_SESSION['apellido_paterno'] . ' ' . $_SESSION['apellido_materno'];
+
+                    echo "
+                    <div class='nav-item' style='display: flex; align-items: center;'>
+                        <a class='nav-link' href='perfil.php' style='color: black; font-size: 18px; text-decoration: none; font-weight: 600;'>
+                            $greeting $fullName
+                        </a>
+                        <div class='vr' style='height: 24px; width: 1px; background-color: black; margin: 0 10px;'></div>
+                        <button title='Change Theme' id='themeToggle' style='background: none; border: none; color: black; font-size: 20px; cursor: pointer;'>
+                            <i class='fas fa-adjust'></i>
+                        </button>
+                    </div>";
+                } else {
+                    $logInText = $translations[$lang]['log_in'];
+                    echo "<a class='nav-link' href='../Login/login.php' style='color: black; font-size: 18px; text-decoration: none; font-weight: 600;'>$logInText</a>";
+                }
+                ?>
+        </div>
     </nav>
 </header>
 
@@ -58,11 +115,11 @@ if (!$user) {
     <div class="card text-center" style="width: 24rem;">
         <div class="card-body">
             <h5 class="card-title">Datos Personales</h5>
-            <p><strong>Nombre:</strong> <?php echo htmlspecialchars($user['nombre_cliente'] ?? 'No disponible'); ?></p>
-            <p><strong>Apellidos:</strong> <?php echo htmlspecialchars(($user['apellido_paterno'] ?? '') . ' ' . ($user['apellido_materno'] ?? '')); ?></p>
-            <p><strong>Correo:</strong> <?php echo htmlspecialchars($user['correo_electronico'] ?? 'No disponible'); ?></p>
-            <p><strong>Teléfono:</strong> <?php echo htmlspecialchars($user['telefono_personal'] ?? 'No disponible'); ?></p>
-            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editModal">Editar Datos</button>
+            <p><strong>Name:</strong> <?php echo htmlspecialchars($user['nombre_cliente'] ?? 'No disponible'); ?></p>
+            <p><strong>Last Name:</strong> <?php echo htmlspecialchars(($user['apellido_paterno'] ?? '') . ' ' . ($user['apellido_materno'] ?? '')); ?></p>
+            <p><strong>Email:</strong> <?php echo htmlspecialchars($user['correo_electronico'] ?? 'No disponible'); ?></p>
+            <p><strong>Phone:</strong> <?php echo htmlspecialchars($user['telefono_personal'] ?? 'No disponible'); ?></p>
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editModal">Edit</button>
         </div>
     </div>
 </div>
@@ -164,8 +221,29 @@ function mostrarToast(titulo, mensaje, tipo) {
             <?php endif; ?>
         });
         
-</script>
+        document.cookie = "timezone=" + Intl.DateTimeFormat().resolvedOptions().timeZone;
 
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+        if (localStorage.getItem('theme') === 'dark') {
+            document.body.classList.add('dark-mode');
+        }
+
+        document.getElementById('themeToggle').addEventListener('click', function() {
+            document.body.classList.toggle('dark-mode');
+            
+            if (document.body.classList.contains('dark-mode')) {
+                localStorage.setItem('theme', 'dark');
+            } else {
+                localStorage.setItem('theme', 'light');
+            }
+        });
+
+        document.getElementById('languageButton').addEventListener('click', () => {
+            const newLang = document.documentElement.lang === 'es' ? 'en' : 'es';
+            document.cookie = `lang=${newLang}; path=/`;
+            location.reload();
+        });
+    </script>
+    
+        <script src="../Js/language.js"></script>
 </body>
 </html>

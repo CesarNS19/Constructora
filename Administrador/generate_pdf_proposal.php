@@ -80,7 +80,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['folio'])) {
                 $pdf->SetFont('Arial', 'B', 12);
                 $pdf->Cell(0, 10, 'SPECIFICATIONS: Use Screws.', 0, 1);
                 $pdf->SetFont('Arial', '', 10);
-                $pdf->MultiCell(0, 8, '   ' . mb_convert_encoding($obra['nombre_servicio'], 'ISO-8859-1', 'UTF-8'), 1);
+                $pdf->MultiCell(0, 8, '   ' . mb_convert_encoding($obra['nombre_servicio'] . ', ' . $obra['observaciones'], 'ISO-8859-1', 'UTF-8'), 1);
                 $pdf->Ln(10);
 
                 // Condiciones
