@@ -65,8 +65,6 @@ $row = $result->fetch_assoc();
 $total_obras = $row['total_obras'];
 $showNotification = isset($_COOKIE['obra_notificada']) ? false : $total_obras > 0;
 
-$stmt->close();
-$con->close();
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -90,8 +88,6 @@ $con->close();
                 <li><a href="index.php" title="Home"><i class="fas fa-home"></i></a></li>
                 <li><a href="perfil.php" title="Profile"><i class="fas fa-user"></i></a></li>
                 <li><a href="services.php" title="Services"><i class="fas fa-concierge-bell"></i></a></li>
-    
-                <li><a href="../Login/logout.php" title="log out"><i class="fas fa-sign-out-alt"></i></a></li>
                 <?php if ($total_obras > 0): ?>
                     <li>
                         <a href="obra.php" title="Works" onclick="dismissNotification()">
@@ -129,7 +125,7 @@ $con->close();
 
     <script>
         function dismissNotification() {
-            document.cookie = "obra_notificada=true; path=/; max-age=86400"; // Notificación válida por 1 día
+            document.cookie = "obra_notificada=true; path=/; max-age=86400";
         }
 
         document.cookie = "timezone=" + Intl.DateTimeFormat().resolvedOptions().timeZone;

@@ -36,6 +36,7 @@ if (isset($_GET['folio']) && isset($_GET['file'])) {
 }
 
 try {
+    // Configuración y envío del correo
     $mail = new PHPMailer(true);
     $mail->isSMTP();
     $mail->Host = 'smtp.gmail.com';
@@ -54,7 +55,13 @@ try {
     $mail->Body = 'Please find the attached contract document.';
 
     $mail->send();
-    $_SESSION['status_message'] = "Contrato enviado correctamente al cliente";
+
+    $update_sql = "UPDATE obras SET estatus = 'iniciada' WHERE folio_obra = ?";
+    $update_stmt = $con->prepare($update_sql);
+    $update_stmt->bind_param('i', $folio_obra);
+    $update_stmt->execute();
+
+    $_SESSION['status_message'] = "Contrato enviado correctamente al cliente por correo electrónico";
     $_SESSION['status_type'] = "success";
 } catch (Exception $e) {
     $_SESSION['status_message'] = "Error al enviar el correo: {$mail->ErrorInfo}";

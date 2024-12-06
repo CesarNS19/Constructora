@@ -114,11 +114,11 @@ if ($hour >= 5 && $hour < 12) {
 <div class="container mt-5 d-flex justify-content-center">
     <div class="card text-center" style="width: 24rem;">
         <div class="card-body">
-            <h5 class="card-title">Datos Personales</h5>
-            <p><strong>Name:</strong> <?php echo htmlspecialchars($user['nombre_cliente'] ?? 'No disponible'); ?></p>
-            <p><strong>Last Name:</strong> <?php echo htmlspecialchars(($user['apellido_paterno'] ?? '') . ' ' . ($user['apellido_materno'] ?? '')); ?></p>
-            <p><strong>Email:</strong> <?php echo htmlspecialchars($user['correo_electronico'] ?? 'No disponible'); ?></p>
-            <p><strong>Phone:</strong> <?php echo htmlspecialchars($user['telefono_personal'] ?? 'No disponible'); ?></p>
+            <h5 class="card-title">Personal Data</h5>
+            <p><strong>Name</strong> <?php echo htmlspecialchars($user['nombre_cliente'] ?? 'No disponible'); ?></p>
+            <p><strong>Last Name</strong> <?php echo htmlspecialchars(($user['apellido_paterno'] ?? '') . ' ' . ($user['apellido_materno'] ?? '')); ?></p>
+            <p><strong>Email</strong> <?php echo htmlspecialchars($user['correo_electronico'] ?? 'No disponible'); ?></p>
+            <p><strong>Phone</strong> <?php echo htmlspecialchars($user['telefono_personal'] ?? 'No disponible'); ?></p>
             <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editModal">Edit</button>
         </div>
     </div>
@@ -129,7 +129,7 @@ if ($hour >= 5 && $hour < 12) {
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="editModalLabel">Editar Datos</h5>
+                <h5 class="modal-title" id="editModalLabel">Edit</h5>
                 <button type="button" class="close" data-bs-dismiss="modal" aria-bs-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -137,26 +137,26 @@ if ($hour >= 5 && $hour < 12) {
             <div class="modal-body">
                 <form action="update_profile.php" method="post">
                     <div class="form-group">
-                        <label for="nombre_cliente">Nombre</label>
+                        <label for="nombre_cliente">Name</label>
                         <input type="text" class="form-control" name="nombre_cliente" id="nombre_cliente" value="<?php echo htmlspecialchars($user['nombre_cliente'] ?? ''); ?>">
                     </div>
                     <div class="form-group">
-                        <label for="apellido_paterno">Apellido Paterno</label>
+                        <label for="apellido_paterno">Paternal Surname</label>
                         <input type="text" class="form-control" name="apellido_paterno" id="apellido_paterno" value="<?php echo htmlspecialchars($user['apellido_paterno'] ?? ''); ?>">
                     </div>
                     <div class="form-group">
-                        <label for="apellido_materno">Apellido Materno</label>
+                        <label for="apellido_materno">Maternal Surname</label>
                         <input type="text" class="form-control" name="apellido_materno" id="apellido_materno" value="<?php echo htmlspecialchars($user['apellido_materno'] ?? ''); ?>">
                     </div>
                     <div class="form-group">
-                        <label for="correo_electronico">Correo Electrónico</label>
+                        <label for="correo_electronico">Email</label>
                         <input type="email" class="form-control" name="correo_electronico" id="correo_electronico" value="<?php echo htmlspecialchars($user['correo_electronico'] ?? ''); ?>">
                     </div>
                     <div class="form-group">
-                        <label for="telefono_personal">Teléfono</label>
+                        <label for="telefono_personal">Phone</label>
                         <input type="text" class="form-control" name="telefono_personal" id="telefono_personal" value="<?php echo htmlspecialchars($user['telefono_personal'] ?? ''); ?>">
                     </div>
-                    <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
                 </form>
             </div>
         </div>

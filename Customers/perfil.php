@@ -111,7 +111,6 @@ if ($hour >= 5 && $hour < 12) {
             <li><a href="perfil.php" title="Perfil"><i class="fas fa-user"></i></a></li>
             <li><a href="services.php" title="Servicios"><i class="fas fa-concierge-bell"></i></a></li>
             <li><a href="#contact" title="Contacto"><i class="fas fa-envelope"></i></a></li>
-            <li><a href="../Login/logout.php" title="Cerrar Sesión"><i class="fas fa-sign-out-alt"></i></a></li>
         </ul>
         <div class="user-controls" style="display: flex; align-items: center; margin-left: auto;">
         <li class="nav-links"><a href="../Login/logout.php" title="Cerrar sesión"><i class="fas fa-sign-out-alt text-dark"></i></a></li>
