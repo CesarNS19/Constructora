@@ -159,13 +159,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <p id="modalTotalServicio"></p>
                             <input type="hidden" name="total_servicio" id="modalTotal">
                         </div>
-                        <div class="mb-3">
-                            <label>¿Desea agregar una nueva dirección?</label>
-                            <select class="form-select" id="nuevaDireccion" name="nueva_direccion">
-                                <option value="no" selected>Conservar dirección actual</option>
-                                <option value="si">Agregar nueva dirección</option>
-                            </select>
-                        </div>
+
+                        <?php if (empty($id_direccion)): ?>
+                            <div class="alert alert-warning" role="alert">
+                                No tienes una dirección registrada. Por favor, ingresa una dirección para continuar con la cotización.
+                            </div>
+                            <div class="mb-3">
+                                <label>¿Deseas agregar una nueva dirección?</label>
+                                <select class="form-select" id="nuevaDireccion" name="nueva_direccion">
+                                    <option value="no" selected>Conservar dirección actual</option>
+                                    <option value="si">Agregar nueva dirección</option>
+                                </select>
+                            </div>
+                        <?php else: ?>
+                            <div class="mb-3">
+                                <label>Dirección actual:</label>
+                                <p><?php echo htmlspecialchars("$calle, $ciudad, $estado, $codigo_postal"); ?></p>
+                            </div>
+                            <div class="mb-3">
+                                <label>¿Deseas conservar esta dirección o agregar una nueva?</label>
+                                <select class="form-select" id="nuevaDireccion" name="nueva_direccion">
+                                    <option value="no" selected>Conservar dirección actual</option>
+                                    <option value="si">Agregar nueva dirección</option>
+                                </select>
+                            </div>
+                        <?php endif; ?>
+
                         <div id="nuevaDireccionForm" class="d-none">
                             <div class="mb-3">
                                 <label>Calle:</label>
@@ -184,11 +203,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 <input type="text" class="form-control" name="codigo_postal">
                             </div>
                         </div>
+
                         <div class="mb-3">
                             <label>Observaciones:</label>
-                            <textarea class="form-control" name="observaciones" rows="3"></textarea>
+                            <textarea class="form-control" name="observaciones"></textarea>
                         </div>
-                        <button type="button" class="btn btn-primary" onclick="confirmarCotizacion()">Enviar Cotización</button>
+
+                        <button type="submit" class="btn btn-primary">Generar Cotización</button>
                     </form>
                 </div>
             </div>
@@ -196,36 +217,45 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
 
     <script>
-        // Llenar el modal con la información del servicio
-        var cotizarModal = document.getElementById('cotizarModal');
-        cotizarModal.addEventListener('show.bs.modal', function (event) {
-            var button = event.relatedTarget;
-            var idServicio = button.getAttribute('data-id-servicio');
-            var nombreServicio = button.getAttribute('data-nombre-servicio');
-            var totalServicio = button.getAttribute('data-total-servicio');
+        // Mostrar modal con datos del servicio
+        const cotizarModal = document.getElementById('cotizarModal');
+        cotizarModal.addEventListener('show.bs.modal', (event) => {
+            const button = event.relatedTarget;
+            const idServicio = button.getAttribute('data-id-servicio');
+            const nombreServicio = button.getAttribute('data-nombre-servicio');
+            const totalServicio = button.getAttribute('data-total-servicio');
 
-            document.getElementById('modalIdServicio').value = idServicio;
-            document.getElementById('modalNombreServicio').textContent = nombreServicio;
-            document.getElementById('modalTotalServicio').textContent = totalServicio;
-            document.getElementById('modalTotal').value = totalServicio;
-        });
+            const modalIdServicio = cotizarModal.querySelector('#modalIdServicio');
+            const modalNombreServicio = cotizarModal.querySelector('#modalNombreServicio');
+            const modalTotalServicio = cotizarModal.querySelector('#modalTotalServicio');
+            const modalTotal = cotizarModal.querySelector('#modalTotal');
 
-        // Mostrar u ocultar el formulario de nueva dirección
-        document.getElementById('nuevaDireccion').addEventListener('change', function () {
-            var nuevaDireccionForm = document.getElementById('nuevaDireccionForm');
-            if (this.value === 'si') {
+            modalIdServicio.value = idServicio;
+            modalNombreServicio.textContent = nombreServicio;
+            modalTotalServicio.textContent = totalServicio;
+            modalTotal.value = totalServicio;
+
+            // Mostrar el formulario para nueva dirección si no existe dirección
+            const nuevaDireccionSelect = cotizarModal.querySelector('#nuevaDireccion');
+            const nuevaDireccionForm = cotizarModal.querySelector('#nuevaDireccionForm');
+            if (nuevaDireccionSelect.value === 'si') {
                 nuevaDireccionForm.classList.remove('d-none');
             } else {
                 nuevaDireccionForm.classList.add('d-none');
             }
         });
 
-        // Confirmación antes de enviar la cotización
-        function confirmarCotizacion() {
-            if (confirm("¿Está seguro de que desea enviar la cotización?")) {
-                document.getElementById('presupuestoForm').submit();
+        // Mostrar/ocultar formulario de dirección según selección
+        const nuevaDireccionSelect = document.querySelector('#nuevaDireccion');
+        const nuevaDireccionForm = document.querySelector('#nuevaDireccionForm');
+        nuevaDireccionSelect.addEventListener('change', () => {
+            if (nuevaDireccionSelect.value === 'si') {
+                nuevaDireccionForm.classList.remove('d-none');
+            } else {
+                nuevaDireccionForm.classList.add('d-none');
             }
-        }
+        });
     </script>
 </body>
 </html>
+
