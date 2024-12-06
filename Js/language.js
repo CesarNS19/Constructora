@@ -192,6 +192,8 @@ const translations = {
     "Activate Employee" : {es: "Activar Empleado", en: "Activate Employee"},
     "Payrolls" : {es: "Nóminas", en: "Payrolls"},
     "log out" : {es: "Cerrar Sesión", en: "log out"},
+    "Upload" : {es: "Cargar", en: "Upload"},
+    "Upload Signature:" : {es: "Cargar Firma", en: "Upload Signature:"},
 
 };
 

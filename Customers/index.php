@@ -105,7 +105,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 <body>
     <div class="container mt-5">
-        <h2 class="text-center">Nuestros Servicios</h2>
+        <h2 class="text-center">Our  Services</h2></br>
         <div class="row">
             <?php if (!empty($servicios)): ?>
                 <?php foreach ($servicios as $servicio): ?>
