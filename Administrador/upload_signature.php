@@ -21,7 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['signature'], $_POST['
         mkdir($upload_dir, 0755, true);
     }
 
-    $file_name = "signature_" . $folio_obra . "." . pathinfo($file['name'], PATHINFO_EXTENSION);
+    $file_name = "signature_." . pathinfo($file['name'], PATHINFO_EXTENSION);
     $file_path = $upload_dir . $file_name;
 
     // Mover el archivo cargado

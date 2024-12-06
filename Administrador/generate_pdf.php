@@ -97,14 +97,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['folio'])) {
                 $pdf->MultiCell(0, 5, "All material is guaranteed to be as specified. All work to be completed in a workmanlike manner according to standard practices. Any alteration or deviation from above specifications involving extra costs will be executed only upon written orders and will become an extra charge over and above the estimate. All agreements contingent upon strikes, accident, or delays beyond our control.");
                 $pdf->Ln(10);
 
-                // Espacio para la firma de autorización
-                $signature_path = "../signatures/signature_" . $folio_obra . ".png"; // Ruta de la firma
-                $pdf->Cell(30, 10, 'Authorized: Signature:', 0, 0, 'L');
+                $signature_path = "../signatures/signature_.png"; // Ruta de la firma
+                $pdf->Cell(10, 10, 'Authorized: Signature:', 0, 0, 'L');
                 if (file_exists($signature_path)) {
-                    $pdf->Image($signature_path, $pdf->GetX() + 40, $pdf->GetY() - 8, 40); // Ajusta tamaño y posición
+                    $pdf->Image($signature_path, $pdf->GetX() + 40, $pdf->GetY() - 5, 30); // Ajusta la anchura a 30px
                 }
                 $pdf->Ln(20);
-
+                
                 // Aceptación del contrato
                 $pdf->SetFont('Arial', 'B', 10);
                 $pdf->Cell(0, 10, 'ACCEPTANCE OF CONTRACT', 0, 1, 'C');
