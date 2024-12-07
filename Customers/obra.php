@@ -1,5 +1,6 @@
 <?php
 require '../Login/conexion.php';
+require '../Customers/superior_customer.php';
 
 $sql_empresas = "SELECT id_empresa, nombre_empresa FROM empresa";
 $result_empresas = $con->query($sql_empresas);
@@ -8,8 +9,6 @@ $sql_clientes = "SELECT id_cliente, nombre_cliente, apellido_paterno, apellido_m
 $result_clientes = $con->query($sql_clientes);
 
 $sql_servicios = "SELECT id_servicio, nombre_servicio, total FROM servicios";
-
-require '../Customers/superior_customer.php';
 ?>
 
 <!DOCTYPE html>
@@ -27,8 +26,8 @@ require '../Customers/superior_customer.php';
 <div id="Alert"></div>
 
 <!-- Tabla de Obras -->
-<section class="my-2"><br/>
-    <div class="table-responsive container">
+<section class="my-2 container"><br/>
+    <div class="table-responsive">
         <table class="table table-bordered table-hover text-center">
             <thead class="thead-dark">
                 <tr>
@@ -36,7 +35,7 @@ require '../Customers/superior_customer.php';
                     <th>Company</th>
                     <th>Service</th>
                     <th>Customer</th>
-                    <th>Customer Address</th>
+                    <th>Address</th>
                     <th>Start Date</th>
                     <th>Advance Payment</th>
                     <th>Debit</th>
@@ -83,6 +82,17 @@ require '../Customers/superior_customer.php';
                                     <i class='fas fa-eye'></i>
                                 </a>";
                         }
+                        echo "<button class='btn btn-primary btn-sm me-2 signature-btn' data-bs-toggle='modal' data-bs-target='#uploadSignatureModal' 
+                                onclick='openSignatureModal(\"$folio_obra\")' title='Add Signature'>
+                                <i class='fas fa-pen'></i>
+                              </button>";
+                        echo "<a href='send_pdf.php?folio=$folio_obra&file=" . urlencode($file_path) . "' 
+                              class='btn btn-success send-button btn-sm me-2' 
+                              title='Send PDF' 
+                              data-folio='$folio_obra' 
+                              onclick='sendPDF(this)'>
+                              <i class='fas fa-envelope'></i>
+                          </a>";
                         echo "</td>";
                         echo "</tr>";
                     }
@@ -95,25 +105,45 @@ require '../Customers/superior_customer.php';
     </div>
 </section></br>
 
-<form action="upload_signature.php" method="POST" enctype="multipart/form-data" class="p-4 border rounded shadow-sm container">
-    <input type="hidden" name="folio_obra" value="<?php echo isset($folio_obra) ? $folio_obra : ''; ?>">
-    
-    <div class="mb-3">
-        <label for="signature" class="form-label fw-bold">Upload Signature:</label>
-        <input 
-            type="file" 
-            name="signature" 
-            id="signature" 
-            class="form-control" 
-            accept="image/*" 
-            required
-        >
+<!-- Modal para subir firma -->
+<div class="modal fade" id="uploadSignatureModal" tabindex="-1" aria-labelledby="uploadSignatureModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form action="upload_signature.php" method="POST" enctype="multipart/form-data">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="uploadSignatureModalLabel">Upload Signature</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" name="folio_obra" id="modalFolioObra">
+                    
+                    <div class="mb-3">
+                        <label for="signature" class="form-label fw-bold">Signature File:</label>
+                        <input 
+                            type="file" 
+                            name="signature" 
+                            id="signature" 
+                            class="form-control" 
+                            accept="image/*" 
+                            required
+                        >
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Upload</button>
+                </div>
+            </form>
+        </div>
     </div>
-    
-    <button type="submit" class="btn btn-primary w-100">Upload</button>
-</form>
+</div>
 
 <script>
+
+    function openSignatureModal(folioObra) {
+        document.getElementById('modalFolioObra').value = folioObra;
+    }
+
      function mostrarToast(titulo, mensaje, tipo) {
             let icon = '';
             let alertClass = '';
@@ -169,6 +199,34 @@ require '../Customers/superior_customer.php';
                 <?php unset($_SESSION['status_message'], $_SESSION['status_type']); ?>
             <?php endif; ?>
         });
+
+        function sendPDF(button) {
+                const folio = button.getAttribute('data-folio');
+
+                const sentPDFs = JSON.parse(localStorage.getItem('sentPDFs')) || [];
+                if (!sentPDFs.includes(folio)) {
+                    sentPDFs.push(folio);
+                    localStorage.setItem('sentPDFs', JSON.stringify(sentPDFs));
+                }
+
+                const row = button.closest('tr');
+                row.querySelectorAll('.edit-button, .generate-pdf-button, .send-button, .signature-btn').forEach(btn => btn.style.display = 'none');
+                if (statusButton) {
+                    statusButton.classList.remove('d-none');
+                }
+            }
+
+
+        document.addEventListener('DOMContentLoaded', function () {
+        const sentPDFs = JSON.parse(localStorage.getItem('sentPDFs')) || [];
+
+        sentPDFs.forEach(folio => {
+            const row = document.querySelector(`tr[data-folio="${folio}"]`);
+            if (row) {
+                row.querySelectorAll('.edit-button, .generate-pdf-button, .send-button, .signature-btn').forEach(btn => btn.style.display = 'none');
+            }
+        });
+    });
 </script>
 </body>
 </html>

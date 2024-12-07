@@ -364,7 +364,7 @@ require '../Administrador/superior_admin.php';
     <input type="hidden" name="folio_obra" value="<?php echo isset($folio_obra) ? $folio_obra : ''; ?>">
     
     <div class="mb-3">
-        <label for="signature" class="form-label fw-bold">Upload Signature:</label>
+        <label for="signature" class="form-label fw-bold">Upload Signature</label>
         <input 
             type="file" 
             name="signature" 

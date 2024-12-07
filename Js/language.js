@@ -193,7 +193,7 @@ const translations = {
     "Payrolls" : {es: "Nóminas", en: "Payrolls"},
     "log out" : {es: "Cerrar Sesión", en: "log out"},
     "Upload" : {es: "Cargar", en: "Upload"},
-    "Upload Signature:" : {es: "Cargar Firma", en: "Upload Signature:"},
+    "Upload Signature" : {es: "Cargar Firma", en: "Upload Signature"},
     "Personal Data" : {es: "Datos Personales", en: "Personal Data"},
     "Name" : {es: "Nombre", en: "Name"},
     "Last Name" : {es: "Apellidos", en: "Last Name"},
