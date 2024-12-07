@@ -28,7 +28,7 @@ require '../Customers/superior_customer.php';
 
 <!-- Tabla de Obras -->
 <section class="my-2"><br/>
-    <div class="table-responsive">
+    <div class="table-responsive container">
         <table class="table table-bordered table-hover text-center">
             <thead class="thead-dark">
                 <tr>
@@ -95,7 +95,7 @@ require '../Customers/superior_customer.php';
     </div>
 </section></br>
 
-<form action="upload_signature.php" method="POST" enctype="multipart/form-data" class="p-4 border rounded shadow-sm">
+<form action="upload_signature.php" method="POST" enctype="multipart/form-data" class="p-4 border rounded shadow-sm container">
     <input type="hidden" name="folio_obra" value="<?php echo isset($folio_obra) ? $folio_obra : ''; ?>">
     
     <div class="mb-3">

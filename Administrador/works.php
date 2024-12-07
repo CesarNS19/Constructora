@@ -324,7 +324,7 @@ require '../Administrador/superior_admin.php';
                         echo "<a href='delete_work.php?id=$folio_obra' class='btn btn-danger btn-sm me-2 delete-button' onclick='return confirm(\"Are you sure you want to delete this work?\")' title='Delete Work'>
                                 <i class='fas fa-trash'></i>
                               </a>";
-                        echo "<button class='btn btn-success btn-sm me-2' onclick='openAddAddressModal(" . json_encode($row) . ")' title='Add Address'>
+                        echo "<button class='btn btn-success add-btn btn-sm me-2' onclick='openAddAddressModal(" . json_encode($row) . ")' title='Add Address'>
                             <i class='fas fa-plus'></i>
                         </button>";
                         echo "<a href='generate_pdf.php?folio=$folio_obra' class='btn btn-danger btn-sm me-2 generate-pdf-button' title='Generate PDF'>
@@ -342,9 +342,12 @@ require '../Administrador/superior_admin.php';
                                 onclick='sendPDF(this)'>
                                 <i class='fas fa-envelope'></i>
                             </a>";
-                        echo "<button class='btn btn-info btn-sm me-2 btn-status' onclick='openStatusModal(" . json_encode($row) . ")' title='Work Status'>
-                            <i class='fas fa-spinner fa-spin'></i>
-                        </button>";
+                        if (strtolower($row['estatus']) !== 'completa') { 
+                            echo "<button class='btn btn-info btn-sm me-2 btn-status' onclick='openStatusModal(" . json_encode($row) . ")' title='Work Status'>
+                                <i class='fas fa-spinner fa-spin'></i>
+                            </button>";
+                        }
+                            
                         echo "</td>";
                         echo "</tr>";
                     }
@@ -357,7 +360,7 @@ require '../Administrador/superior_admin.php';
     </div>
 </section></br>
 
-<form action="upload_signature.php" method="POST" enctype="multipart/form-data" class="p-4 border rounded shadow-sm">
+<form action="upload_signature.php" method="POST" enctype="multipart/form-data" class="p-4 border rounded shadow-sm container">
     <input type="hidden" name="folio_obra" value="<?php echo isset($folio_obra) ? $folio_obra : ''; ?>">
     
     <div class="mb-3">
@@ -558,7 +561,7 @@ require '../Administrador/superior_admin.php';
                 }
 
                 const row = button.closest('tr');
-                row.querySelectorAll('.edit-button, .generate-pdf-button, .send-button').forEach(btn => btn.style.display = 'none');
+                row.querySelectorAll('.edit-button, .generate-pdf-button, .send-button, .add-btn').forEach(btn => btn.style.display = 'none');
                 
                 const statusButton = row.querySelector('.btn-status');
                 if (statusButton) {
@@ -573,7 +576,7 @@ require '../Administrador/superior_admin.php';
         sentPDFs.forEach(folio => {
             const row = document.querySelector(`tr[data-folio="${folio}"]`);
             if (row) {
-                row.querySelectorAll('.edit-button, .generate-pdf-button, .send-button').forEach(btn => btn.style.display = 'none');
+                row.querySelectorAll('.edit-button, .generate-pdf-button, .send-button, .add-btn').forEach(btn => btn.style.display = 'none');
             }
         });
     });

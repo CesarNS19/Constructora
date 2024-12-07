@@ -263,7 +263,7 @@ $result_servicios = $con->query($sql_servicios);
                         $servicio = htmlspecialchars($row['nombre_servicio']);
                         $file_path = "../pdf/Proposal_" . $folio_presupuesto . ".pdf";
 
-                        echo "<tr>";
+                        echo "<tr data-folio='$folio_presupuesto'>";
                         echo "<td>" . htmlspecialchars($row['nombre_empresa']) . "</td>";
                         echo "<td>" . $nombre_cliente . "</td>";
                         echo "<td>" . htmlspecialchars($row['ciudad']) . "</td>";
@@ -282,7 +282,7 @@ $result_servicios = $con->query($sql_servicios);
                                        title='Delete Budget'>
                                         <i class='fas fa-trash'></i>
                                     </a>
-                                    <button class='btn btn-success btn-sm' onclick='openAddAddressModal(" . json_encode($row) . ")' title='Add Address'>
+                                    <button class='btn btn-success btn-sm add-btn' onclick='openAddAddressModal(" . json_encode($row) . ")' title='Add Address'>
                                         <i class='fas fa-plus'></i>
                                     </button>
                                     <a href='generate_pdf_proposal.php?folio=$folio_presupuesto' 
@@ -429,22 +429,36 @@ $result_servicios = $con->query($sql_servicios);
         });
 
         function sendPDF(button) {
-                const folio = button.getAttribute('data-folio');
+            const folio_presupuesto = button.getAttribute('data-folio');
 
-                const sentPDFs = JSON.parse(localStorage.getItem('sentPDFs')) || [];
-                if (!sentPDFs.includes(folio)) {
-                    sentPDFs.push(folio);
-                    localStorage.setItem('sentPDFs', JSON.stringify(sentPDFs));
-                }
+            const sentPDFs = JSON.parse(localStorage.getItem('sentPDFs')) || [];
 
-                const row = button.closest('tr');
-                row.querySelectorAll('.edit-button, .generate-pdf-button, .send-button').forEach(btn => btn.style.display = 'none');
-                
-                const statusButton = row.querySelector('.btn-status');
-                if (statusButton) {
-                    statusButton.classList.remove('d-none');
-                }
+            if (!sentPDFs.includes(folio_presupuesto)) {
+                sentPDFs.push(folio_presupuesto);
+                localStorage.setItem('sentPDFs', JSON.stringify(sentPDFs));
             }
+
+            const row = button.closest('tr');
+            row.querySelectorAll('.edit-button, .generate-pdf-button, .send-button, .add-btn').forEach(btn => btn.style.display = 'none');
+            
+            const statusButton = row.querySelector('.btn-status');
+            if (statusButton) {
+                statusButton.classList.remove('d-none');
+            }
+        }
+
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const sentPDFs = JSON.parse(localStorage.getItem('sentPDFs')) || [];
+
+            sentPDFs.forEach(folio => {
+                const row = document.querySelector(`tr[data-folio="${folio}"]`);
+                if (row) {
+                    row.querySelectorAll('.edit-button, .generate-pdf-button, .send-button, .add-btn').forEach(btn => btn.style.display = 'none');
+                }
+            });
+        });
+
     </script>
 </body>
 </html>
