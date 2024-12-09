@@ -44,22 +44,7 @@ require '../Administrador/superior_admin.php';
             </div>
             <form action="add_work.php" method="POST">
                 <div class="modal-body">
-                    <div class="form-group mb-3">
-                        <label for="id_empresa">Selected a Company</label>
-                        <select name="id_empresa" class="form-control" required>
-                            <option value="">Selected a Company</option>
-                            <?php
-                            if ($result_empresas->num_rows > 0) {
-                                while ($empresa = $result_empresas->fetch_assoc()) {
-                                    echo "<option value='" . htmlspecialchars($empresa['id_empresa']) . "'>" . htmlspecialchars($empresa['nombre_empresa']) . "</option>";
-                                }
-                            } else {
-                                echo "<option value=''>No hay empresas disponibles</option>";
-                            }
-                            ?>
-                        </select>
-                    </div>
-                    <div class="form-group mb-3">
+                                    <div class="form-group mb-3">
                         <label for="id_cliente">Selected a Customer</label>
                         <select name="id_cliente" id="select_cliente" class="form-control" required>
                             <option value="">Selected a Customer</option>
@@ -81,20 +66,14 @@ require '../Administrador/superior_admin.php';
                         </select>
                     </div>
                     <div class="form-group mb-3">
-                        <label for="id_servicio">Select a Service</label>
-                        <select name="id_servicio" id="select_servicio" class="form-control" required>
-                            <option value="">Select a Service</option>
-                            <?php
-                            $result_servicios = $con->query($sql_servicios);
-                            if ($result_servicios->num_rows > 0) {
-                                while ($servicio = $result_servicios->fetch_assoc()) {
-                                    echo "<option value='" . htmlspecialchars($servicio['id_servicio']) . "' data-total='" . htmlspecialchars($servicio['total']) . "'>" . htmlspecialchars($servicio['nombre_servicio']) . "</option>";
-                                }
-                            } else {
-                                echo "<option value=''>No services available</option>";
-                            }
-                            ?>
-                        </select>
+                        <label for="nombre_empresa">Company</label>
+                        <input type="text" id="nombre_empresa" class="form-control" readonly>
+                        <input type="hidden" name="id_empresa" id="id_empresa">
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="nombre_servicio">Service</label>
+                        <input type="text" id="nombre_servicio" class="form-control" readonly>
+                        <input type="hidden" name="id_servicio" id="id_servicio">
                     </div>
                     <div class="form-group mb-3">
                         <label for="direccion_cliente">Customer Address</label>
@@ -107,7 +86,7 @@ require '../Administrador/superior_admin.php';
                     </div>
                     <div class="form-group mb-3">
                         <label >Advance Payment</label>
-                        <input type="number" name="anticipo" id="anticipo" class="form-control" required>
+                        <input type="number" name="anticipo" id="anticipo" class="form-control" readonly>
                     </div>
                     <div class="form-group mb-3">
                         <label >Debit</label>
@@ -119,7 +98,7 @@ require '../Administrador/superior_admin.php';
                     </div>
                     <div class="form-group mb-3">
                         <label >Observations</label>
-                        <textarea name="observaciones" class="form-control"></textarea>
+                        <textarea name="observaciones" id="observaciones" class="form-control" readonly></textarea>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -143,20 +122,8 @@ require '../Administrador/superior_admin.php';
                     <input type="hidden" name="folio_obra" id="edit_folio_obra">
 
                     <div class="form-group mb-3">
-                    <label for="edit_id_servicio">Select a Service</label>
-                    <select name="id_servicio" id="edit_id_servicio" class="form-control" required>
-                        <option value="">Select a Service</option>
-                        <?php
-                        $result_servicios = $con->query($sql_servicios);
-                        if ($result_servicios->num_rows > 0) {
-                            while ($servicio = $result_servicios->fetch_assoc()) {
-                                echo "<option value='" . htmlspecialchars($servicio['id_servicio']) . "' data-total='" . htmlspecialchars($servicio['total']) . "'>" . htmlspecialchars($servicio['nombre_servicio']) . "</option>";
-                            }
-                        } else {
-                            echo "<option value=''>No services available</option>";
-                        }
-                        ?>
-                    </select>
+                    <label for="edit_id_servicio">Service</label>
+                    <input name="id_servicio" id="edit_id_servicio" class="form-control" readonly>
                     </div>
 
                     <div class="form-group mb-3">
@@ -166,7 +133,7 @@ require '../Administrador/superior_admin.php';
 
                     <div class="form-group mb-3">
                         <label for="edit_anticipo">Advance Payment</label>
-                        <input type="number" name="anticipo" id="edit_anticipo" class="form-control" required>
+                        <input type="number" name="anticipo" id="edit_anticipo" class="form-control" readonly>
                     </div>
                     
                     <div class="form-group mb-3">
@@ -388,28 +355,9 @@ require '../Administrador/superior_admin.php';
         $('#edit_total_obra').val(obraData.total_obra);
         $('#edit_observaciones').val(obraData.observaciones);
 
-        $('#edit_id_servicio').val(obraData.id_servicio);
-
-        let selectedServiceTotal = $('#edit_id_servicio option:selected').data('total');
-        $('#edit_total_obra').val(selectedServiceTotal);
-
-        $('#edit_id_servicio').off('change').on('change', function() {
-            let selectedServiceTotal = $('#edit_id_servicio option:selected').data('total');
-            $('#edit_total_obra').val(selectedServiceTotal);
-
-            $('#edit_anticipo').val('');
-            $('#edit_adeudo').val('');
-        });
-
+        $('#edit_id_servicio').val(obraData.nombre_servicio);
         $('#editWorksModal').modal('show');
-    }
-
-    $('#select_servicio').on('change', function () {
-        var total = parseFloat($(this).find(':selected').data('total')) || 0;
-        $('#total_obra').val(total.toFixed(2));
-        $('#anticipo').val('');
-        $('#adeudo').val('');
-    });
+    };
 
 
     function openAddAddressModal(obra) {
@@ -434,7 +382,6 @@ require '../Administrador/superior_admin.php';
         const statusModal = new bootstrap.Modal(document.getElementById('workStatusModal'));
         statusModal.show();
     }
-
 
         function mostrarToast(titulo, mensaje, tipo) {
             let icon = '';
@@ -492,64 +439,91 @@ require '../Administrador/superior_admin.php';
             <?php endif; ?>
         });
 
-        $(document).ready(function () {
-            $('select[name="id_cliente"]').on('change', function () {
-                var id_cliente = $(this).val();
+        $('select[name="id_cliente"]').on('change', function () {
+            var id_cliente = $(this).val();
 
-                if (id_cliente) {
-                    $.ajax({
-                        url: 'get_direccion_cliente.php',
-                        type: 'POST',
-                        data: { id_cliente: id_cliente },
-                        success: function (data) {
-                            var direccion = JSON.parse(data);
-                            $('#direccion_cliente').val(direccion.ciudad);
-                            $('#id_direccion').val(direccion.id_direccion);
+            if (id_cliente) {
+                $.ajax({
+                    url: 'get_service.php',
+                    type: 'POST',
+                    data: { id_cliente: id_cliente },
+                    success: function (data) {
+                        try {
+                            var response = JSON.parse(data);
+
+                            if (response.direccion) {
+                                $('#direccion_cliente').val(response.direccion.ciudad);
+                                $('#id_direccion').val(response.direccion.id_direccion);
+                                $('#nombre_servicio').val(response.servicio.nombre_servicio);
+                                $('#id_servicio').val(response.servicio.id_servicio);
+                                $('#nombre_empresa').val(response.presupuesto.nombre_empresa);
+                                $('#id_empresa').val(response.presupuesto.id_empresa);
+                                $('#total_obra').val(parseFloat(response.servicio.total).toFixed(2));
+                                $('#anticipo').val(response.presupuesto.anticipo);
+                                $('#observaciones').val(response.presupuesto.observaciones);
+                            }
+                        } catch (error) {
+                            console.error('Error al parsear JSON:', error, data);
                         }
-                    });
-                } else {
-                    $('#direccion_cliente').val('');
-                    $('#id_direccion').val('');
-                }
-            });
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('Error en la solicitud AJAX:', status, error);
+                    }
+                });
+            } else {
+                console.log('Cliente no seleccionado.');
+                $('#direccion_cliente').val('');
+                $('#id_direccion').val('');
+                $('#nombre_servicio').val('');
+                $('#id_servicio').val('');
+                $('#total_obra').val('');
+                $('#anticipo').val('');
+                $('#adeudo').val('');
+                $('#nombre_empresa').val('');
+                $('#id_empresa').val('');
+            }
         });
 
 
-        function validarYCalcularAgregar() {
-            var total = parseFloat(document.getElementById('total_obra').value) || 0;
-            var anticipo = parseFloat(document.getElementById('anticipo').value) || 0;
+        function validarYCalcular(context) {
+            // Obtener los elementos dentro del contexto (agregar o editar)
+            var totalInput = context.querySelector('[id$="_total_obra"]');
+            var anticipoInput = context.querySelector('[id$="_anticipo"]');
+            var adeudoInput = context.querySelector('[id$="_adeudo"]');
 
+            var total = parseFloat(totalInput.value) || 0;
+            var anticipo = parseFloat(anticipoInput.value) || 0;
+
+            // Validar si el anticipo excede el total
             if (anticipo > total) {
                 alert("El anticipo no puede exceder el total.");
-                document.getElementById('anticipo').value = total.toFixed(2);
                 anticipo = total;
+                anticipoInput.value = total.toFixed(2);
             }
 
+            // Calcular el adeudo
             var adeudo = total - anticipo;
-            document.getElementById('adeudo').value = adeudo.toFixed(2);
+            adeudoInput.value = adeudo.toFixed(2);
         }
 
-    function validarYCalcularEditar() {
-        var total = parseFloat(document.getElementById('edit_total_obra').value) || 0;
-        var anticipo = parseFloat(document.getElementById('edit_anticipo').value) || 0;
-
-        if (anticipo > total) {
-                alert("El anticipo no puede exceder el total.");
-                document.getElementById('edit_anticipo').value = total.toFixed(2);
-                anticipo = total;
+        // Listeners dinámicos para los campos
+        document.addEventListener('DOMContentLoaded', function () {
+            // Agregar listeners para el modal de agregar
+            var agregarContext = document.getElementById('addWorksModal');
+            if (agregarContext) {
+                agregarContext.querySelector('#anticipo').addEventListener('input', function () {
+                    validarYCalcular(agregarContext);
+                });
             }
 
-                var adeudo = total - anticipo;
-                document.getElementById('edit_adeudo').value = adeudo.toFixed(2);
+            // Agregar listeners para el modal de editar
+            var editarContext = document.getElementById('editWorksModal');
+            if (editarContext) {
+                editarContext.querySelector('#edit_anticipo').addEventListener('input', function () {
+                    validarYCalcular(editarContext);
+                });
             }
-
-            if (document.getElementById('anticipo')) {
-                document.getElementById('anticipo').addEventListener('input', validarYCalcularAgregar);
-            }
-
-            if (document.getElementById('edit_anticipo')) {
-                document.getElementById('edit_anticipo').addEventListener('input', validarYCalcularEditar);
-            }
+        });
 
             function sendPDF(button) {
                 const folio = button.getAttribute('data-folio');

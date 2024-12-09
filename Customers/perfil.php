@@ -139,45 +139,52 @@ if ($hour >= 5 && $hour < 12) {
 
 <div id="Alert"></div>
 
-<div class="container mt-5 d-flex justify-content-center">
-    <!-- Card for Personal Information -->
-    <div class="card text-center" style="width: 24rem;">
-        <div class="card-body">
-            <h5 class="card-title">Personal Data</h5>
-            <p><strong>Name</strong> <?php echo htmlspecialchars($user['nombre_cliente'] ?? 'No disponible'); ?></p>
-            <p><strong>Last Name</strong> <?php echo htmlspecialchars(($user['apellido_paterno'] ?? '') . ' ' . ($user['apellido_materno'] ?? '')); ?></p>
-            <p><strong>Email</strong> <?php echo htmlspecialchars($user['correo_electronico'] ?? 'No disponible'); ?></p>
-            <p><strong>Phone</strong> <?php echo htmlspecialchars($user['telefono_personal'] ?? 'No disponible'); ?></p>
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editModal">Edit</button>
+<div class="container mt-5">
+    <div class="row justify-content-center g-4">
+        <!-- Card for Personal Information -->
+        <div class="col-lg-4 col-md-6">
+            <div class="card text-center h-100">
+                <div class="card-body">
+                    <h5 class="card-title">Personal Data</h5>
+                    <p><strong>Name</strong> <?php echo htmlspecialchars($user['nombre_cliente'] ?? 'No disponible'); ?></p>
+                    <p><strong>Last Name</strong> <?php echo htmlspecialchars(($user['apellido_paterno'] ?? '') . ' ' . ($user['apellido_materno'] ?? '')); ?></p>
+                    <p><strong>Email</strong> <?php echo htmlspecialchars($user['correo_electronico'] ?? 'No disponible'); ?></p>
+                    <p><strong>Phone</strong> <?php echo htmlspecialchars($user['telefono_personal'] ?? 'No disponible'); ?></p>
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editModal">Edit</button>
+                </div>
+            </div>
         </div>
-    </div>
 
-    <!-- Card for Address Information -->
-    <div class="card text-center mt-4" style="width: 24rem;">
-        <div class="card-body">
-            <h5 class="card-title">Address</h5>
-            <?php if ($direccion) { ?>
-                <p><strong>Street</strong> <?php echo htmlspecialchars($direccion['calle'] ?? 'No disponible'); ?></p>
-                <p><strong>Outside Number</strong> <?php echo htmlspecialchars($direccion['num_ext'] ?? 'No disponible'); ?></p>
-                <p><strong>Inner Number</strong> <?php echo htmlspecialchars($direccion['num_int'] ?? 'No disponible'); ?></p>
-                <p><strong>City</strong> <?php echo htmlspecialchars($direccion['ciudad'] ?? 'No disponible'); ?></p>
-                <p><strong>State</strong> <?php echo htmlspecialchars($direccion['estado'] ?? 'No disponible'); ?></p>
-                <p><strong>Postal Code</strong> <?php echo htmlspecialchars($direccion['codigo_postal'] ?? 'No disponible'); ?></p>
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editAddressModal">Edit</button>
-            <?php } else { ?>
-                <p>The address data was not found.</p>
-                <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#addAddressModal">Add Address</button>
-            <?php } ?>
+        <!-- Card for Address Information -->
+        <div class="col-lg-4 col-md-6">
+            <div class="card text-center h-100">
+                <div class="card-body">
+                    <h5 class="card-title">Address</h5>
+                    <?php if ($direccion) { ?>
+                        <p><strong>Street</strong> <?php echo htmlspecialchars($direccion['calle'] ?? 'No disponible'); ?></p>
+                        <p><strong>Outside Number</strong> <?php echo htmlspecialchars($direccion['num_ext'] ?? 'No disponible'); ?></p>
+                        <p><strong>Inner Number</strong> <?php echo htmlspecialchars($direccion['num_int'] ?? 'No disponible'); ?></p>
+                        <p><strong>City</strong> <?php echo htmlspecialchars($direccion['ciudad'] ?? 'No disponible'); ?></p>
+                        <p><strong>State</strong> <?php echo htmlspecialchars($direccion['estado'] ?? 'No disponible'); ?></p>
+                        <p><strong>Postal Code</strong> <?php echo htmlspecialchars($direccion['codigo_postal'] ?? 'No disponible'); ?></p>
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editAddressModal">Edit</button>
+                    <?php } else { ?>
+                        <p>The address data was not found.</p>
+                        <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#addAddressModal">Add Address</button>
+                    <?php } ?>
+                </div>
+            </div>
         </div>
     </div>
 </div>
+
 
 <!-- Modal para editar datos personales -->
 <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="editModalLabel">Editar Datos Personales</h5>
+                <h5 class="modal-title" id="editModalLabel">Edit</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -185,27 +192,27 @@ if ($hour >= 5 && $hour < 12) {
             <div class="modal-body">
                 <form action="update_profile.php" method="post">
                     <div class="form-group">
-                        <label for="nombre_cliente">Nombre</label>
+                        <label for="nombre_cliente">Name</label>
                         <input type="text" class="form-control" name="nombre_cliente" id="nombre_cliente" value="<?php echo htmlspecialchars($user['nombre_cliente']); ?>" required>
                     </div>
                     <div class="form-group">
-                        <label for="apellido_paterno">Apellido Paterno</label>
+                        <label for="apellido_paterno">Paternal Surname</label>
                         <input type="text" class="form-control" name="apellido_paterno" id="apellido_paterno" value="<?php echo htmlspecialchars($user['apellido_paterno']); ?>" required>
                     </div>
                     <div class="form-group">
-                        <label for="apellido_materno">Apellido Materno</label>
+                        <label for="apellido_materno">Maternal Surname</label>
                         <input type="text" class="form-control" name="apellido_materno" id="apellido_materno" value="<?php echo htmlspecialchars($user['apellido_materno']); ?>" required>
                     </div>
                     <div class="form-group">
-                        <label for="correo_electronico">Correo Electrónico</label>
+                        <label for="correo_electronico">Email</label>
                         <input type="email" class="form-control" name="correo_electronico" id="correo_electronico" value="<?php echo htmlspecialchars($user['correo_electronico']); ?>" required>
                     </div>
                     <div class="form-group">
-                        <label for="telefono_personal">Teléfono</label>
+                        <label for="telefono_personal">Phone</label>
                         <input type="text" class="form-control" name="telefono_personal" id="telefono_personal" value="<?php echo htmlspecialchars($user['telefono_personal']); ?>" required>
                     </div>
                     <input type="hidden" name="id_cliente" value="<?php echo htmlspecialchars($user['id_cliente']); ?>">
-                    <button type="submit" class="btn btn-primary">Actualizar Perfil</button>
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
                 </form>
             </div>
         </div>
@@ -234,7 +241,7 @@ if ($hour >= 5 && $hour < 12) {
                     </div>
                     <div class="form-group">
                         <label for="num_int">Inner Number</label>
-                        <input type="text" class="form-control" name="num_int" id="num_int" 
+                        <input type="text" class="form-control" name="num_int" id="num_int">
                     </div>
                     <div class="form-group">
                         <label for="ciudad">City</label>
@@ -261,7 +268,7 @@ if ($hour >= 5 && $hour < 12) {
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="editAddressModalLabel">Edit Address</h5>
+                <h5 class="modal-title" id="editAddressModalLabel">Edit</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -294,7 +301,7 @@ if ($hour >= 5 && $hour < 12) {
                     </div>
                     <input type="hidden" name="id_cliente" value="<?php echo htmlspecialchars($user['id_cliente']); ?>">
                     <input type="hidden" name="id_direccion" value="<?php echo htmlspecialchars($direccion['id_direccion']); ?>">
-                    <button type="submit" class="btn btn-primary">Update Address</button>
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
                 </form>
             </div>
         </div>

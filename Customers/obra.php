@@ -2,13 +2,25 @@
 require '../Login/conexion.php';
 require '../Customers/superior_customer.php';
 
-$sql_empresas = "SELECT id_empresa, nombre_empresa FROM empresa";
-$result_empresas = $con->query($sql_empresas);
+if (!isset($_SESSION['id_cliente'])) {
+    header("Location: ../Login/login.php");
+    exit;
+}
 
-$sql_clientes = "SELECT id_cliente, nombre_cliente, apellido_paterno, apellido_materno FROM clientes WHERE rol = 'usuario'";
-$result_clientes = $con->query($sql_clientes);
+$user_id = $_SESSION['id_cliente'];
 
-$sql_servicios = "SELECT id_servicio, nombre_servicio, total FROM servicios";
+$sql = "SELECT o.*, e.nombre_empresa, c.nombre_cliente, c.apellido_paterno, c.apellido_materno, d.ciudad, s.nombre_servicio
+        FROM obras o
+        LEFT JOIN empresa e ON o.id_empresa = e.id_empresa
+        LEFT JOIN clientes c ON o.id_cliente = c.id_cliente
+        LEFT JOIN servicios s ON o.id_servicio = s.id_servicio
+        LEFT JOIN direcciones d ON o.id_direccion = d.id_direccion
+        WHERE c.id_cliente = ?";
+
+$stmt = $con->prepare($sql);
+$stmt->bind_param('i', $user_id);
+$stmt->execute();
+$result = $stmt->get_result();
 ?>
 
 <!DOCTYPE html>
@@ -47,14 +59,6 @@ $sql_servicios = "SELECT id_servicio, nombre_servicio, total FROM servicios";
             </thead>
             <tbody>
                 <?php
-                $sql = "SELECT o.*, e.nombre_empresa, c.nombre_cliente, c.apellido_paterno, c.apellido_materno, d.ciudad, s.nombre_servicio
-                        FROM obras o
-                        LEFT JOIN empresa e ON o.id_empresa = e.id_empresa
-                        LEFT JOIN clientes c ON o.id_cliente = c.id_cliente
-                        LEFT JOIN servicios s ON o.id_servicio = s.id_servicio
-                        LEFT JOIN direcciones d ON o.id_direccion = d.id_direccion";
-                $result = $con->query($sql);
-
                 if ($result->num_rows > 0) {
                     while ($row = $result->fetch_assoc()) {
                         $nombre_cliente = htmlspecialchars($row['nombre_cliente'] . ' ' . $row['apellido_paterno'] . ' ' . $row['apellido_materno']);
@@ -97,7 +101,7 @@ $sql_servicios = "SELECT id_servicio, nombre_servicio, total FROM servicios";
                         echo "</tr>";
                     }
                 } else {
-                    echo "<tr><td colspan='9'>There are no works recorded.</td></tr>";
+                    echo "<tr><td colspan='11'>There are no works recorded.</td></tr>";
                 }
                 ?>
             </tbody>

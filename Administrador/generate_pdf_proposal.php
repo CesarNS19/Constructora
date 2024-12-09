@@ -85,7 +85,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['folio'])) {
 
                 // Condiciones
                 $pdf->SetFont('Arial', 'B', 10);
-                $pdf->MultiCell(0, 6, "We hereby propose to furnish labor -- complete in accordance with the above specifications");
+                $pdf->MultiCell(0, 6, "We hereby propose to furnish labor -- complete in accordance with the above specifications, for the sum of $" . $obra['anticipo'] . " with payment to be made as follows:");
                 $pdf->Cell(0, 8, 'FINAL PAYMENT DUE AT COMPLETION OF JOB -- $' . $obra['total'], 0, 1);
                 $pdf->Ln(8);
 

@@ -107,8 +107,8 @@ $result_servicios = $con->query($sql_servicios);
                         </select>
                     </div>
                     <div class="form-group mb-3">
-                        <label for="date">Date of Preparation</label>
-                        <input type="date" step="0.01" name="fecha_elaboracion" class="form-control" required>
+                        <label for="anticipo">Advance Payment</label>
+                        <input type="number" name="anticipo" id="anticipo" class="form-control" required>
                     </div>
                     <div class="form-group mb-3">
                         <label >Total Work</label>
@@ -138,8 +138,8 @@ $result_servicios = $con->query($sql_servicios);
             <form action="edit_budget.php" method="POST">
                 <div class="modal-body">
                     <input type="hidden" name="folio_presupuesto" id="edit_folio_presupuesto">
-                    
-                    <div class="form-group mb-3">
+                
+                <div class="form-group mb-3">
                     <label for="edit_id_servicio">Select a Service</label>
                     <select name="id_servicio" id="edit_id_servicio" class="form-control" required>
                         <option value="">Select a Service</option>
@@ -157,15 +157,15 @@ $result_servicios = $con->query($sql_servicios);
                 </div>
 
                     <div class="form-group mb-3">
-                        <label for="edit_fecha_elaboracion">Date of Preparation</label>
-                        <input type="date" name="fecha_elaboracion" id="edit_fecha_elaboracion" class="form-control" required>
-                    </div>
-
-                    <div class="form-group mb-3">
                         <label for="edit_total">Total Work</label>
                         <input type="number" name="total" id="edit_total" class="form-control" readonly>
                     </div>
-                                        
+                             
+                    <div class="form-group mb-3">
+                        <label for="edit_anticipo">Advance Payment</label>
+                        <input type="number" name="anticipo" id="edit_anticipo" class="form-control" required>
+                    </div>
+
                     <div class="form-group mb-3">
                         <label for="edit_observaciones">Observations</label>
                         <input type="text" name="observaciones" id="edit_observaciones" class="form-control" required>
@@ -239,6 +239,7 @@ $result_servicios = $con->query($sql_servicios);
                     <th>Customer</th>
                     <th>Customer Address</th>
                     <th>Service</th>
+                    <th>Advance Payment</th>
                     <th>Date of Preparation</th>
                     <th>Total</th>
                     <th>Observations</th>
@@ -268,6 +269,7 @@ $result_servicios = $con->query($sql_servicios);
                         echo "<td>" . $nombre_cliente . "</td>";
                         echo "<td>" . htmlspecialchars($row['ciudad']) . "</td>";
                         echo "<td>" . $servicio . "</td>";
+                        echo "<td>" . htmlspecialchars($row['anticipo']) . "</td>";
                         echo "<td>" . htmlspecialchars($row['fecha_elaboracion']) . "</td>";
                         echo "<td>" . htmlspecialchars($row['total']) . "</td>";
                         echo "<td>" . htmlspecialchars($row['observaciones']) . "</td>";
@@ -321,9 +323,9 @@ $result_servicios = $con->query($sql_servicios);
 
     function openEditModal(customerData) {
         $('#edit_folio_presupuesto').val(customerData.folio_presupuesto);
-        $('#edit_fecha_elaboracion').val(customerData.fecha_elaboracion);
         $('#edit_total_obra').val(customerData.total_obra);
         $('#edit_total').val(customerData.total);
+        $('#edit_anticipo').val(customerData.anticipo);
         $('#edit_observaciones').val(customerData.observaciones);
         
         $('#edit_id_servicio').val(customerData.id_servicio);
@@ -349,6 +351,33 @@ $result_servicios = $con->query($sql_servicios);
         document.getElementById('presupuesto_modal').value = presupuesto.folio_presupuesto;
         $('#addBudgetAddressModal').modal('show');
     }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const anticipoField = document.getElementById('anticipo');
+        const totalField = document.getElementById('total');
+        const editAnticipoField = document.getElementById('edit_anticipo');
+        const editTotalField = document.getElementById('edit_total');
+
+        anticipoField.addEventListener('input', function () {
+            const anticipo = parseFloat(anticipoField.value);
+            const total = parseFloat(totalField.value);
+
+            if (!isNaN(anticipo) && !isNaN(total) && anticipo > total) {
+                alert(`The advance payment cannot exceed the total amount of $${total}.`);
+                anticipoField.value = 0;
+            }
+        });
+
+        editAnticipoField.addEventListener('input', function () {
+            const anticipo = parseFloat(editAnticipoField.value);
+            const total = parseFloat(editTotalField.value);
+
+            if (!isNaN(anticipo) && !isNaN(total) && anticipo > total) {
+                alert(`The advance payment cannot exceed the total amount of $${total}.`);
+                editAnticipoField.value = 0;
+            }
+        });
+    });
 
         function mostrarToast(titulo, mensaje, tipo) {
             let icon = '';

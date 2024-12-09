@@ -225,37 +225,6 @@ require '../Administrador/superior_admin.php';
                         <label class="form-check-label" for="day7">Sunday</label>
                     </div>
                 </div>
-
-                <div id="workDaysRow2" class="d-flex justify-content-between">
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="day8" value="Lunes">
-                        <label class="form-check-label" for="day8">Monday</label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="day9" value="Martes">
-                        <label class="form-check-label" for="day9">Tuesday</label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="day10" value="Miércoles">
-                        <label class="form-check-label" for="day10">Wednesday</label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="day11" value="Jueves">
-                        <label class="form-check-label" for="day11">Thursday</label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="day12" value="Viernes">
-                        <label class="form-check-label" for="day12">Friday</label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="day13" value="Sábado">
-                        <label class="form-check-label" for="day13">Saturday</label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="day14" value="Domingo">
-                        <label class="form-check-label" for="day14">Sunday</label>
-                    </div>
-                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -439,8 +408,7 @@ require '../Administrador/superior_admin.php';
         $('#saveWorkDays').on('click', function() {
             const idEmpleado = $('#modal_id_empleado').val();
             const diasSeleccionadosArriba = $('#workDaysRow1 .form-check-input:checked').length;
-            const diasSeleccionadosAbajo = $('#workDaysRow2 .form-check-input:checked').length;
-            const diasSeleccionados = diasSeleccionadosArriba + diasSeleccionadosAbajo;
+            const diasSeleccionados = diasSeleccionadosArriba;
 
             $.ajax({
                 url: 'save_work_days.php',

@@ -200,6 +200,13 @@ const translations = {
     "Address" : {es: "Dirección", en: "Address"},
     "Add Address" : {es: "Agregar Dirección", en: "Add Address"},
     "The address data was not found." : {es: "No se encontraron datos de dirección.", en: "The address data was not found."},
+    "Qoute" : {es: "Cotizar", en: "Qoute"},
+    "You don't have a registered address. Please enter an address to proceed with the quotation." : {es: "No tienes una dirección registrada. Por favor, ingresa una dirección para continuar con la cotización.", en: "You don't have a registered address. Please enter an address to proceed with the quotation."},
+    "Do you want to add a new address?" : {es: "¿Deseas agregar una nueva dirección?", en: "Do you want to add a new address?"},
+    "Do you want to keep this address or add a new one?" : {es: "¿Deseas conservar esta dirección o agregar una nueva?", en: "Do you want to keep this address or add a new one?"},
+    "Keep current address" : {es: "Conservar dirección actual", en: "Keep current address"},
+    "Current address:" : {es: "Dirección Actual", en: "Current address:"},
+    "Add New Address" : {es: "Agregar Nueva Dirección", en: "Add New Address"},
 
 };
 
