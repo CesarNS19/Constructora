@@ -9,7 +9,7 @@ $result_clientes = $con->query($sql_clientes);
 
 $sql_servicios = "SELECT id_servicio, nombre_servicio, total FROM servicios";
 
-require '../Employee/superior_empoyee.php';
+require '../Employee/superior_employee.php';
 ?>
 
 <!DOCTYPE html>

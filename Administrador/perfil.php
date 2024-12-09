@@ -64,6 +64,7 @@ if ($hour >= 5 && $hour < 12) {
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" href="../Css/style.css">
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 
 <header>
@@ -95,10 +96,6 @@ if ($hour >= 5 && $hour < 12) {
                         <a class='nav-link' href='perfil.php' style='color: black; font-size: 18px; text-decoration: none; font-weight: 600;'>
                             $greeting $fullName
                         </a>
-                        <div class='vr' style='height: 24px; width: 1px; background-color: black; margin: 0 10px;'></div>
-                        <button title='Change Theme' id='themeToggle' style='background: none; border: none; color: black; font-size: 20px; cursor: pointer;'>
-                            <i class='fas fa-adjust'></i>
-                        </button>
                     </div>";
                 } else {
                     $logInText = $translations[$lang]['log_in'];
@@ -126,42 +123,43 @@ if ($hour >= 5 && $hour < 12) {
 
 <!-- Modal para editar datos -->
 <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content shadow-lg">
             <div class="modal-header">
                 <h5 class="modal-title" id="editModalLabel">Edit</h5>
-                <button type="button" class="close" data-bs-dismiss="modal" aria-bs-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <form action="update_profile.php" method="post">
-                    <div class="form-group">
-                        <label for="nombre_cliente">Name</label>
-                        <input type="text" class="form-control" name="nombre_cliente" id="nombre_cliente" value="<?php echo htmlspecialchars($user['nombre_cliente'] ?? ''); ?>">
+                    <div class="mb-3">
+                        <label for="nombre_cliente" class="form-label">Name</label>
+                        <input type="text" class="form-control" name="nombre_cliente" id="nombre_cliente" value="<?php echo htmlspecialchars($user['nombre_cliente'] ?? ''); ?>" required>
                     </div>
-                    <div class="form-group">
-                        <label for="apellido_paterno">Paternal Surname</label>
-                        <input type="text" class="form-control" name="apellido_paterno" id="apellido_paterno" value="<?php echo htmlspecialchars($user['apellido_paterno'] ?? ''); ?>">
+                    <div class="mb-3">
+                        <label for="apellido_paterno" class="form-label">Paternal Surname</label>
+                        <input type="text" class="form-control" name="apellido_paterno" id="apellido_paterno" value="<?php echo htmlspecialchars($user['apellido_paterno'] ?? ''); ?>" required>
                     </div>
-                    <div class="form-group">
-                        <label for="apellido_materno">Maternal Surname</label>
-                        <input type="text" class="form-control" name="apellido_materno" id="apellido_materno" value="<?php echo htmlspecialchars($user['apellido_materno'] ?? ''); ?>">
+                    <div class="mb-3">
+                        <label for="apellido_materno" class="form-label">Maternal Surname</label>
+                        <input type="text" class="form-control" name="apellido_materno" id="apellido_materno" value="<?php echo htmlspecialchars($user['apellido_materno'] ?? ''); ?>" required>
                     </div>
-                    <div class="form-group">
-                        <label for="correo_electronico">Email</label>
-                        <input type="email" class="form-control" name="correo_electronico" id="correo_electronico" value="<?php echo htmlspecialchars($user['correo_electronico'] ?? ''); ?>">
+                    <div class="mb-3">
+                        <label for="correo_electronico" class="form-label">Email</label>
+                        <input type="email" class="form-control" name="correo_electronico" id="correo_electronico" value="<?php echo htmlspecialchars($user['correo_electronico'] ?? ''); ?>" required>
                     </div>
-                    <div class="form-group">
-                        <label for="telefono_personal">Phone</label>
-                        <input type="text" class="form-control" name="telefono_personal" id="telefono_personal" value="<?php echo htmlspecialchars($user['telefono_personal'] ?? ''); ?>">
+                    <div class="mb-3">
+                        <label for="telefono_personal" class="form-label">Phone</label>
+                        <input type="text" class="form-control" name="telefono_personal" id="telefono_personal" value="<?php echo htmlspecialchars($user['telefono_personal'] ?? ''); ?>" required>
                     </div>
-                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-primary w-100">Save Changes</button>
+                    </div>
                 </form>
             </div>
         </div>
     </div>
 </div>
+
 
 <script>
 
@@ -222,20 +220,6 @@ function mostrarToast(titulo, mensaje, tipo) {
         });
         
         document.cookie = "timezone=" + Intl.DateTimeFormat().resolvedOptions().timeZone;
-
-        if (localStorage.getItem('theme') === 'dark') {
-            document.body.classList.add('dark-mode');
-        }
-
-        document.getElementById('themeToggle').addEventListener('click', function() {
-            document.body.classList.toggle('dark-mode');
-            
-            if (document.body.classList.contains('dark-mode')) {
-                localStorage.setItem('theme', 'dark');
-            } else {
-                localStorage.setItem('theme', 'light');
-            }
-        });
 
         document.getElementById('languageButton').addEventListener('click', () => {
             const newLang = document.documentElement.lang === 'es' ? 'en' : 'es';

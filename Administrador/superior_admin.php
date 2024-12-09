@@ -74,10 +74,6 @@ if ($hour >= 5 && $hour < 12) {
                         <a class='nav-link' href='perfil.php' style='color: black; font-size: 18px; text-decoration: none; font-weight: 600;'>
                             $greeting $fullName
                         </a>
-                        <div class='vr' style='height: 24px; width: 1px; background-color: black; margin: 0 10px;'></div>
-                        <button title='Change Theme' id='themeToggle' style='background: none; border: none; color: black; font-size: 20px; cursor: pointer;'>
-                            <i class='fas fa-adjust'></i>
-                        </button>
                     </div>";
                 } else {
                     $logInText = $translations[$lang]['log_in'];
@@ -90,20 +86,6 @@ if ($hour >= 5 && $hour < 12) {
 
     <script>
         document.cookie = "timezone=" + Intl.DateTimeFormat().resolvedOptions().timeZone;
-
-        if (localStorage.getItem('theme') === 'dark') {
-            document.body.classList.add('dark-mode');
-        }
-
-        document.getElementById('themeToggle').addEventListener('click', function() {
-            document.body.classList.toggle('dark-mode');
-            
-            if (document.body.classList.contains('dark-mode')) {
-                localStorage.setItem('theme', 'dark');
-            } else {
-                localStorage.setItem('theme', 'light');
-            }
-        });
 
         document.getElementById('languageButton').addEventListener('click', () => {
             const newLang = document.documentElement.lang === 'es' ? 'en' : 'es';
