@@ -1,6 +1,5 @@
 <?php
 require '../Login/conexion.php';
-require '../Employee/superior_employee.php';
 
 $sql_empresas = "SELECT id_empresa, nombre_empresa FROM empresa";
 $result_empresas = $con->query($sql_empresas);
@@ -9,6 +8,8 @@ $sql_clientes = "SELECT id_cliente, nombre_cliente, apellido_paterno, apellido_m
 $result_clientes = $con->query($sql_clientes);
 
 $sql_servicios = "SELECT id_servicio, nombre_servicio, total FROM servicios";
+
+require '../Employee/superior_empoyee.php';
 ?>
 
 <!DOCTYPE html>
@@ -66,11 +67,11 @@ $sql_servicios = "SELECT id_servicio, nombre_servicio, total FROM servicios";
                             if ($result_clientes->num_rows > 0) {
                                 while ($clientes = $result_clientes->fetch_assoc()) {
                                     $nombre_completo = htmlspecialchars($clientes['nombre_cliente'] . ' ' . $clientes['apellido_paterno'] . ' ' . $clientes['apellido_materno']);
-                                    
+
                                     $direccion_sql = "SELECT id_direccion, ciudad FROM direcciones WHERE id_cliente = " . (int)$clientes['id_cliente'];
                                     $direccion_result = $con->query($direccion_sql);
                                     $direccion = $direccion_result->fetch_assoc();
-                                    
+
                                     echo "<option value='" . htmlspecialchars($clientes['id_cliente']) . "' data-direccion='" . htmlspecialchars($direccion['ciudad']) . "' data-id-direccion='" . htmlspecialchars($direccion['id_direccion']) . "'>" . $nombre_completo . "</option>";
                                 }
                             } else {
@@ -167,17 +168,17 @@ $sql_servicios = "SELECT id_servicio, nombre_servicio, total FROM servicios";
                         <label for="edit_anticipo">Advance Payment</label>
                         <input type="number" name="anticipo" id="edit_anticipo" class="form-control" required>
                     </div>
-                    
+
                     <div class="form-group mb-3">
                         <label for="edit_adeudo">Debit</label>
                         <input type="number" name="adeudo" id="edit_adeudo" class="form-control" readonly>
                     </div>
-                    
+
                     <div class="form-group mb-3">
                         <label for="edit_total_obra">Total Work</label>
                         <input type="number" name="total_obra" id="edit_total_obra" class="form-control" readonly>
                     </div>
-                    
+
                     <div class="form-group mb-3">
                         <label for="edit_observaciones">Observations</label>
                         <input type="text" name="observaciones" id="edit_observaciones" class="form-control" required>
@@ -240,6 +241,7 @@ $sql_servicios = "SELECT id_servicio, nombre_servicio, total FROM servicios";
     </div>
 </div>
 
+<!-- Modal para editar el estado de la obra -->
 <div class="modal fade" id="workStatusModal" tabindex="-1" aria-labelledby="workStatusModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -252,9 +254,9 @@ $sql_servicios = "SELECT id_servicio, nombre_servicio, total FROM servicios";
                     <input type="hidden" id="folioObra" name="folio_obra">
                     <div class="mb-3">
                         <select class="form-select" id="newStatus" name="estatus">
-                            <option value="iniciada">Initial</option>
-                            <option value="medium">Medium</option>
-                            <option value="complete">Complete</option>
+                            <option value="Iniciada">Initial</option>
+                            <option value="En Progreso">Medium</option>
+                            <option value="Completa">Complete</option>
                         </select>
                     </div>
                 </div>
@@ -266,7 +268,6 @@ $sql_servicios = "SELECT id_servicio, nombre_servicio, total FROM servicios";
         </div>
     </div>
 </div>
-
 
 <!-- Tabla de Obras -->
 <section class="my-2"><br/>
@@ -315,15 +316,29 @@ $sql_servicios = "SELECT id_servicio, nombre_servicio, total FROM servicios";
                         echo "<td>" . htmlspecialchars($row['adeudo']) . "</td>";
                         echo "<td>" . htmlspecialchars($row['total_obra']) . "</td>";
                         echo "<td>" . htmlspecialchars($row['observaciones']) . "</td>";
-                        echo "<td>" . htmlspecialchars($row['estatus']) . "</td>";
+
+                        $estatus = htmlspecialchars($row['estatus']);
+                        $iniciadaClass = $estatus == 'Iniciada' ? 'bg-danger' : 'bg-light';
+                        $progresoClass = $estatus == 'En Progreso' ? 'bg-warning' : 'bg-light';
+                        $completaClass = $estatus == 'Completa' ? 'bg-success' : 'bg-light';
+
+
+                        echo "<td>
+                                <div class='d-flex justify-content-center' style='width: 100px;'>
+                                    <div class='rounded-circle $iniciadaClass' style='width: 20px; height: 20px; margin: 0 5px;'></div>
+                                    <div class='rounded-circle $progresoClass' style='width: 20px; height: 20px; margin: 0 5px;'></div>
+                                    <div class='rounded-circle $completaClass' style='width: 20px; height: 20px; margin: 0 5px;'></div>
+                                </div>
+                            </td>";
+
                         echo "<td>";
                         echo "<button class='btn btn-info btn-sm me-1 edit-button' onclick='openEditModal(" . json_encode($row) . ")' title='Edit Work'>
                             <i class='fas fa-edit'></i>
                         </button>";
-                        echo "<a href='delete_work.php?id=$folio_obra' class='btn btn-danger btn-sm me-2 delete-button' onclick='return confirm(\"Are you sure you want to delete this work?\")' title='Delete Work'>
+                        echo "<a href='delete_work.php?id=$folio_obra' class='btn btn-danger btn-sm me-2 delete-btn' onclick='return confirm(\"Are you sure you want to delete this work?\")' title='Delete Work'>
                                 <i class='fas fa-trash'></i>
                               </a>";
-                        echo "<button class='btn btn-success btn-sm me-2' onclick='openAddAddressModal(" . json_encode($row) . ")' title='Add Address'>
+                        echo "<button class='btn btn-success add-btn btn-sm me-2' onclick='openAddAddressModal(" . json_encode($row) . ")' title='Add Address'>
                             <i class='fas fa-plus'></i>
                         </button>";
                         echo "<a href='generate_pdf.php?folio=$folio_obra' class='btn btn-danger btn-sm me-2 generate-pdf-button' title='Generate PDF'>
@@ -341,9 +356,11 @@ $sql_servicios = "SELECT id_servicio, nombre_servicio, total FROM servicios";
                                 onclick='sendPDF(this)'>
                                 <i class='fas fa-envelope'></i>
                             </a>";
-                        echo "<button class='btn btn-info btn-sm me-2 btn-status' onclick='openStatusModal(" . json_encode($row) . ")' title='Work Status'>
-                            <i class='fas fa-spinner fa-spin'></i>
-                        </button>";
+                        if (strtolower($row['estatus']) !== 'completa') { 
+                            echo "<button class='btn btn-info btn-sm me-2 btn-status' onclick='openStatusModal(" . json_encode($row) . ")' title='Work Status'>
+                                <i class='fas fa-spinner fa-spin'></i>
+                            </button>";
+                        }
                         echo "</td>";
                         echo "</tr>";
                     }
@@ -354,7 +371,25 @@ $sql_servicios = "SELECT id_servicio, nombre_servicio, total FROM servicios";
             </tbody>
         </table>
     </div>
-</section>
+</section></br>
+
+<form action="upload_signature.php" method="POST" enctype="multipart/form-data" class="p-4 border rounded shadow-sm">
+    <input type="hidden" name="folio_obra" value="<?php echo isset($folio_obra) ? $folio_obra : ''; ?>">
+    
+    <div class="mb-3">
+        <label for="signature" class="form-label fw-bold">Upload Signature</label>
+        <input 
+            type="file" 
+            name="signature" 
+            id="signature" 
+            class="form-control" 
+            accept="image/*" 
+            required
+        >
+    </div>
+    
+    <button type="submit" class="btn btn-primary w-100">Upload</button>
+</form>
 
     <script>
 
@@ -539,7 +574,7 @@ $sql_servicios = "SELECT id_servicio, nombre_servicio, total FROM servicios";
                 }
 
                 const row = button.closest('tr');
-                row.querySelectorAll('.edit-button, .generate-pdf-button, .send-button').forEach(btn => btn.style.display = 'none');
+                row.querySelectorAll('.edit-button, .generate-pdf-button, .send-button, .add-btn, .delete-btn').forEach(btn => btn.style.display = 'none');
                 
                 const statusButton = row.querySelector('.btn-status');
                 if (statusButton) {
@@ -554,10 +589,9 @@ $sql_servicios = "SELECT id_servicio, nombre_servicio, total FROM servicios";
         sentPDFs.forEach(folio => {
             const row = document.querySelector(`tr[data-folio="${folio}"]`);
             if (row) {
-                row.querySelectorAll('.edit-button, .generate-pdf-button, .send-button').forEach(btn => btn.style.display = 'none');
+                row.querySelectorAll('.edit-button, .generate-pdf-button, .send-button, .add-btn, .delete-btn').forEach(btn => btn.style.display = 'none');
             }
         });
     });
     </script>
 </body>
-</html>

@@ -207,6 +207,7 @@ const translations = {
     "Keep current address" : {es: "Conservar dirección actual", en: "Keep current address"},
     "Current address:" : {es: "Dirección Actual", en: "Current address:"},
     "Add New Address" : {es: "Agregar Nueva Dirección", en: "Add New Address"},
+    "Signature File:" : {es: "Archivo de Firma", en: "Signature File:"},
 
 };
 

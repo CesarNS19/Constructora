@@ -4,7 +4,6 @@ require '../Login/conexion.php';
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id_cliente'])) {
     $id_cliente = intval($_POST['id_cliente']);
 
-    // Consulta para obtener el servicio y el total de la tabla `presupuestos`
     $query = "SELECT servicio, total_servicio 
               FROM presupuestos 
               WHERE id_cliente = ? 

@@ -1,6 +1,6 @@
 <?php
 require '../Login/conexion.php';
-require '../Administrador/superior_admin.php';
+require '../Employee/superior_employee.php';
 ?>
 
 <!DOCTYPE html>
@@ -22,7 +22,7 @@ require '../Administrador/superior_admin.php';
         <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addServicesModal">
             Add Service Category
         </button>
-        <a href="../Administrador/servicios.php" class="btn btn-primary">
+        <a href="../Employee/servicios.php" class="btn btn-primary">
             Back
         </a>
     </div>

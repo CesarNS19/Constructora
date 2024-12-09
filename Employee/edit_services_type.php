@@ -2,30 +2,26 @@
 require '../Login/conexion.php';
 session_start();
 
-if (isset($_POST['folio_obra'])) {
-    $id = $_POST['folio_obra'];
+if (isset($_POST['id_categoria'])) {
+    $id = $_POST['id_categoria'];
 
-    $sql = "SELECT * FROM obras WHERE folio_obra = ?";
+    $sql = "SELECT * FROM categorias_servicios";
     $stmt = $con->prepare($sql);
-    $stmt->bind_param("i", $id);
     $stmt->execute();
     $result = $stmt->get_result();
     $cliente = $result->fetch_assoc();
 
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-        $fecha = $_POST['fecha_inicio'];
-        $anticipo = $_POST['anticipo'];
-        $adeudo = $_POST['adeudo'];
-        $total = $_POST['total_obra'];
-        $observaciones = $_POST['observaciones'];
+        $categoria = $_POST['categoria'];
+        $altura = $_POST['altura'];
     
-        $sql = "UPDATE obras SET  fecha_inicio = ?, anticipo = ?, adeudo = ?, total_obra = ?, observaciones = ? WHERE folio_obra = ?";
+        $sql = "UPDATE categorias_servicios SET categoria = ?, altura = ? WHERE id_categoria = ?";
         $stmt = $con->prepare($sql);
-        $stmt->bind_param("sssssi",  $fecha, $anticipo, $adeudo, $total, $observaciones, $id);
+        $stmt->bind_param("ssi", $categoria, $altura, $id);
     
         if ($stmt->execute()) {
             if ($stmt->affected_rows > 0) {
-                $_SESSION['status_message'] = 'Obra actualizada exitosamente.';
+                $_SESSION['status_message'] = 'Categoria de servicios actualizada exitosamente.';
                 $_SESSION['status_type'] = 'success';
             } else {
                 $_SESSION['status_message'] = 'No se realizaron cambios. Verifica los datos.';
@@ -33,11 +29,11 @@ if (isset($_POST['folio_obra'])) {
             }
         } else {
             $_SESSION['status_message'] = 'Error al actualizar los datos: ' . $stmt->error;
-            $_SESSION['status_type'] = 'danger';
+            $_SESSION['status_type'] = 'error';
         }
 
         $stmt->close();
-        header("Location: works.php");
+        header("Location: categorias_servicios.php");
         exit();
     }
 }

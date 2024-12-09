@@ -161,9 +161,9 @@ if ($hour >= 5 && $hour < 12) {
                 <div class="card-body">
                     <h5 class="card-title">Address</h5>
                     <?php if ($direccion) { ?>
-                        <p><strong>Street</strong> <?php echo htmlspecialchars($direccion['calle'] ?? 'No disponible'); ?></p>
                         <p><strong>Outside Number</strong> <?php echo htmlspecialchars($direccion['num_ext'] ?? 'No disponible'); ?></p>
                         <p><strong>Inner Number</strong> <?php echo htmlspecialchars($direccion['num_int'] ?? 'No disponible'); ?></p>
+                        <p><strong>Street</strong> <?php echo htmlspecialchars($direccion['calle'] ?? 'No disponible'); ?></p>
                         <p><strong>City</strong> <?php echo htmlspecialchars($direccion['ciudad'] ?? 'No disponible'); ?></p>
                         <p><strong>State</strong> <?php echo htmlspecialchars($direccion['estado'] ?? 'No disponible'); ?></p>
                         <p><strong>Postal Code</strong> <?php echo htmlspecialchars($direccion['codigo_postal'] ?? 'No disponible'); ?></p>

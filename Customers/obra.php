@@ -76,7 +76,19 @@ $result = $stmt->get_result();
                         echo "<td>" . htmlspecialchars($row['adeudo']) . "</td>";
                         echo "<td>" . htmlspecialchars($row['total_obra']) . "</td>";
                         echo "<td>" . htmlspecialchars($row['observaciones']) . "</td>";
-                        echo "<td>" . htmlspecialchars($row['estatus']) . "</td>";
+                        $estatus = htmlspecialchars($row['estatus']);
+                        $iniciadaClass = $estatus == 'Iniciada' ? 'bg-danger' : 'bg-light';
+                        $progresoClass = $estatus == 'En Progreso' ? 'bg-warning' : 'bg-light';
+                        $completaClass = $estatus == 'Completa' ? 'bg-success' : 'bg-light';
+
+
+                        echo "<td>
+                                <div class='d-flex justify-content-center' style='width: 100px;'>
+                                    <div class='rounded-circle $iniciadaClass' style='width: 20px; height: 20px; margin: 0 5px;'></div>
+                                    <div class='rounded-circle $progresoClass' style='width: 20px; height: 20px; margin: 0 5px;'></div>
+                                    <div class='rounded-circle $completaClass' style='width: 20px; height: 20px; margin: 0 5px;'></div>
+                                </div>
+                            </td>";
                         echo "<td>";
                         echo "<a href='generate_pdf.php?folio=$folio_obra' class='btn btn-danger btn-sm me-2 generate-pdf-button' title='Generate PDF'>
                                 <i class='fas fa-file-pdf'></i>

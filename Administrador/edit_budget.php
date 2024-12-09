@@ -16,13 +16,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['folio_presupuesto'])) 
         $id_servicio = $_POST['id_servicio'] ?? null;
         $total = $_POST['total'] ?? null;
         $observaciones = $_POST['observaciones'] ?? '';
+        $anticipo = $_POST['anticipo'] ?? null;
 
         if ($id_servicio && $total !== null) {
             $sql = "UPDATE presupuestos 
-                    SET id_servicio = ?, total = ?, observaciones = ? 
+                    SET id_servicio = ?, total = ?, anticipo = ?, observaciones = ? 
                     WHERE folio_presupuesto = ?";
             $stmt = $con->prepare($sql);
-            $stmt->bind_param("sdsi", $id_servicio, $total, $observaciones, $id);
+            $stmt->bind_param("sdssi", $id_servicio, $total, $anticipo, $observaciones, $id);
 
             if ($stmt->execute()) {
                 if ($stmt->affected_rows > 0) {

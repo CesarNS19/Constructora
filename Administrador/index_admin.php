@@ -7,8 +7,8 @@
 <body>
     <section class="hero">
         <div class="hero-content fade-in">
-            <h1>Welcome Admin</h1>
-            <button id="learnMoreButton" class="button-3d">Learn More</button>
+            <h1>Welcome Admin</h1></br></br>
+            <a href="../pdf/Manual Técnico.pdf" target="_blank" class="button-3d" id="learnMoreButton">Learn More</a>
         </div>
     </section>
    

@@ -1,5 +1,6 @@
 <?php
 require '../Login/conexion.php';
+require '../Employee/superior_employee.php';
 
 $sql_empresas = "SELECT id_empresa, nombre_empresa FROM empresa";
 $result_empresas = $con->query($sql_empresas);
@@ -12,8 +13,6 @@ $result_direccion_clientes = $con->query($sql_direccion_clientes);
 
 $sql_servicios = "SELECT id_servicio, nombre_servicio, total FROM servicios";
 $result_servicios = $con->query($sql_servicios);
-
-require '../Employee/superior_employee.php';
 ?>
 
 <!DOCTYPE html>
@@ -108,8 +107,8 @@ require '../Employee/superior_employee.php';
                         </select>
                     </div>
                     <div class="form-group mb-3">
-                        <label for="date">Date of Preparation</label>
-                        <input type="date" step="0.01" name="fecha_elaboracion" class="form-control" required>
+                        <label for="anticipo">Advance Payment</label>
+                        <input type="number" name="anticipo" id="anticipo" class="form-control" required>
                     </div>
                     <div class="form-group mb-3">
                         <label >Total Work</label>
@@ -139,8 +138,8 @@ require '../Employee/superior_employee.php';
             <form action="edit_budget.php" method="POST">
                 <div class="modal-body">
                     <input type="hidden" name="folio_presupuesto" id="edit_folio_presupuesto">
-                    
-                    <div class="form-group mb-3">
+                
+                <div class="form-group mb-3">
                     <label for="edit_id_servicio">Select a Service</label>
                     <select name="id_servicio" id="edit_id_servicio" class="form-control" required>
                         <option value="">Select a Service</option>
@@ -158,15 +157,15 @@ require '../Employee/superior_employee.php';
                 </div>
 
                     <div class="form-group mb-3">
-                        <label for="edit_fecha_elaboracion">Date of Preparation</label>
-                        <input type="date" name="fecha_elaboracion" id="edit_fecha_elaboracion" class="form-control" required>
-                    </div>
-
-                    <div class="form-group mb-3">
                         <label for="edit_total">Total Work</label>
                         <input type="number" name="total" id="edit_total" class="form-control" readonly>
                     </div>
-                                        
+                             
+                    <div class="form-group mb-3">
+                        <label for="edit_anticipo">Advance Payment</label>
+                        <input type="number" name="anticipo" id="edit_anticipo" class="form-control" required>
+                    </div>
+
                     <div class="form-group mb-3">
                         <label for="edit_observaciones">Observations</label>
                         <input type="text" name="observaciones" id="edit_observaciones" class="form-control" required>
@@ -240,6 +239,7 @@ require '../Employee/superior_employee.php';
                     <th>Customer</th>
                     <th>Customer Address</th>
                     <th>Service</th>
+                    <th>Advance Payment</th>
                     <th>Date of Preparation</th>
                     <th>Total</th>
                     <th>Observations</th>
@@ -264,11 +264,12 @@ require '../Employee/superior_employee.php';
                         $servicio = htmlspecialchars($row['nombre_servicio']);
                         $file_path = "../pdf/Proposal_" . $folio_presupuesto . ".pdf";
 
-                        echo "<tr>";
+                        echo "<tr data-folio='$folio_presupuesto'>";
                         echo "<td>" . htmlspecialchars($row['nombre_empresa']) . "</td>";
                         echo "<td>" . $nombre_cliente . "</td>";
                         echo "<td>" . htmlspecialchars($row['ciudad']) . "</td>";
                         echo "<td>" . $servicio . "</td>";
+                        echo "<td>" . htmlspecialchars($row['anticipo']) . "</td>";
                         echo "<td>" . htmlspecialchars($row['fecha_elaboracion']) . "</td>";
                         echo "<td>" . htmlspecialchars($row['total']) . "</td>";
                         echo "<td>" . htmlspecialchars($row['observaciones']) . "</td>";
@@ -283,7 +284,7 @@ require '../Employee/superior_employee.php';
                                        title='Delete Budget'>
                                         <i class='fas fa-trash'></i>
                                     </a>
-                                    <button class='btn btn-success btn-sm' onclick='openAddAddressModal(" . json_encode($row) . ")' title='Add Address'>
+                                    <button class='btn btn-success btn-sm add-btn' onclick='openAddAddressModal(" . json_encode($row) . ")' title='Add Address'>
                                         <i class='fas fa-plus'></i>
                                     </button>
                                     <a href='generate_pdf_proposal.php?folio=$folio_presupuesto' 
@@ -294,7 +295,7 @@ require '../Employee/superior_employee.php';
                         if (file_exists($file_path)) {
                             echo "<a href='$file_path' 
                                        target='_blank' 
-                                       class='btn btn-success btn-sm' 
+                                       class='btn btn-warning btn-sm' 
                                        title='View PDF'>
                                         <i class='fas fa-eye'></i>
                                   </a>";
@@ -322,9 +323,9 @@ require '../Employee/superior_employee.php';
 
     function openEditModal(customerData) {
         $('#edit_folio_presupuesto').val(customerData.folio_presupuesto);
-        $('#edit_fecha_elaboracion').val(customerData.fecha_elaboracion);
         $('#edit_total_obra').val(customerData.total_obra);
         $('#edit_total').val(customerData.total);
+        $('#edit_anticipo').val(customerData.anticipo);
         $('#edit_observaciones').val(customerData.observaciones);
         
         $('#edit_id_servicio').val(customerData.id_servicio);
@@ -350,6 +351,33 @@ require '../Employee/superior_employee.php';
         document.getElementById('presupuesto_modal').value = presupuesto.folio_presupuesto;
         $('#addBudgetAddressModal').modal('show');
     }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const anticipoField = document.getElementById('anticipo');
+        const totalField = document.getElementById('total');
+        const editAnticipoField = document.getElementById('edit_anticipo');
+        const editTotalField = document.getElementById('edit_total');
+
+        anticipoField.addEventListener('input', function () {
+            const anticipo = parseFloat(anticipoField.value);
+            const total = parseFloat(totalField.value);
+
+            if (!isNaN(anticipo) && !isNaN(total) && anticipo > total) {
+                alert(`The advance payment cannot exceed the total amount of $${total}.`);
+                anticipoField.value = 0;
+            }
+        });
+
+        editAnticipoField.addEventListener('input', function () {
+            const anticipo = parseFloat(editAnticipoField.value);
+            const total = parseFloat(editTotalField.value);
+
+            if (!isNaN(anticipo) && !isNaN(total) && anticipo > total) {
+                alert(`The advance payment cannot exceed the total amount of $${total}.`);
+                editAnticipoField.value = 0;
+            }
+        });
+    });
 
         function mostrarToast(titulo, mensaje, tipo) {
             let icon = '';
@@ -430,22 +458,36 @@ require '../Employee/superior_employee.php';
         });
 
         function sendPDF(button) {
-                const folio = button.getAttribute('data-folio');
+            const folio_presupuesto = button.getAttribute('data-folio');
 
-                const sentPDFs = JSON.parse(localStorage.getItem('sentPDFs')) || [];
-                if (!sentPDFs.includes(folio)) {
-                    sentPDFs.push(folio);
-                    localStorage.setItem('sentPDFs', JSON.stringify(sentPDFs));
-                }
+            const sentPDFs = JSON.parse(localStorage.getItem('sentPDFs')) || [];
 
-                const row = button.closest('tr');
-                row.querySelectorAll('.edit-button, .generate-pdf-button, .send-button').forEach(btn => btn.style.display = 'none');
-                
-                const statusButton = row.querySelector('.btn-status');
-                if (statusButton) {
-                    statusButton.classList.remove('d-none');
-                }
+            if (!sentPDFs.includes(folio_presupuesto)) {
+                sentPDFs.push(folio_presupuesto);
+                localStorage.setItem('sentPDFs', JSON.stringify(sentPDFs));
             }
+
+            const row = button.closest('tr');
+            row.querySelectorAll('.edit-button, .generate-pdf-button, .send-button, .add-btn').forEach(btn => btn.style.display = 'none');
+            
+            const statusButton = row.querySelector('.btn-status');
+            if (statusButton) {
+                statusButton.classList.remove('d-none');
+            }
+        }
+
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const sentPDFs = JSON.parse(localStorage.getItem('sentPDFs')) || [];
+
+            sentPDFs.forEach(folio => {
+                const row = document.querySelector(`tr[data-folio="${folio}"]`);
+                if (row) {
+                    row.querySelectorAll('.edit-button, .generate-pdf-button, .send-button, .add-btn').forEach(btn => btn.style.display = 'none');
+                }
+            });
+        });
+
     </script>
 </body>
 </html>
