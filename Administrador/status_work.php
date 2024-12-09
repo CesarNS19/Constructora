@@ -13,7 +13,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     if ($stmt->execute()) {
         // Si el estatus es "completa", actualizamos adeudo y anticipo a 0
-        if ($new_status == 'completa') {
+        if ($new_status == 'Completa') {
             $updateSql2 = "UPDATE obras SET adeudo = 0, anticipo = 0 WHERE folio_obra = ?";
             $stmt2 = $con->prepare($updateSql2);
             $stmt2->bind_param('s', $folio_obra);

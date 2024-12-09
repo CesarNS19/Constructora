@@ -76,21 +76,9 @@ $result = $stmt->get_result();
                         echo "<td>" . htmlspecialchars($row['adeudo']) . "</td>";
                         echo "<td>" . htmlspecialchars($row['total_obra']) . "</td>";
                         echo "<td>" . htmlspecialchars($row['observaciones']) . "</td>";
-                        $estatus = htmlspecialchars($row['estatus']);
-                        $iniciadaClass = $estatus == 'Iniciada' ? 'bg-danger' : 'bg-light';
-                        $progresoClass = $estatus == 'En Progreso' ? 'bg-warning' : 'bg-light';
-                        $completaClass = $estatus == 'Completa' ? 'bg-success' : 'bg-light';
-
-
-                        echo "<td>
-                                <div class='d-flex justify-content-center' style='width: 100px;'>
-                                    <div class='rounded-circle $iniciadaClass' style='width: 20px; height: 20px; margin: 0 5px;'></div>
-                                    <div class='rounded-circle $progresoClass' style='width: 20px; height: 20px; margin: 0 5px;'></div>
-                                    <div class='rounded-circle $completaClass' style='width: 20px; height: 20px; margin: 0 5px;'></div>
-                                </div>
-                            </td>";
+                        echo "<td>" . htmlspecialchars($row['estatus']) . "</td>";
                         echo "<td>";
-                        echo "<a href='generate_pdf.php?folio=$folio_obra' class='btn btn-danger btn-sm me-2 generate-pdf-button' title='Generate PDF'>
+                        echo "<a href='generate_pdf.php?folio=$folio_obra' class='btn btn-danger btn-sm me-2 generate-pdf' title='Generate PDF'>
                                 <i class='fas fa-file-pdf'></i>
                               </a>";
                         if (file_exists($file_path)) {
@@ -103,16 +91,17 @@ $result = $stmt->get_result();
                                 <i class='fas fa-pen'></i>
                               </button>";
                         echo "<a href='send_pdf.php?folio=$folio_obra&file=" . urlencode($file_path) . "' 
-                              class='btn btn-success send-button btn-sm me-2' 
+                              class='btn btn-success env-btn btn-sm me-2' 
                               title='Send PDF' 
                               data-folio='$folio_obra' 
-                              onclick='sendPDF(this)'>
+                              onclick='envPDF(this)'>
                               <i class='fas fa-envelope'></i>
                           </a>";
                         echo "</td>";
                         echo "</tr>";
                     }
                 } else {
+                    echo "<tr><td colspan='9'>There are no works recorded.</td></tr>";
                     echo "<tr><td colspan='11'>There are no works recorded.</td></tr>";
                 }
                 ?>
@@ -216,17 +205,17 @@ $result = $stmt->get_result();
             <?php endif; ?>
         });
 
-        function sendPDF(button) {
+        function envPDF(button) {
                 const folio = button.getAttribute('data-folio');
 
-                const sentPDFs = JSON.parse(localStorage.getItem('sentPDFs')) || [];
-                if (!sentPDFs.includes(folio)) {
-                    sentPDFs.push(folio);
-                    localStorage.setItem('sentPDFs', JSON.stringify(sentPDFs));
+                const envPDFs = JSON.parse(localStorage.getItem('envPDFs')) || [];
+                if (!envPDFs.includes(folio)) {
+                    envPDFs.push(folio);
+                    localStorage.setItem('envPDFs', JSON.stringify(envPDFs));
                 }
 
                 const row = button.closest('tr');
-                row.querySelectorAll('.edit-button, .generate-pdf-button, .send-button, .signature-btn').forEach(btn => btn.style.display = 'none');
+                row.querySelectorAll('.generate-pdf, .signature-btn, .env-btn').forEach(btn => btn.style.display = 'none');
                 if (statusButton) {
                     statusButton.classList.remove('d-none');
                 }
@@ -234,12 +223,12 @@ $result = $stmt->get_result();
 
 
         document.addEventListener('DOMContentLoaded', function () {
-        const sentPDFs = JSON.parse(localStorage.getItem('sentPDFs')) || [];
+        const envPDFs = JSON.parse(localStorage.getItem('envPDFs')) || [];
 
-        sentPDFs.forEach(folio => {
+        envPDFs.forEach(folio => {
             const row = document.querySelector(`tr[data-folio="${folio}"]`);
             if (row) {
-                row.querySelectorAll('.edit-button, .generate-pdf-button, .send-button, .signature-btn').forEach(btn => btn.style.display = 'none');
+                row.querySelectorAll('.generate-pdf, .signature-btn, .env-btn').forEach(btn => btn.style.display = 'none');
             }
         });
     });
