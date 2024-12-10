@@ -304,7 +304,7 @@ $result_servicios = $con->query($sql_servicios);
                                    class='btn btn-primary btn-sm send-button' 
                                    title='Send PDF' 
                                    data-folio='$folio_presupuesto' 
-                                   onclick='sendPDF(this)'>
+                                   onclick='enviarPDF(this)'>
                                    <i class='fas fa-envelope'></i>
                               </a>";
                         echo "</div></td>";
@@ -457,14 +457,14 @@ $result_servicios = $con->query($sql_servicios);
             });
         });
 
-        function sendPDF(button) {
+        function enviarPDF(button) {
             const folio_presupuesto = button.getAttribute('data-folio');
 
-            const sentPDFs = JSON.parse(localStorage.getItem('sentPDFs')) || [];
+            const enviarPDF = JSON.parse(localStorage.getItem('enviarPDF')) || [];
 
-            if (!sentPDFs.includes(folio_presupuesto)) {
-                sentPDFs.push(folio_presupuesto);
-                localStorage.setItem('sentPDFs', JSON.stringify(sentPDFs));
+            if (!enviarPDF.includes(folio_presupuesto)) {
+                enviarPDF.push(folio_presupuesto);
+                localStorage.setItem('enviarPDF', JSON.stringify(enviarPDF));
             }
 
             const row = button.closest('tr');
@@ -478,9 +478,9 @@ $result_servicios = $con->query($sql_servicios);
 
 
         document.addEventListener('DOMContentLoaded', function () {
-            const sentPDFs = JSON.parse(localStorage.getItem('sentPDFs')) || [];
+            const enviarPDF = JSON.parse(localStorage.getItem('enviarPDF')) || [];
 
-            sentPDFs.forEach(folio => {
+            enviarPDF.forEach(folio => {
                 const row = document.querySelector(`tr[data-folio="${folio}"]`);
                 if (row) {
                     row.querySelectorAll('.edit-button, .generate-pdf-button, .send-button, .add-btn').forEach(btn => btn.style.display = 'none');

@@ -316,26 +316,12 @@ require '../Employee/superior_employee.php';
                         echo "<td>" . htmlspecialchars($row['adeudo']) . "</td>";
                         echo "<td>" . htmlspecialchars($row['total_obra']) . "</td>";
                         echo "<td>" . htmlspecialchars($row['observaciones']) . "</td>";
-
-                        $estatus = htmlspecialchars($row['estatus']);
-                        $iniciadaClass = $estatus == 'Iniciada' ? 'bg-danger' : 'bg-light';
-                        $progresoClass = $estatus == 'En Progreso' ? 'bg-warning' : 'bg-light';
-                        $completaClass = $estatus == 'Completa' ? 'bg-success' : 'bg-light';
-
-
-                        echo "<td>
-                                <div class='d-flex justify-content-center' style='width: 100px;'>
-                                    <div class='rounded-circle $iniciadaClass' style='width: 20px; height: 20px; margin: 0 5px;'></div>
-                                    <div class='rounded-circle $progresoClass' style='width: 20px; height: 20px; margin: 0 5px;'></div>
-                                    <div class='rounded-circle $completaClass' style='width: 20px; height: 20px; margin: 0 5px;'></div>
-                                </div>
-                            </td>";
-
+                        echo "<td>" . htmlspecialchars($row['estatus']) . "</td>";
                         echo "<td>";
                         echo "<button class='btn btn-info btn-sm me-1 edit-button' onclick='openEditModal(" . json_encode($row) . ")' title='Edit Work'>
                             <i class='fas fa-edit'></i>
                         </button>";
-                        echo "<a href='delete_work.php?id=$folio_obra' class='btn btn-danger btn-sm me-2 delete-btn' onclick='return confirm(\"Are you sure you want to delete this work?\")' title='Delete Work'>
+                        echo "<a href='delete_work.php?id=$folio_obra' class='btn btn-danger btn-sm me-2 delete-button' onclick='return confirm(\"Are you sure you want to delete this work?\")' title='Delete Work'>
                                 <i class='fas fa-trash'></i>
                               </a>";
                         echo "<button class='btn btn-success add-btn btn-sm me-2' onclick='openAddAddressModal(" . json_encode($row) . ")' title='Add Address'>
@@ -361,6 +347,7 @@ require '../Employee/superior_employee.php';
                                 <i class='fas fa-spinner fa-spin'></i>
                             </button>";
                         }
+                            
                         echo "</td>";
                         echo "</tr>";
                     }
@@ -527,7 +514,6 @@ require '../Employee/superior_employee.php';
             });
         });
 
-
         function validarYCalcularAgregar() {
             var total = parseFloat(document.getElementById('total_obra').value) || 0;
             var anticipo = parseFloat(document.getElementById('anticipo').value) || 0;
@@ -574,7 +560,7 @@ require '../Employee/superior_employee.php';
                 }
 
                 const row = button.closest('tr');
-                row.querySelectorAll('.edit-button, .generate-pdf-button, .send-button, .add-btn, .delete-btn').forEach(btn => btn.style.display = 'none');
+                row.querySelectorAll('.edit-button, .generate-pdf-button, .send-button, .add-btn, .delete-button').forEach(btn => btn.style.display = 'none');
                 
                 const statusButton = row.querySelector('.btn-status');
                 if (statusButton) {
@@ -589,7 +575,7 @@ require '../Employee/superior_employee.php';
         sentPDFs.forEach(folio => {
             const row = document.querySelector(`tr[data-folio="${folio}"]`);
             if (row) {
-                row.querySelectorAll('.edit-button, .generate-pdf-button, .send-button, .add-btn, .delete-btn').forEach(btn => btn.style.display = 'none');
+                row.querySelectorAll('.edit-button, .generate-pdf-button, .send-button, .add-btn, .delete-button').forEach(btn => btn.style.display = 'none');
             }
         });
     });
