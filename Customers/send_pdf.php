@@ -79,7 +79,7 @@ try {
     $mail->Body = "
         <p>Estimado administrador,</p>
         <p>Por favor, encuentre el contrato adjunto a este correo.</p>
-        <p>Atentamente,<br>$nombre_cliente<br>Family Drywall</p>
+        <p>Atentamente,<br>$nombre_cliente
     ";
 
     // Enviar correo

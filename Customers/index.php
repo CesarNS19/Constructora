@@ -34,7 +34,7 @@ $direccion_existe = $stmt_direccion->fetch();
 $stmt_direccion->close();
 
 // Consultar servicios
-$query = "SELECT id_servicio, nombre_servicio, descripcion_servicio, imagen_servicio, total FROM servicios";
+$query = "SELECT id_servicio, nombre_servicio, descripcion_servicio, imagen_servicio, total FROM servicios LIMIT 3";
 $result = $con->query($query);
 
 $servicios = [];
