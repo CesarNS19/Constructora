@@ -39,7 +39,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $stmt_insert->close();
     }
 
-    header("Location: customers.php");
+    header("Location: customer_address.php");
     exit();
 }
 

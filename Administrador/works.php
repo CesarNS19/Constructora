@@ -514,7 +514,6 @@ require '../Administrador/superior_admin.php';
             });
         });
 
-
         function validarYCalcularAgregar() {
             var total = parseFloat(document.getElementById('total_obra').value) || 0;
             var anticipo = parseFloat(document.getElementById('anticipo').value) || 0;

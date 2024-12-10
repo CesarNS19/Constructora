@@ -30,7 +30,7 @@ $stmt_direccion = $con->prepare($sql_direccion);
 $stmt_direccion->bind_param('i', $id_cliente);
 $stmt_direccion->execute();
 $stmt_direccion->bind_result($id_direccion, $calle, $ciudad, $estado, $codigo_postal);
-$stmt_direccion->fetch();
+$direccion_existe = $stmt_direccion->fetch();
 $stmt_direccion->close();
 
 // Consultar servicios
@@ -59,47 +59,44 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 
-    // Si se agrega nueva dirección o si el cliente no tiene una dirección registrada
-    if ($_POST['nueva_direccion'] === 'si') {
-        // Verificar si el cliente ya tiene una dirección registrada
-        $sql_check_direccion = "SELECT id_direccion FROM direcciones WHERE id_cliente = ?";
-        $stmt_check = $con->prepare($sql_check_direccion);
-        $stmt_check->bind_param('i', $id_cliente);
-        $stmt_check->execute();
-        $stmt_check->store_result();
+    // Procesar dirección (insertar o actualizar)
+    $calle = htmlspecialchars($_POST['calle']);
+    $ciudad = htmlspecialchars($_POST['ciudad']);
+    $estado = htmlspecialchars($_POST['estado']);
+    $codigo_postal = htmlspecialchars($_POST['codigo_postal']);
+    $num_ext = htmlspecialchars($_POST['num_ext']);
+    $num_int = htmlspecialchars($_POST['num_int']);
 
-        if ($stmt_check->num_rows > 0) {
-            // Si ya tiene una dirección, actualizamos la dirección
-            $sql_update_direccion = "
-                UPDATE direcciones
-                SET calle = ?, ciudad = ?, estado = ?, num_ext = ?, num_int = ?, codigo_postal = ?
-                WHERE id_cliente = ?";
-            $stmt_update = $con->prepare($sql_update_direccion);
-            $calle = htmlspecialchars($_POST['calle'], ENT_QUOTES, 'UTF-8');
-            $ciudad = htmlspecialchars($_POST['ciudad'], ENT_QUOTES, 'UTF-8');
-            $estado = htmlspecialchars($_POST['estado'], ENT_QUOTES, 'UTF-8');
-            $num_ext = htmlspecialchars($_POST['num_ext'], ENT_QUOTES, 'UTF-8');
-            $num_int = htmlspecialchars($_POST['num_int'], ENT_QUOTES, 'UTF-8');
-            $codigo_postal = htmlspecialchars($_POST['codigo_postal'], ENT_QUOTES, 'UTF-8');
-
-            $stmt_update->bind_param('ssssssi', $calle, $ciudad, $estado, $num_ext, $num_int, $codigo_postal, $id_cliente);
-            $stmt_update->execute();
-            $stmt_update->close();
+    if ($direccion_existe) {
+        // Actualizar dirección existente
+        $sql_update_direccion = "
+            UPDATE direcciones 
+            SET calle = ?, ciudad = ?, estado = ?, codigo_postal = ?, num_ext = ?, num_int = ? 
+            WHERE id_direccion = ? AND id_cliente = ?";
+        $stmt_direccion = $con->prepare($sql_update_direccion);
+        $stmt_direccion->bind_param('sssssiii', $calle, $ciudad, $estado, $codigo_postal, $num_ext, $num_int, $id_direccion, $id_cliente);
+        if ($stmt_direccion->execute()) {
+            echo "<script>alert('Dirección actualizada correctamente.');</script>";
         } else {
-            // Si no tiene dirección, insertamos una nueva dirección
-            $sql_insert_direccion = "INSERT INTO direcciones (id_cliente, calle, ciudad, estado, num_ext, num_int, codigo_postal) 
-                                    VALUES (?, ?, ?, ?, ?, ?, ?)";
-            $stmt_insert_direccion = $con->prepare($sql_insert_direccion);
-            $stmt_insert_direccion->bind_param('issssss', $id_cliente, $calle, $ciudad, $estado, $num_ext, $num_int, $codigo_postal);
-            if ($stmt_insert_direccion->execute()) {
-                $id_direccion = $stmt_insert_direccion->insert_id; // Obtener el id de la nueva dirección
-            }
-            $stmt_insert_direccion->close();
+            echo "<script>alert('Error al actualizar dirección: " . $stmt_direccion->error . "');</script>";
+            exit;
         }
-        $stmt_check->close();
+        $stmt_direccion->close();
     } else {
-        // Si no se agrega una nueva dirección, usar la dirección existente
-        $id_direccion = $_POST['id_direccion'] ?? null; // Se supone que el formulario pasará el id de la dirección existente
+        // Insertar nueva dirección
+        $sql_insert_direccion = "
+            INSERT INTO direcciones (id_cliente, calle, ciudad, estado, codigo_postal, num_ext, num_int) 
+            VALUES (?, ?, ?, ?, ?, ?, ?)";
+        $stmt_direccion = $con->prepare($sql_insert_direccion);
+        $stmt_direccion->bind_param('issssss', $id_cliente, $calle, $ciudad, $estado, $codigo_postal, $num_ext, $num_int);
+        if ($stmt_direccion->execute()) {
+            $id_direccion = $stmt_direccion->insert_id;
+            echo "<script>alert('Dirección agregada correctamente.');</script>";
+        } else {
+            echo "<script>alert('Error al agregar dirección: " . $stmt_direccion->error . "');</script>";
+            exit;
+        }
+        $stmt_direccion->close();
     }
 
     // Procesar anticipo
@@ -107,8 +104,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Insertar presupuesto
     $sql_insert_presupuesto = "
-    INSERT INTO presupuestos (id_empresa, id_cliente, id_direccion, id_servicio, anticipo, fecha_elaboracion, total, observaciones) 
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        INSERT INTO presupuestos (id_empresa, id_cliente, id_direccion, id_servicio, anticipo, fecha_elaboracion, total, observaciones) 
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
     $stmt_insert = $con->prepare($sql_insert_presupuesto);
     $stmt_insert->bind_param('iiiissss', $id_empresa, $id_cliente, $id_direccion, $id_servicio, $anticipo, $fecha_elaboracion, $total, $observaciones);
 
