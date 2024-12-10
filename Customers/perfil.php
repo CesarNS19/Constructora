@@ -142,10 +142,10 @@ if ($hour >= 5 && $hour < 12) {
             <div class="card text-center h-100">
                 <div class="card-body">
                     <h5 class="card-title">Personal Data</h5>
-                    <p><strong>Name</strong> <?php echo htmlspecialchars($user['nombre_cliente'] ?? 'No disponible'); ?></p>
-                    <p><strong>Last Name</strong> <?php echo htmlspecialchars(($user['apellido_paterno'] ?? '') . ' ' . ($user['apellido_materno'] ?? '')); ?></p>
-                    <p><strong>Email</strong> <?php echo htmlspecialchars($user['correo_electronico'] ?? 'No disponible'); ?></p>
-                    <p><strong>Phone</strong> <?php echo htmlspecialchars($user['telefono_personal'] ?? 'No disponible'); ?></p>
+                    <p><strong>Name</strong><strong>: </strong> <?php echo htmlspecialchars($user['nombre_cliente'] ?? 'No disponible'); ?></p>
+                    <p><strong>Last Name</strong><strong>: </strong> <?php echo htmlspecialchars(($user['apellido_paterno'] ?? '') . ' ' . ($user['apellido_materno'] ?? '')); ?></p>
+                    <p><strong>Email</strong><strong>: </strong> <?php echo htmlspecialchars($user['correo_electronico'] ?? 'No disponible'); ?></p>
+                    <p><strong>Phone</strong><strong>: </strong> <?php echo htmlspecialchars($user['telefono_personal'] ?? 'No disponible'); ?></p>
                     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editModal">Edit</button>
                 </div>
             </div>
@@ -157,12 +157,12 @@ if ($hour >= 5 && $hour < 12) {
                 <div class="card-body">
                     <h5 class="card-title">Address</h5>
                     <?php if ($direccion) { ?>
-                        <p><strong>Outside Number</strong> <?php echo htmlspecialchars($direccion['num_ext'] ?? 'No disponible'); ?></p>
-                        <p><strong>Inner Number</strong> <?php echo htmlspecialchars($direccion['num_int'] ?? 'No disponible'); ?></p>
-                        <p><strong>Street</strong> <?php echo htmlspecialchars($direccion['calle'] ?? 'No disponible'); ?></p>
-                        <p><strong>City</strong> <?php echo htmlspecialchars($direccion['ciudad'] ?? 'No disponible'); ?></p>
-                        <p><strong>State</strong> <?php echo htmlspecialchars($direccion['estado'] ?? 'No disponible'); ?></p>
-                        <p><strong>Postal Code</strong> <?php echo htmlspecialchars($direccion['codigo_postal'] ?? 'No disponible'); ?></p>
+                        <p><strong>Outside Number</strong><strong>: </strong> <?php echo htmlspecialchars($direccion['num_ext'] ?? 'No disponible'); ?></p>
+                        <p><strong>Inner Number</strong><strong>: </strong> <?php echo htmlspecialchars($direccion['num_int'] ?? 'No disponible'); ?></p>
+                        <p><strong>Street</strong><strong>: </strong> <?php echo htmlspecialchars($direccion['calle'] ?? 'No disponible'); ?></p>
+                        <p><strong>City</strong><strong>: </strong> <?php echo htmlspecialchars($direccion['ciudad'] ?? 'No disponible'); ?></p>
+                        <p><strong>State</strong><strong>: </strong> <?php echo htmlspecialchars($direccion['estado'] ?? 'No disponible'); ?></p>
+                        <p><strong>Postal Code</strong><strong>: </strong> <?php echo htmlspecialchars($direccion['codigo_postal'] ?? 'No disponible'); ?></p>
                         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editAddressModal">Edit</button>
                     <?php } else { ?>
                         <p>The address data was not found.</p>

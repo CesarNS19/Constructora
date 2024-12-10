@@ -109,10 +109,10 @@ if ($hour >= 5 && $hour < 12) {
     <div class="card text-center" style="width: 24rem;">
         <div class="card-body">
             <h5 class="card-title">Personal Data</h5>
-            <p><strong>Name</strong> <?php echo htmlspecialchars($user['nombre'] ?? 'No disponible'); ?></p>
-            <p><strong>Last Name</strong> <?php echo htmlspecialchars(($user['apellido_paterno'] ?? '') . ' ' . ($user['apellido_materno'] ?? '')); ?></p>
-            <p><strong>Email</strong> <?php echo htmlspecialchars($user['correo_personal'] ?? 'No disponible'); ?></p>
-            <p><strong>Phone</strong> <?php echo htmlspecialchars($user['telefono_personal'] ?? 'No disponible'); ?></p>
+            <p><strong>Name</strong><strong>: </strong> <?php echo htmlspecialchars($user['nombre'] ?? 'No disponible'); ?></p>
+            <p><strong>Last Name</strong><strong>: </strong> <?php echo htmlspecialchars(($user['apellido_paterno'] ?? '') . ' ' . ($user['apellido_materno'] ?? '')); ?></p>
+            <p><strong>Email</strong><strong>: </strong> <?php echo htmlspecialchars($user['correo_personal'] ?? 'No disponible'); ?></p>
+            <p><strong>Phone</strong><strong>: </strong> <?php echo htmlspecialchars($user['telefono_personal'] ?? 'No disponible'); ?></p>
             <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editModal">Edit</button>
         </div>
     </div>
